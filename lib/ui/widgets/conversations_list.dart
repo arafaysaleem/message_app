@@ -22,7 +22,6 @@ class ConversationsList extends StatelessWidget {
             (ctx, i) => ChangeNotifierProvider.value(
               value: convos[i],
               child: ConversationListItem(
-                //convo: convos[i],
                 avClr: Utils.getAvatarColor(),
               ),
             ),

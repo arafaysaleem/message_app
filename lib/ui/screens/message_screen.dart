@@ -8,54 +8,15 @@ import '../../helper/utils.dart';
 import '../../models/conversation.dart';
 import '../../models/message.dart';
 
-class MessageScreen extends StatefulWidget {
+import '../widgets/bottom_message_bar.dart';
+
+class MessageScreen extends StatelessWidget {
   final Color avClr;
-
-  const MessageScreen({Key key, @required contact, @required this.avClr})
-      : super(key: key);
-
-  @override
-  _MessageScreenState createState() => _MessageScreenState();
-}
-
-class _MessageScreenState extends State<MessageScreen> {
   final double _splashRadius = 21;
-  bool keyboardActive;
-  ScrollController _sController;
-  FocusNode _focusNode = FocusNode();
-  TextEditingController _textEditingController;
+  ScrollController _sController = ScrollController();
 
-  @override
-  void initState() {
-    super.initState();
-    _sController = ScrollController();
-    _textEditingController = TextEditingController();
-    keyboardActive = false;
-    WidgetsBinding.instance.addPostFrameCallback(
-        (_) => _sController.jumpTo(_sController.position.maxScrollExtent));
-  }
-
-  void disableKeyboard() {
-    setState(() {
-      keyboardActive = false;
-      _focusNode.unfocus();
-    });
-  }
-
-  void sendMessage(convo) {
-    setState(() {
-      convo.sendMessage(text: _textEditingController.text.trim());
-      _textEditingController.clear();
-      _sController.jumpTo(_sController.position.maxScrollExtent);
-    });
-  }
-
-  @override
-  void dispose() {
-    _focusNode.dispose();
-    _sController.dispose();
-    super.dispose();
-  }
+  MessageScreen({Key key, @required contact, @required this.avClr})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -105,149 +66,95 @@ class _MessageScreenState extends State<MessageScreen> {
             left: 0,
             right: 0,
             bottom: 0,
-            child: GestureDetector(
-              onTap: disableKeyboard,
-              child: Scrollbar(
-                isAlwaysShown: true,
-                controller: _sController,
-                child: ListView.builder(
-                  keyboardDismissBehavior:
-                      ScrollViewKeyboardDismissBehavior.onDrag,
-                  controller: _sController,
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  itemCount: convo.messages.length,
-                  itemBuilder: (ctx, i) {
-                    bool myMsg = false;
-                    if (Conversation.myContact.number == convo.messages[i].number)
-                      myMsg = true;
-                    if (i == convo.messages.length - 1)
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 60),
-                        child: MessageListItem(
-                          isSpam: convo.isSpam,
-                          contact: convo.sender,
-                          msg: convo.messages[i],
-                          avClr: widget.avClr,
-                          myMessage: myMsg,
-                        ),
-                      );
-                    return MessageListItem(
-                      isSpam: convo.isSpam,
-                      contact: convo.sender,
-                      msg: convo.messages[i],
-                      avClr: widget.avClr,
-                      myMessage: myMsg,
-                    );
-                  },
-                ),
-              ),
-            ),
+            child: MessagesList(sController: _sController, avClr: avClr),
           ),
 
           //Bottom Text Input Bar
           Positioned(
             bottom: 0,
-            child: Container(
-              color: Colors.white.withOpacity(0.95),
-              width: MediaQuery.of(context).size.width,
-              padding: const EdgeInsets.symmetric(vertical: 5),
-              child: Row(
-                children: [
-                  IconButton(
-                    constraints: BoxConstraints(
-                      maxWidth: 60,
-                    ),
-                    icon: Icon(
-                      Icons.add_circle,
-                      size: 28,
-                      color: Theme.of(context).primaryColor,
-                    ),
-                    onPressed: () {},
-                  ),
-                  IconButton(
-                    constraints: BoxConstraints(
-                      maxWidth: 60,
-                    ),
-                    padding: const EdgeInsets.fromLTRB(2, 8, 12, 8),
-                    icon: Icon(
-                      Icons.add_photo_alternate,
-                      size: 28,
-                      color: Theme.of(context).primaryColor,
-                    ),
-                    onPressed: () {},
-                  ),
-                  Expanded(
-                    child: Container(
-                      color: Colors.white,
-                      child: TextField(
-                        controller: _textEditingController,
-                        cursorColor: Theme.of(context).primaryColor,
-                        focusNode: _focusNode,
-                        maxLines: null,
-                        textInputAction: TextInputAction.send,
-                        onTap: () {
-                          setState(() {
-                            keyboardActive = true;
-                          });
-                        },
-                        onSubmitted: (String msg) {
-                          if(msg.isEmpty) return;
-                          sendMessage(convo);
-                          //TODO: add regex check for any urls to show preview and it as a path
-                        },
-                        decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.all(16),
-                          hintText: "Text Message",
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(40),
-                            borderSide: BorderSide(
-                              color: Colors.grey[300],
-                              width: 1.4,
-                              style: BorderStyle.solid,
-                            ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(40),
-                            borderSide: BorderSide(
-                              color: Utils.greyColor,
-                              width: 1.4,
-                              style: BorderStyle.solid,
-                            ),
-                          ),
-                          suffixIcon: InkWell(
-                            onTap: () {},
-                            child: Padding(
-                              padding: const EdgeInsets.only(right: 10),
-                              child: Icon(
-                                Icons.person_add,
-                                color: Theme.of(context).primaryColor,
-                                size: 28,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  IconButton(
-                    constraints: BoxConstraints(maxWidth: 60),
-                    padding: const EdgeInsets.fromLTRB(2, 8, 12, 8),
-                    icon: Icon(
-                      Icons.mic,
-                      size: 28,
-                      color: Theme.of(context).primaryColor,
-                    ),
-                    onPressed: () {},
-                  ),
-                ],
-              ),
-            ),
+            child: BottomMessageBar(sController: _sController),
           ),
         ],
       ),
     );
   }
 }
+
+class MessagesList extends StatefulWidget {
+
+  final ScrollController sController;
+  final avClr;
+
+  const MessagesList({Key key, @required this.sController, @required this.avClr}) : super(key: key);
+
+  @override
+  _MessagesListState createState() => _MessagesListState();
+}
+
+class _MessagesListState extends State<MessagesList> {
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback(
+            (_) => widget.sController.jumpTo(widget.sController.position.maxScrollExtent));
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    widget.sController.dispose();
+    super.dispose();
+  }
+
+  void disableKeyboard() {
+    setState(() {
+      FocusScope.of(context).unfocus();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final convo = Provider.of<Conversation>(context,listen:false);
+    return GestureDetector(
+      onTap: disableKeyboard,
+      child: Scrollbar(
+        isAlwaysShown: true,
+        controller: widget.sController,
+        child: ListView.builder(
+          keyboardDismissBehavior:
+          ScrollViewKeyboardDismissBehavior.onDrag,
+          controller: widget.sController,
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          itemCount: convo.messages.length,
+          itemBuilder: (ctx, i) {
+            bool myMsg = false;
+            if (Conversation.myContact.number == convo.messages[i].number)
+              myMsg = true;
+            if (i == convo.messages.length - 1)
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 60),
+                child: MessageListItem(
+                  isSpam: convo.isSpam,
+                  contact: convo.sender,
+                  msg: convo.messages[i],
+                  avClr: widget.avClr,
+                  myMessage: myMsg,
+                ),
+              );
+            return MessageListItem(
+              isSpam: convo.isSpam,
+              contact: convo.sender,
+              msg: convo.messages[i],
+              avClr: widget.avClr,
+              myMessage: myMsg,
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
 
 class MessageListItem extends StatefulWidget {
   final isSpam, contact;

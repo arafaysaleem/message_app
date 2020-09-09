@@ -380,7 +380,9 @@ class MessageManager with ChangeNotifier {
         _archivedConversations.add(convo);
       }
       convo.toggleArchived();
+      print(convo);
     });
+    print(_archivedConversations);
     _selectedConversations.clear();
     notifyListeners();
   }
@@ -429,6 +431,9 @@ class MessageManager with ChangeNotifier {
       _spammedConversations.add(convo);
     }
     convo.toggleSpam();
+    print(convo);
+    print(_spammedConversations);
+    _selectedConversations.clear();
     notifyListeners();
   }
 

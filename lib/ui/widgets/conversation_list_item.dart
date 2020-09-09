@@ -23,7 +23,7 @@ class ConversationListItem extends StatelessWidget {
         if (msgManager.isSelected(convo))
           return CircleAvatar(
             radius: 20,
-            backgroundColor: Colors.indigo[700],
+            backgroundColor: Colors.indigoAccent[700],
             child: Center(
               child: Icon(
                 Icons.check,
@@ -69,7 +69,7 @@ class ConversationListItem extends StatelessWidget {
   Widget getMessageBody() {
     String message = convo.latestMessage.body;
     return Padding(
-      padding: const EdgeInsets.fromLTRB(15, 1.5, 10, 0),
+      padding: const EdgeInsets.fromLTRB(15, 1, 10, 0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -89,7 +89,7 @@ class ConversationListItem extends StatelessWidget {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
-          SizedBox(height: 1),
+          SizedBox(height: 4),
           convo.isRead
               ? Text(
                   message,
