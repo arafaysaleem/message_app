@@ -30,7 +30,7 @@ class DefaultAppBar extends StatelessWidget {
         IconButton(
           splashColor: Colors.grey,
           onPressed: () {
-            //TODO: Add pop up menu with options:-
+            // TODO: Add pop up menu with options:-
             // to view spam/archive
             // mark all read
             // delete all etc
