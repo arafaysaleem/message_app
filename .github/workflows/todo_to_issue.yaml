@@ -15,7 +15,7 @@ jobs:
           REPO: ${{ github.repository }}
           BEFORE: ${{ github.event.before }}
           SHA: ${{ github.sha }}
-          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TOKEN: ${{ secrets.TODO_TOKEN }}
           LABEL: "// TODO"
           COMMENT_MARKER: "//"
         id: "todo"
