@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:message_app/enums/filters_enum.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/messages_provider.dart';
@@ -26,6 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final convos = Provider.of<MessageManager>(context, listen: false).conversations;
     return Scaffold(
       body: SafeArea(
         child: Stack(
@@ -42,7 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   child: DefaultAppBar(),
                 ),
-                ConversationsList(),
+                ConversationsList(convos: convos,currentFilter: Filters.HomeScreen,),
               ],
             ),
           ],

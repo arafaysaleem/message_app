@@ -15,6 +15,7 @@ enum Filters {
   SpamAndBlocked,
   MessagesForWeb,
   Settings,
+  HomeScreen,
   Archived,
   HelpAndFeedback
 }
@@ -29,15 +30,15 @@ extension SelectedFilterExtension on Filters{
         return;
       }
       case Filters.Archived: {
-        Navigator.of(context).pushNamed(ArchivedMessagesScreen.routeName);
+        Navigator.of(context).pushReplacementNamed(ArchivedMessagesScreen.routeName);
         return;
       }
       case Filters.SpamAndBlocked: {
-        Navigator.of(context).pushNamed(SpamAndBlockedMessagesScreen.routeName);
+        Navigator.of(context).pushReplacementNamed(SpamAndBlockedMessagesScreen.routeName);
         return;
       }
       case Filters.Settings: {
-        Navigator.of(context).pushNamed(SettingsScreen.routeName);
+        Navigator.of(context).pushReplacementNamed(SettingsScreen.routeName);
         return;
       }
       case Filters.MarkAllAsRead: {
@@ -53,6 +54,7 @@ extension SelectedFilterExtension on Filters{
         //open chrome url
         return;
       }
+      case Filters.HomeScreen: return;
     }
   }
 }

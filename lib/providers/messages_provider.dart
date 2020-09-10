@@ -354,7 +354,10 @@ class MessageManager with ChangeNotifier {
   }
 
   void deleteConversation(Conversation convo) {
-    _conversations.removeWhere((number, converse) => number == convo.sender.number);
+    print(_archivedConversations.contains(convo));
+    if(_conversations.containsKey(convo.sender.number)) _conversations.remove(convo.sender.number);
+    else if(_archivedConversations.contains(convo)) _archivedConversations.remove(convo);
+    else if(_spammedConversations.contains(convo)) _spammedConversations.remove(convo);
   }
 
   void deleteSelected() {

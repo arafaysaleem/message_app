@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:message_app/providers/messages_provider.dart';
 import 'package:provider/provider.dart';
+
+import '../../enums/filters_enum.dart';
+
+import '../../providers/messages_provider.dart';
 
 class ActionsAppBar extends StatelessWidget {
   final int length;
+  final Filters currentFilter;
 
-  const ActionsAppBar({Key key, this.length}) : super(key: key);
+  const ActionsAppBar({Key key, this.length, this.currentFilter}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +34,14 @@ class ActionsAppBar extends StatelessWidget {
             ),
           ),
         ),
-        IconButton(
+        (currentFilter == Filters.Archived) ? IconButton(
+          splashColor: Colors.transparent,
+          icon: Icon(
+            Icons.unarchive,
+            color: Colors.indigoAccent[700],
+          ),
+          onPressed: messageManager.archiveSelected,
+        ) : IconButton(
           splashColor: Colors.transparent,
           icon: Icon(
             Icons.archive,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:message_app/enums/filters_enum.dart';
 
 import 'actions_app_bar.dart';
 
@@ -52,6 +53,7 @@ class CustomAppBar extends StatelessWidget {
                 ? child
                 : ActionsAppBar(
                     length: length,
+                    currentFilter: Filters.HomeScreen,
                   ),
           ),
         ),
