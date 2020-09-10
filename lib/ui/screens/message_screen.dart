@@ -10,6 +10,7 @@ import '../../models/message.dart';
 
 import '../widgets/bottom_message_bar.dart';
 
+// ignore: must_be_immutable
 class MessageScreen extends StatelessWidget {
   final Color avClr;
   final double _splashRadius = 21;

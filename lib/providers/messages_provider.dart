@@ -314,7 +314,7 @@ class MessageManager with ChangeNotifier {
     ),
   };
   final List<Conversation> _selectedConversations = [];
-  final List<Message> _favMsgs = [];
+  final List<Message> _favMessages = [];
   final List<Conversation> _spammedConversations = [];
   final List<Conversation> _archivedConversations = [];
   final List<Contact> _contacts = [];
@@ -330,7 +330,7 @@ class MessageManager with ChangeNotifier {
   UnmodifiableListView<Conversation> get selectedConversations =>
       UnmodifiableListView(_selectedConversations);
 
-  UnmodifiableListView<Message> get favMsgs => UnmodifiableListView(_favMsgs);
+  UnmodifiableListView<Message> get favMsgs => UnmodifiableListView(_favMessages);
 
   UnmodifiableListView<Conversation> get spammedConversations =>
       UnmodifiableListView(_spammedConversations);
@@ -345,13 +345,12 @@ class MessageManager with ChangeNotifier {
           .where((Contact contact) => contact == sender)
           .toList()[0];
     return sender;
-  }
+  } //call from api helper
 
   bool isSelected(Conversation convo) => _selectedConversations.contains(convo);
 
   void readAllConversations() {
     _conversations.values.forEach((Conversation convo) => convo.readConversation());
-    notifyListeners();
   }
 
   void deleteConversation(Conversation convo) {
@@ -360,8 +359,7 @@ class MessageManager with ChangeNotifier {
 
   void deleteSelected() {
     _selectedConversations.forEach((Conversation convo) => deleteConversation(convo));
-    _selectedConversations.clear();
-    notifyListeners();
+    clearSelected();
   }
 
   void clearSelected(){
@@ -383,8 +381,7 @@ class MessageManager with ChangeNotifier {
       print(convo);
     });
     print(_archivedConversations);
-    _selectedConversations.clear();
-    notifyListeners();
+    clearSelected();
   }
 
   void spamSelected() {
@@ -433,15 +430,14 @@ class MessageManager with ChangeNotifier {
     convo.toggleSpam();
     print(convo);
     print(_spammedConversations);
-    _selectedConversations.clear();
-    notifyListeners();
+    clearSelected();
   }
 
   void toggleFavMessage(Message msg) {
     if (msg.isFav)
-      _favMsgs.remove(msg);
+      _favMessages.remove(msg);
     else
-      _favMsgs.add(msg);
+      _favMessages.add(msg);
     msg.isFav = !msg.isFav;
     notifyListeners();
   }

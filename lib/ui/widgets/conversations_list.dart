@@ -5,8 +5,6 @@ import '../../providers/messages_provider.dart';
 
 import '../../helper/utils.dart';
 
-import '../../models/conversation.dart';
-
 import 'conversation_list_item.dart';
 
 class ConversationsList extends StatelessWidget {

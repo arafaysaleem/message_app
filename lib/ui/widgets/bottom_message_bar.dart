@@ -117,7 +117,10 @@ class _BottomMessageBarState extends State<BottomMessageBar> {
                           size: 28,
                         ),
                       ) : InkWell(
-                        onTap: () => sendMessage(convo),
+                        onTap: () {
+                          sendMessage(convo);
+                          FocusScope.of(context).unfocus();
+                        },
                         child: Icon(
                           Icons.send,
                           color: Theme.of(context).primaryColor,
