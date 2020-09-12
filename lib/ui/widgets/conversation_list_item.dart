@@ -39,13 +39,12 @@ class ConversationListItem extends StatelessWidget {
         backgroundColor: convo.isSpam ? Colors.grey[300] : avClr,
         child: convo.isSpam
             ? Container(
-                color: Colors.white,
                 margin: EdgeInsets.all(2),
                 child: Center(
                   child: Icon(
                     Icons.error,
                     color: Colors.redAccent,
-                    size: 20,
+                    size: 35,
                   ),
                 ),
               )

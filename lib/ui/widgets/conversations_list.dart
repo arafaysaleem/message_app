@@ -19,7 +19,7 @@ class ConversationsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverPadding(
-      padding: const EdgeInsets.fromLTRB(20, 0, 17, 0),
+      padding: const EdgeInsets.fromLTRB(18, 0, 17, 0),
       sliver: Selector<MessageManager, int>(
         selector: (ctx, msgManager) {
           if(currentFilter == Filters.Archived) return msgManager.archivedConversations.length;
