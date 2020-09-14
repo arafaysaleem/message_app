@@ -10,11 +10,8 @@ import '../screens/message_screen.dart';
 
 // ignore: must_be_immutable
 class ConversationListItem extends StatelessWidget {
-  final Color avClr;
   Conversation convo;
   MessageManager msgManager;
-
-  ConversationListItem({Key key, this.avClr}) : super(key: key);
 
   Widget getProfilePicture() {
     return Selector<MessageManager, int>(
@@ -36,7 +33,7 @@ class ConversationListItem extends StatelessWidget {
       },
       child: CircleAvatar(
         radius: 20,
-        backgroundColor: convo.isSpam ? Colors.grey[200] : avClr,
+        backgroundColor: convo.isSpam ? Colors.grey[200] : convo.sender.avClr,
         child: convo.isSpam
             ? Container(
                 margin: EdgeInsets.all(2),
@@ -151,7 +148,6 @@ class ConversationListItem extends StatelessWidget {
                 value: convo,
                 child: MessageScreen(
                   contact: convo.sender,
-                  avClr: avClr,
                 ),
               ),
             ),

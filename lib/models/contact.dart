@@ -1,8 +1,10 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/rendering.dart';
 
 class Contact{
   final String _name,picturePath;
   final int number;
+  final Color avClr;
   final bool isBlocked;
 
   @override
@@ -15,7 +17,7 @@ class Contact{
   @override
   int get hashCode => number.hashCode;
 
-  Contact({this.isBlocked, name, this.picturePath, @required this.number}) : _name=name;
+  Contact({@required this.avClr, this.isBlocked, name, this.picturePath, @required this.number}) : _name=name;
 
   String get name => _name??number.toString();
 

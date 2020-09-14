@@ -66,9 +66,6 @@ class _HomeScreenState extends State<HomeScreen> {
         openColor: Colors.transparent,
         closedColor: Colors.transparent,
         tappable: false,
-        openShape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20)
-        ),
         transitionType: ContainerTransitionType.fade,
         transitionDuration: Duration(milliseconds: 500),
         closedBuilder: (ctx,openFunction) => Padding(

@@ -8,7 +8,7 @@ import '../models/message.dart';
 class MessageManager with ChangeNotifier {
   final Map<int, Conversation> _conversations = {
     03028220488: Conversation(
-      sender: Contact(name: "Farhan",number: 03028220488),
+      sender: Contact(name: "Farhan",number: 03028220488,avClr: Colors.red),
       messages: [
         Message(
           number: 03028220488,
@@ -24,7 +24,7 @@ class MessageManager with ChangeNotifier {
       ],
     ),
     03028199488: Conversation(
-      sender: Contact(name: "Asad",number: 03028199488),
+      sender: Contact(name: "Asad",number: 03028199488,avClr: Colors.blue),
       messages: [
         Message(
           number: 03028199488,
@@ -39,7 +39,7 @@ class MessageManager with ChangeNotifier {
       ],
     ),
     03010220805: Conversation(
-      sender: Contact(number: 03010220805),
+      sender: Contact(number: 03010220805,avClr: Colors.red),
       messages: [
         Message(
           number: 03010220805,
@@ -54,7 +54,7 @@ class MessageManager with ChangeNotifier {
       ],
     ),
     03009268622: Conversation(
-      sender: Contact(name: "Shahzaib",number: 03009268622),
+      sender: Contact(name: "Shahzaib",number: 03009268622,avClr: Colors.red),
       messages: [
         Message(
           number: 03009268622,
@@ -80,7 +80,7 @@ class MessageManager with ChangeNotifier {
       ],
     ),
     03009219062: Conversation(
-      sender: Contact(number: 03009219062, name: "Papa"),
+      sender: Contact(number: 03009219062, name: "Papa",avClr: Colors.lightGreenAccent),
       messages: [
         Message(
           number: 03009219062,
@@ -95,7 +95,7 @@ class MessageManager with ChangeNotifier {
       ],
     ),
     03339120488: Conversation(
-      sender: Contact(name: "Hamza",number: 03339120488),
+      sender: Contact(name: "Hamza",number: 03339120488,avClr: Colors.amber),
       messages: [
         Message(
           number: 03339120488,
@@ -110,7 +110,7 @@ class MessageManager with ChangeNotifier {
       ],
     ),
     03328144588: Conversation(
-      sender: Contact(name: "Rafay",number: 03328144588),
+      sender: Contact(name: "Rafay",number: 03328144588,avClr: Colors.blue),
       messages: [
         Message(
           number: 03328144588,
@@ -125,7 +125,7 @@ class MessageManager with ChangeNotifier {
       ],
     ),
     03309658505: Conversation(
-      sender: Contact(number: 03309658505),
+      sender: Contact(number: 03309658505,avClr: Colors.red),
       messages: [
         Message(
           number: 03309658505,
@@ -140,7 +140,7 @@ class MessageManager with ChangeNotifier {
       ],
     ),
     03003528563: Conversation(
-      sender: Contact(name: "Zohaib",number: 03003528563),
+      sender: Contact(name: "Zohaib",number: 03003528563,avClr: Colors.lightGreenAccent),
       messages: [
         Message(
           number: 03003528563,
@@ -152,7 +152,7 @@ class MessageManager with ChangeNotifier {
       ],
     ),
     03012500876: Conversation(
-      sender: Contact(number: 03012500876, name: "Mama"),
+      sender: Contact(number: 03012500876, name: "Mama",avClr: Colors.red),
       messages: [
         Message(
           number: 03012500876,
@@ -167,7 +167,7 @@ class MessageManager with ChangeNotifier {
       ],
     ),
     03024320488: Conversation(
-      sender: Contact(number: 03024320488),
+      sender: Contact(number: 03024320488,avClr: Colors.amber),
       messages: [
         Message(
           number: 03024320488,
@@ -182,7 +182,7 @@ class MessageManager with ChangeNotifier {
       ],
     ),
     03028145488: Conversation(
-      sender: Contact(number: 03028145488),
+      sender: Contact(number: 03028145488,avClr: Colors.lightGreenAccent),
       messages: [
         Message(
           number: 03028145488,
@@ -197,7 +197,7 @@ class MessageManager with ChangeNotifier {
       ],
     ),
     03010656505: Conversation(
-      sender: Contact(name: "Suraksha",number: 03010656505),
+      sender: Contact(name: "Suraksha",number: 03010656505,avClr: Colors.blue),
       messages: [
         Message(
           number: 03010656505,
@@ -206,15 +206,15 @@ class MessageManager with ChangeNotifier {
         ),
         Message(
           number: 03010656505,
-          body: "Milk my tits ( . )( . ). They are waiting for you :*."
-              "Daba daba ke doodh nikaldo inka chooso zor se phaar do mere"
-              "mammay bhenchod.",
+          body: "Hello did you get the printed mugs?"
+              "I saw a page on instagram called allthatjazz.com,"
+              "order there.",
           datetime: DateTime.now(),
         ),
       ],
     ),
     03009565352: Conversation(
-      sender: Contact(name: "Bakhtyar Bellcow",number: 03009565352),
+      sender: Contact(name: "Bakhtyar Bellcow",number: 03009565352,avClr: Colors.red),
       messages: [
         Message(
           number: 03009565352,
@@ -226,7 +226,7 @@ class MessageManager with ChangeNotifier {
       ],
     ),
     03009756562: Conversation(
-      sender: Contact(number: 03009756562, name: "Meeran"),
+      sender: Contact(number: 03009756562, name: "Meeran",avClr: Colors.blue),
       messages: [
         Message(
           number: 03009756562,
@@ -241,7 +241,7 @@ class MessageManager with ChangeNotifier {
       ],
     ),
     03339657568: Conversation(
-      sender: Contact(number: 03339657568),
+      sender: Contact(number: 03339657568,avClr: Colors.red),
       messages: [
         Message(
           number: 03339657568,
@@ -256,7 +256,7 @@ class MessageManager with ChangeNotifier {
       ],
     ),
     03328652868: Conversation(
-      sender: Contact(name: "Bakh Randi<3",number: 03328652868),
+      sender: Contact(name: "Bakh",number: 03328652868,avClr: Colors.blue),
       messages: [
         Message(
           number: 03328652868,
@@ -265,13 +265,13 @@ class MessageManager with ChangeNotifier {
         ),
         Message(
           number: 03328652868,
-          body: "Mere mammay chooso janu (.)(.). Muaah :*",
+          body: "Flight is gonna reach at 2am",
           datetime: DateTime.now(),
         ),
       ],
     ),
     03309677784: Conversation(
-      sender: Contact(name: "Faryal Janu<3",number: 03309677784),
+      sender: Contact(name: "Faryal",number: 03309677784,avClr: Colors.blue),
       messages: [
         Message(
           number: 03309677784,
@@ -280,25 +280,13 @@ class MessageManager with ChangeNotifier {
         ),
         Message(
           number: 03309677784,
-          body: "Zor se chodo mujhe baby. Mujhe tumhara lund chahiye",
-          datetime: DateTime.now(),
-        ),
-      ],
-    ),
-    03003768643: Conversation(
-      sender: Contact(name: "Faryal Shaikh",number: 03003768643),
-      messages: [
-        Message(
-          number: 03003768643,
-          body: "I want you to suck on my big tits!"
-              " Press them, squeeze the juicy hell out of them. Slap your balls against my soft ass and"
-              " finger my choot jab tak pani na nikal jaye. Muaah :* ?",
+          body: "Check the timetable and update when free",
           datetime: DateTime.now(),
         ),
       ],
     ),
     03012668889: Conversation(
-      sender: Contact(number: 03012668889, name: "Zain"),
+      sender: Contact(number: 03012668889, name: "Zain",avClr: Colors.amber),
       messages: [
         Message(
           number: 03012668889,
@@ -339,13 +327,19 @@ class MessageManager with ChangeNotifier {
       UnmodifiableListView(_archivedConversations);
 
   Contact getSenderContact(int number) {
-    Contact sender = Contact(number: number);
+    Contact sender = Contact(number: number,avClr: Colors.amber);
     if (_contacts.contains(sender))
       return _contacts
           .where((Contact contact) => contact == sender)
           .toList()[0];
     return sender;
   } //call from api helper
+
+  // void updateConversionList(Conversation convo){
+  //   _conversations.remove(convo.sender.number); //remove
+  //   _conversations[convo.sender.number]=convo; //and insert at end to make it appear on top
+  //   notifyListeners();
+  // }
 
   bool isSelected(Conversation convo) => _selectedConversations.contains(convo);
 
@@ -354,10 +348,10 @@ class MessageManager with ChangeNotifier {
   }
 
   void deleteConversation(Conversation convo) {
-    print(_archivedConversations.contains(convo));
     if(_conversations.containsKey(convo.sender.number)) _conversations.remove(convo.sender.number);
     else if(_archivedConversations.contains(convo)) _archivedConversations.remove(convo);
     else if(_spammedConversations.contains(convo)) _spammedConversations.remove(convo);
+    notifyListeners();
   }
 
   void deleteSelected() {
@@ -373,8 +367,8 @@ class MessageManager with ChangeNotifier {
   void archiveSelected() {
     _selectedConversations.forEach((Conversation convo) {
       if (convo.isArchived) {
-        _conversations[convo.sender.number] = convo;
         _archivedConversations.remove(convo);
+        _conversations[convo.sender.number] = convo;
       } else {
         _conversations
             .removeWhere((number, converse) => number == convo.sender.number);
@@ -410,8 +404,8 @@ class MessageManager with ChangeNotifier {
 
   void toggleArchiveConvo(Conversation convo) {
     if (convo.isArchived) {
-      _conversations[convo.sender.number] = convo;
       _archivedConversations.remove(convo);
+      _conversations[convo.sender.number] = convo;
     } else {
       _conversations
           .removeWhere((number, converse) => number == convo.sender.number);
@@ -423,8 +417,8 @@ class MessageManager with ChangeNotifier {
 
   void toggleSpamConvo(Conversation convo) {
     if (convo.isSpam) {
-      _conversations[convo.sender.number] = convo;
       _spammedConversations.remove(convo);
+      _conversations[convo.sender.number] = convo;
     } else {
       _conversations
           .removeWhere((number, converse) => number == convo.sender.number);

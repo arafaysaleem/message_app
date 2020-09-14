@@ -34,11 +34,11 @@ class MyApp extends StatelessWidget {
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         routes: {
-          "/": (ctx) => HomeScreen(),
-          ArchivedMessagesScreen.routeName: (ctx) => ArchivedMessagesScreen(),
-          SpamAndBlockedMessagesScreen.routeName: (ctx) => SpamAndBlockedMessagesScreen(),
-          SettingsScreen.routeName: (ctx) => SettingsScreen(),
-          MessagesForWebScreen.routeName: (ctx) => MessagesForWebScreen(),
+          "/": (_) => HomeScreen(),
+          ArchivedMessagesScreen.routeName: (_) => ArchivedMessagesScreen(),
+          SpamAndBlockedMessagesScreen.routeName: (_) => SpamAndBlockedMessagesScreen(),
+          SettingsScreen.routeName: (_) => SettingsScreen(),
+          MessagesForWebScreen.routeName: (_) => MessagesForWebScreen(),
         },
       ),
     );

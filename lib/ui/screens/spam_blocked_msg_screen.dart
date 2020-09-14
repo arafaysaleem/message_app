@@ -64,44 +64,47 @@ class SpamAndBlockedMessagesScreen extends StatelessWidget {
 class SpamAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return AppBar(
-      elevation: 0,
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      leading: IconButton(
-        splashRadius: 21,
-        onPressed: () => Navigator.of(context).pushReplacementNamed("/"),
-        icon: Icon(Icons.arrow_back),
-      ),
-      iconTheme: IconThemeData(color: Colors.grey[800]),
-      title: Text(
-        "Spam & Blocked",
-        style: TextStyle(
-          color: Colors.black,
-          fontWeight: FontWeight.normal,
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: AppBar(
+        elevation: 0,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        leading: IconButton(
+          splashRadius: 21,
+          onPressed: () => Navigator.of(context).pushReplacementNamed("/"),
+          icon: Icon(Icons.arrow_back),
         ),
-      ),
-      actions: [
-        PopupMenuButton(
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(4)
+        iconTheme: IconThemeData(color: Colors.grey[800]),
+        title: Text(
+          "Spam & Blocked",
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.normal,
           ),
-          onSelected: (Filters filter) => filter.actionOnFilter(context),
-          icon: Icon(
-            Icons.more_vert,
-            color: Colors.grey[600],
-          ),
-          itemBuilder: (_) => [
-            PopupMenuItem(
-              child: Text("Blocked Contacts"),
-              value: Filters.HelpAndFeedback,
-            ),
-            PopupMenuItem(
-              child: Text("Help & feedback"),
-              value: Filters.HelpAndFeedback,
-            ),
-          ],
         ),
-      ],
+        actions: [
+          PopupMenuButton(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(4)
+            ),
+            onSelected: (Filters filter) => filter.actionOnFilter(context),
+            icon: Icon(
+              Icons.more_vert,
+              color: Colors.grey[600],
+            ),
+            itemBuilder: (_) => [
+              PopupMenuItem(
+                child: Text("Blocked Contacts"),
+                value: Filters.HelpAndFeedback,
+              ),
+              PopupMenuItem(
+                child: Text("Help & feedback"),
+                value: Filters.HelpAndFeedback,
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

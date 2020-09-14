@@ -5,8 +5,6 @@ import '../../providers/messages_provider.dart';
 
 import '../../enums/filters_enum.dart';
 
-import '../../helper/utils.dart';
-
 import '../../models/conversation.dart';
 
 import 'conversation_list_item.dart';
@@ -27,13 +25,11 @@ class ConversationsList extends StatelessWidget {
           else if(currentFilter == Filters.SpamAndBlocked) return msgManager.spammedConversations.length;
           return msgManager.conversationsMap.length;
         },
-        builder: (ctx, int length, _) => SliverList(
+        builder: (ctx, _l, _c) => SliverList(
           delegate: SliverChildBuilderDelegate(
             (ctx, i) => ChangeNotifierProvider.value(
-              value: convos[i],
-              child: ConversationListItem(
-                avClr: Utils.getAvatarColor(),
-              ),
+              value: convos[convos.length-i-1],
+              child: ConversationListItem(),
             ),
             childCount: convos.length,
           ),

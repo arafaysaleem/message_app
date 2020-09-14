@@ -1,12 +1,13 @@
 import 'dart:collection';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
 import 'contact.dart';
 import 'message.dart';
 
 class Conversation with ChangeNotifier{
-  static Contact myContact=Contact(number: 03001234567,name: "Abdur Rafay Saleem");
+  static Contact myContact=Contact(number: 03001234567,name: "Abdur Rafay Saleem",avClr: Colors.red);
   final Contact sender;
   final List<Message> _messages;
   bool _isRead=false;
@@ -47,7 +48,7 @@ class Conversation with ChangeNotifier{
   }
 
   void editMyContact({String name,int number, String picPath}){
-    myContact=Contact(name: name??myContact.name,number: number??myContact.number,picturePath: picPath??myContact.picturePath);
+    myContact=Contact(avClr: myContact.avClr,name: name??myContact.name,number: number??myContact.number,picturePath: picPath??myContact.picturePath);
     notifyListeners();
   }
 

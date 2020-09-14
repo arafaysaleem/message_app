@@ -23,11 +23,12 @@ class _BottomMessageBarState extends State<BottomMessageBar> {
     _textEditingController = TextEditingController();
   }
 
-  void sendMessage(convo) {
+  void sendMessage(convo,BuildContext context) {
     setState(() {
       convo.sendMessage(text: _textEditingController.text.trim());
       _textEditingController.clear();
       widget.sController.jumpTo(widget.sController.position.maxScrollExtent);
+      // context.read<MessageManager>().updateConversionList(convo);
     });
   }
 
@@ -84,7 +85,7 @@ class _BottomMessageBarState extends State<BottomMessageBar> {
                 textInputAction: TextInputAction.send,
                 onSubmitted: (String msg) {
                   if(msg.isEmpty) return;
-                  sendMessage(convo);
+                  sendMessage(convo,context);
                   //TODO: add regex check for any urls to show preview and it as a path
                 },
                 decoration: InputDecoration(
@@ -118,7 +119,7 @@ class _BottomMessageBarState extends State<BottomMessageBar> {
                         ),
                       ) : InkWell(
                         onTap: () {
-                          sendMessage(convo);
+                          sendMessage(convo,context);
                           FocusScope.of(context).unfocus();
                         },
                         child: Icon(

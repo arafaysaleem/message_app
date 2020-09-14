@@ -8,15 +8,16 @@ import '../../helper/utils.dart';
 import '../../models/conversation.dart';
 import '../../models/message.dart';
 
+import '../../enums/convo_action_enum.dart';
+
 import '../widgets/bottom_message_bar.dart';
 
 // ignore: must_be_immutable
 class MessageScreen extends StatelessWidget {
-  final Color avClr;
   final double _splashRadius = 21;
   ScrollController _sController = ScrollController();
 
-  MessageScreen({Key key, @required contact, @required this.avClr})
+  MessageScreen({Key key, @required contact})
       : super(key: key);
 
   @override
@@ -52,10 +53,32 @@ class MessageScreen extends StatelessWidget {
             onPressed: () {},
             icon: Icon(Icons.search),
           ),
-          IconButton(
-            splashRadius: _splashRadius,
-            onPressed: () {},
-            icon: Icon(Icons.more_vert),
+          PopupMenuButton(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(4)
+            ),
+            onSelected: (ConversationActions filter) => filter.actionOnConversation(context, convo),
+            icon: Icon(
+              Icons.more_vert,
+            ),
+            itemBuilder: (_) => [
+              PopupMenuItem(
+                child: Text("Details"),
+                value: ConversationActions.DETAILS,
+              ),
+              PopupMenuItem(
+                child: Text(convo.isArchived?"Unarchive":"Archive"),
+                value: ConversationActions.ARCHIVE,
+              ),
+              PopupMenuItem(
+                child: Text("Delete"),
+                value: ConversationActions.DELETE,
+              ),
+              PopupMenuItem(
+                child: Text("Help & feedback"),
+                value: ConversationActions.HELP,
+              ),
+            ],
           ),
         ],
       ),
@@ -67,7 +90,7 @@ class MessageScreen extends StatelessWidget {
             left: 0,
             right: 0,
             bottom: 0,
-            child: MessagesList(sController: _sController, avClr: avClr),
+            child: MessagesList(sController: _sController, avClr: convo.sender.avClr),
           ),
 
           //Bottom Text Input Bar
