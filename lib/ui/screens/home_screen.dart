@@ -1,5 +1,7 @@
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:message_app/ui/screens/new_message_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/messages_provider.dart';
@@ -58,11 +60,25 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 10, right: 5),
-        child: CustomFAB(
-          controller: _controller,
+      floatingActionButton: OpenContainer(
+        openElevation: 0,
+        closedElevation: 0,
+        openColor: Colors.transparent,
+        closedColor: Colors.transparent,
+        tappable: false,
+        openShape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20)
         ),
+        transitionType: ContainerTransitionType.fade,
+        transitionDuration: Duration(milliseconds: 500),
+        closedBuilder: (ctx,openFunction) => Padding(
+          padding: const EdgeInsets.only(bottom: 10, right: 5),
+          child: CustomFAB(
+            controller: _controller,
+            onTap: openFunction,
+          ),
+        ),
+        openBuilder: (ctx,_) => NewMessageScreen(),
       ),
     );
   }

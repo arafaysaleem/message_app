@@ -3,9 +3,9 @@ import 'package:flutter/rendering.dart';
 
 class CustomFAB extends StatefulWidget {
   final ScrollController _controller;
-  final distance;
+  final VoidCallback onTap;
 
-  const CustomFAB({Key key, controller, this.distance})
+  const CustomFAB({Key key,@required controller, @required this.onTap})
       : _controller = controller,
         super(key: key);
 
@@ -52,7 +52,7 @@ class _CustomFABState extends State<CustomFAB> with TickerProviderStateMixin{
       child: FloatingActionButton.extended(
         backgroundColor: Theme.of(context).primaryColor,
         isExtended: expandFAB,
-        onPressed: () {},
+        onPressed: widget.onTap,
         label: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
