@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import 'providers/messages_provider.dart';
@@ -10,6 +12,10 @@ import 'ui/screens/settings_screen.dart';
 import 'ui/screens/web_message_screen.dart';
 
 void main() {
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Colors.white,
+      statusBarBrightness: Brightness.dark
+  ));
   runApp(MyApp());
 }
 

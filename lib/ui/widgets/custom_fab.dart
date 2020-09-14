@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 class CustomFAB extends StatefulWidget {
-  final _controller;
+  final ScrollController _controller;
+  final distance;
 
-  const CustomFAB({Key key, controller})
+  const CustomFAB({Key key, controller, this.distance})
       : _controller = controller,
         super(key: key);
 
@@ -21,19 +22,21 @@ class _CustomFABState extends State<CustomFAB> with TickerProviderStateMixin{
     });
   }
 
+  void scrollListener(){
+    if (widget._controller.position.userScrollDirection ==
+        ScrollDirection.reverse) {
+      _switchFAB(false);
+    } else if (widget._controller.position.userScrollDirection ==
+        ScrollDirection.forward) {
+      _switchFAB(true);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     widget._controller
-      ..addListener(() {
-        if (widget._controller.position.userScrollDirection ==
-            ScrollDirection.reverse) {
-          _switchFAB(false);
-        } else if (widget._controller.position.userScrollDirection ==
-            ScrollDirection.forward) {
-          _switchFAB(true);
-        }
-      });
+      ..addListener(() => scrollListener());
   }
 
   @override

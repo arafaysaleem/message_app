@@ -36,7 +36,7 @@ class ConversationListItem extends StatelessWidget {
       },
       child: CircleAvatar(
         radius: 20,
-        backgroundColor: convo.isSpam ? Colors.grey[300] : avClr,
+        backgroundColor: convo.isSpam ? Colors.grey[200] : avClr,
         child: convo.isSpam
             ? Container(
                 margin: EdgeInsets.all(2),
@@ -44,7 +44,7 @@ class ConversationListItem extends StatelessWidget {
                   child: Icon(
                     Icons.error,
                     color: Colors.redAccent,
-                    size: 35,
+                    size: 30,
                   ),
                 ),
               )
@@ -145,7 +145,6 @@ class ConversationListItem extends StatelessWidget {
           msgManager.toggleSelected(convo);
         }
         else {
-          convo.readConversation();
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (ctx) => ChangeNotifierProvider.value(
@@ -156,7 +155,7 @@ class ConversationListItem extends StatelessWidget {
                 ),
               ),
             ),
-          );
+          ).then((value) => convo.readConversation());
         }
       },
       onLongPress: () {

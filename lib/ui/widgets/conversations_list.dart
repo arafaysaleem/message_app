@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:message_app/enums/filters_enum.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/messages_provider.dart';
+
+import '../../enums/filters_enum.dart';
 
 import '../../helper/utils.dart';
 
@@ -19,7 +20,7 @@ class ConversationsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverPadding(
-      padding: const EdgeInsets.fromLTRB(18, 0, 17, 0),
+      padding: const EdgeInsets.fromLTRB(16, 0, 17, 0),
       sliver: Selector<MessageManager, int>(
         selector: (ctx, msgManager) {
           if(currentFilter == Filters.Archived) return msgManager.archivedConversations.length;

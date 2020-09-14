@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:message_app/enums/filters_enum.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/messages_provider.dart';
+
+import '../../enums/filters_enum.dart';
 
 import '../widgets/custom_app_bar.dart';
 import '../widgets/custom_fab.dart';
 import '../widgets/default_app_bar.dart';
 import '../widgets/conversations_list.dart';
-
 
 // ignore: must_be_immutable
 class HomeScreen extends StatefulWidget {
@@ -19,6 +19,9 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   ScrollController _controller = ScrollController();
+  double initialPosition = 0.0;
+  double endPosition = 0.0;
+  double distance = 0.0;
 
   dispose() {
     _controller.dispose();
@@ -27,7 +30,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final convos = Provider.of<MessageManager>(context, listen: false).conversations;
+    final convos =
+        Provider.of<MessageManager>(context, listen: false).conversations;
     return Scaffold(
       body: SafeArea(
         child: Stack(
@@ -36,22 +40,26 @@ class _HomeScreenState extends State<HomeScreen> {
               controller: _controller,
               slivers: [
                 Selector<MessageManager, int>(
-                  selector: (ctx, msgMgr) => msgMgr.selectedConversations.length,
-                  builder: (ctx, int length, child) =>  CustomAppBar(
-                      length: length,
-                      child: child,
-                      duration: Duration(milliseconds: 300),
+                  selector: (ctx, msgMgr) =>
+                      msgMgr.selectedConversations.length,
+                  builder: (ctx, int length, child) => CustomAppBar(
+                    length: length,
+                    child: child,
+                    duration: Duration(milliseconds: 300),
                   ),
                   child: DefaultAppBar(),
                 ),
-                ConversationsList(convos: convos,currentFilter: Filters.HomeScreen,),
+                ConversationsList(
+                  convos: convos,
+                  currentFilter: Filters.HomeScreen,
+                ),
               ],
             ),
           ],
         ),
       ),
       floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 10,right: 5),
+        padding: const EdgeInsets.only(bottom: 10, right: 5),
         child: CustomFAB(
           controller: _controller,
         ),
