@@ -79,6 +79,7 @@ class _BottomMessageBarState extends State<BottomMessageBar> {
               color: Colors.white,
               child: TextField(
                 onChanged: onChanged,
+                keyboardType: TextInputType.multiline,
                 controller: _textEditingController,
                 cursorColor: Theme.of(context).primaryColor,
                 maxLines: null,
