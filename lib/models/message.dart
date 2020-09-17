@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 class Message{
-  final int number;
+  final String number;
   final String body;
   final DateTime datetime;
   final String previewPath; //for any image or website preview

@@ -3,7 +3,7 @@ import 'package:flutter/rendering.dart';
 
 class Contact{
   final String _name,picturePath;
-  final int number;
+  final String number;
   final Color avClr;
   final bool isBlocked;
 
@@ -19,7 +19,7 @@ class Contact{
 
   Contact({@required this.avClr, this.isBlocked, name, this.picturePath, @required this.number}) : _name=name;
 
-  String get name => _name??number.toString();
+  String get name => _name?? "${number.substring(0, 4)} ${number.substring(4)}" ;
 
   bool get isAdded => _name!=null;
 
