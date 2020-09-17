@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../providers/messages_provider.dart';
+
 import '../../helper/utils.dart';
 
 import '../../models/conversation.dart';
@@ -23,12 +25,14 @@ class _BottomMessageBarState extends State<BottomMessageBar> {
     _textEditingController = TextEditingController();
   }
 
-  void sendMessage(convo,BuildContext context) {
+  void sendMessage(Conversation convo, BuildContext context) {
     setState(() {
       convo.sendMessage(text: _textEditingController.text.trim());
       _textEditingController.clear();
       widget.sController.jumpTo(widget.sController.position.maxScrollExtent);
-      // context.read<MessageManager>().updateConversionList(convo);
+      final msgMgr = context.read<MessageManager>();
+      if (convo.isArchived) msgMgr.toggleArchiveConvo(convo);
+      msgMgr.updateConversionList(convo);
     });
   }
 
@@ -38,13 +42,13 @@ class _BottomMessageBarState extends State<BottomMessageBar> {
     super.dispose();
   }
 
-  onChanged(String msg){
-    if(msg.trim().length < 2) setState(() {});
+  onChanged(String msg) {
+    if (msg.trim().length < 2) setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    final convo = Provider.of<Conversation>(context,listen:false);
+    final convo = Provider.of<Conversation>(context, listen: false);
     return Container(
       color: Colors.white.withOpacity(0.95),
       width: MediaQuery.of(context).size.width,
@@ -85,8 +89,8 @@ class _BottomMessageBarState extends State<BottomMessageBar> {
                 maxLines: null,
                 textInputAction: TextInputAction.send,
                 onSubmitted: (String msg) {
-                  if(msg.isEmpty) return;
-                  sendMessage(convo,context);
+                  if (msg.isEmpty) return;
+                  sendMessage(convo, context);
                   //TODO: add regex check for any urls to show preview and it as a path
                 },
                 decoration: InputDecoration(
@@ -112,23 +116,25 @@ class _BottomMessageBarState extends State<BottomMessageBar> {
                     onTap: () {},
                     child: Padding(
                       padding: const EdgeInsets.only(right: 10),
-                      child: _textEditingController.text.isEmpty ? InkWell(
-                        child: Icon(
-                           Icons.person_add,
-                          color: Theme.of(context).primaryColor,
-                          size: 28,
-                        ),
-                      ) : InkWell(
-                        onTap: () {
-                          sendMessage(convo,context);
-                          FocusScope.of(context).unfocus();
-                        },
-                        child: Icon(
-                          Icons.send,
-                          color: Theme.of(context).primaryColor,
-                          size: 28,
-                        ),
-                      ),
+                      child: _textEditingController.text.isEmpty
+                          ? InkWell(
+                              child: Icon(
+                                Icons.person_add,
+                                color: Theme.of(context).primaryColor,
+                                size: 28,
+                              ),
+                            )
+                          : InkWell(
+                              onTap: () {
+                                sendMessage(convo, context);
+                                FocusScope.of(context).unfocus();
+                              },
+                              child: Icon(
+                                Icons.send,
+                                color: Theme.of(context).primaryColor,
+                                size: 28,
+                              ),
+                            ),
                     ),
                   ),
                 ),

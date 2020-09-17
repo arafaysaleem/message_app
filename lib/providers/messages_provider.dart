@@ -305,15 +305,12 @@ class MessageManager with ChangeNotifier {
   final List<Message> _favMessages = [];
   final List<Conversation> _spammedConversations = [];
   final List<Conversation> _archivedConversations = [];
-  final List<Contact> _contacts = [];
 
   UnmodifiableMapView<String, Conversation> get conversationsMap =>
       UnmodifiableMapView(_conversations);
 
   UnmodifiableListView<Conversation> get conversations =>
       UnmodifiableListView(_conversations.values);
-
-  UnmodifiableListView<Contact> get contacts => UnmodifiableListView(_contacts);
 
   UnmodifiableListView<Conversation> get selectedConversations =>
       UnmodifiableListView(_selectedConversations);
@@ -326,20 +323,11 @@ class MessageManager with ChangeNotifier {
   UnmodifiableListView<Conversation> get archivedConversations =>
       UnmodifiableListView(_archivedConversations);
 
-  Contact getSenderContact(String number) {
-    Contact sender = Contact(number: number,avClr: Colors.amber);
-    if (_contacts.contains(sender))
-      return _contacts
-          .where((Contact contact) => contact == sender)
-          .toList()[0];
-    return sender;
-  } //call from api helper
-
-  // void updateConversionList(Conversation convo){
-  //   _conversations.remove(convo.sender.number); //remove
-  //   _conversations[convo.sender.number]=convo; //and insert at end to make it appear on top
-  //   notifyListeners();
-  // }
+  void updateConversionList(Conversation convo){
+    _conversations.remove(convo.sender.number); //remove
+    _conversations[convo.sender.number]=convo; //and insert at end to make it appear on top
+    notifyListeners();
+  }
 
   bool isSelected(Conversation convo) => _selectedConversations.contains(convo);
 

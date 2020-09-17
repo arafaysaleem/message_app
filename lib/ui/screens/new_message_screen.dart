@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:message_app/ui/widgets/contacts_list.dart';
 
+import '../widgets/contacts_list.dart';
 import '../widgets/new_message_appbar.dart';
 
 // ignore: must_be_immutable

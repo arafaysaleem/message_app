@@ -12,6 +12,7 @@ dependencies:
   provider: ^4.3.2+1
   intl: ^0.16.1
   animations: ^1.1.2
+  tuple: ^1.0.3
 dev_dependencies:
   flutter_test:
     sdk: flutter

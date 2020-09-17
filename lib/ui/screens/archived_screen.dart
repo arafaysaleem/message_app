@@ -13,7 +13,6 @@ class ArchivedMessagesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final archivedConvos = Provider.of<MessageManager>(context, listen: false).archivedConversations;
     return Scaffold(
       body: SafeArea(
         child: Stack(
@@ -48,7 +47,6 @@ class ArchivedMessagesScreen extends StatelessWidget {
                   child: ArchivedAppBar(),
                 ),
                 ConversationsList(
-                  convos: archivedConvos,
                   currentFilter: Filters.Archived,
                 ),
               ],

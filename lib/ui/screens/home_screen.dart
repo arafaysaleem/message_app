@@ -1,12 +1,16 @@
-import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:message_app/ui/screens/new_message_screen.dart';
 import 'package:provider/provider.dart';
 
+import 'package:animations/animations.dart';
+
+
+import '../../providers/contacts_provider.dart';
 import '../../providers/messages_provider.dart';
 
 import '../../enums/filters_enum.dart';
+
+import 'new_message_screen.dart';
 
 import '../widgets/custom_app_bar.dart';
 import '../widgets/custom_fab.dart';
@@ -32,8 +36,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final convos =
-        Provider.of<MessageManager>(context, listen: false).conversations;
     return Scaffold(
       body: SafeArea(
         child: Stack(
@@ -52,7 +54,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: DefaultAppBar(),
                 ),
                 ConversationsList(
-                  convos: convos,
                   currentFilter: Filters.HomeScreen,
                 ),
               ],
@@ -68,14 +69,17 @@ class _HomeScreenState extends State<HomeScreen> {
         tappable: false,
         transitionType: ContainerTransitionType.fade,
         transitionDuration: Duration(milliseconds: 500),
-        closedBuilder: (ctx,openFunction) => Padding(
+        closedBuilder: (ctx, openFunction) => Padding(
           padding: const EdgeInsets.only(bottom: 10, right: 5),
           child: CustomFAB(
             controller: _controller,
             onTap: openFunction,
           ),
         ),
-        openBuilder: (ctx,_) => NewMessageScreen(),
+        openBuilder: (ctx, _) => ChangeNotifierProvider(
+          create:(_) => ContactsProvider(context.read<MessageManager>()),
+          child: NewMessageScreen(),
+        ),
       ),
     );
   }

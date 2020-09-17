@@ -13,7 +13,6 @@ class SpamAndBlockedMessagesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final spammedConvos=Provider.of<MessageManager>(context,listen: false).spammedConversations;
     return Scaffold(
       body: SafeArea(
         child: Stack(
@@ -48,7 +47,6 @@ class SpamAndBlockedMessagesScreen extends StatelessWidget {
                   child: SpamAppBar(),
                 ),
                 ConversationsList(
-                  convos: spammedConvos,
                   currentFilter: Filters.SpamAndBlocked,
                 ),
               ],
