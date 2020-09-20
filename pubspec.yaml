@@ -24,6 +24,8 @@ flutter:
     - asset: fonts/Roboto-Regular.ttf
     - asset: fonts/Roboto-Bold.ttf
       weight: 700
+    - asset: fonts/Roboto-Medium.ttf
+      weight: 500
   - family: Poppins
     fonts:
     - asset: fonts/Poppins-Regular.ttf

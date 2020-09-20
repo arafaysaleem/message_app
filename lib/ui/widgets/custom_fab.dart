@@ -64,7 +64,7 @@ class _CustomFABState extends State<CustomFAB> with TickerProviderStateMixin{
                   if (expandFAB) SizedBox(width: 8),
                   AnimatedSize(
                     vsync: this,
-                    duration: Duration(milliseconds: 200),
+                    duration: Duration(milliseconds: 100),
                     child: Text(
                     expandFAB ? "Start chat" : "",
                       style: TextStyle(fontSize: 17, color: Colors.white,

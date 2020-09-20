@@ -6,7 +6,6 @@ import 'messages_provider.dart';
 
 import '../helper/utils.dart';
 
-import '../models/conversation.dart';
 import '../models/contact.dart';
 
 class ContactsProvider with ChangeNotifier {

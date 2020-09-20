@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:message_app/models/contact.dart';
 
 class NewMessageAppBar extends StatefulWidget {
   final TextEditingController textEditingController;
@@ -29,12 +28,6 @@ class _NewMessageAppBarState extends State<NewMessageAppBar> {
     widget.textEditingController.dispose();
     super.dispose();
   }
-
-  onChanged(String msg) {
-    //filter list
-  }
-
-  onSubmitted(String msg) {}
 
   toggleKeyboardType() {
     setState(() {
@@ -96,9 +89,7 @@ class _NewMessageAppBarState extends State<NewMessageAppBar> {
                           hintText: "Type a name, phone number, or email",
                           hintStyle:
                               TextStyle(fontSize: 14, color: Colors.grey[700])),
-                      onChanged: onChanged,
                       controller: widget.textEditingController,
-                      onSubmitted: onSubmitted,
                     ),
                   ),
                   IconButton(
