@@ -5,6 +5,8 @@ import '../../enums/filters_enum.dart';
 
 import '../../providers/messages_provider.dart';
 
+import '../../helper/utils.dart';
+
 class ActionsAppBar extends StatelessWidget {
   final int length;
   final Filters currentFilter;
@@ -43,7 +45,14 @@ class ActionsAppBar extends StatelessWidget {
                     Icons.unarchive,
                     color: Colors.indigoAccent[700],
                   ),
-                  onPressed: messageManager.archiveSelected,
+                  onPressed: () {
+                    Utils.showFlushBar(
+                      context,
+                      "${messageManager.selectedConversations.length} conversations unarchived",
+                      Icons.unarchive
+                    );
+                    messageManager.archiveSelected();
+                  },
                 )
               : IconButton(
                   splashColor: Colors.transparent,
@@ -51,7 +60,14 @@ class ActionsAppBar extends StatelessWidget {
                     Icons.archive,
                     color: Colors.indigoAccent[700],
                   ),
-                  onPressed: messageManager.archiveSelected,
+                  onPressed: () {
+                    Utils.showFlushBar(
+                      context,
+                      "${messageManager.selectedConversations.length} conversations archived",
+                      Icons.archive
+                    );
+                    messageManager.archiveSelected();
+                  },
                 ),
         IconButton(
           splashColor: Colors.transparent,
@@ -59,9 +75,16 @@ class ActionsAppBar extends StatelessWidget {
             Icons.delete,
             color: Colors.indigoAccent[700],
           ),
-          onPressed: messageManager.deleteSelected,
+          onPressed: () {
+            Utils.showFlushBar(
+              context,
+              "${messageManager.selectedConversations.length} conversations deleted",
+              Icons.delete
+            );
+            messageManager.deleteSelected();
+          },
         ),
-        if (length == 1 && currentFilter!=Filters.SpamAndBlocked) ...[
+        if (length == 1 && currentFilter != Filters.SpamAndBlocked) ...[
           IconButton(
             splashColor: Colors.transparent,
             icon: Icon(
@@ -78,7 +101,14 @@ class ActionsAppBar extends StatelessWidget {
               Icons.block,
               color: Colors.indigoAccent[700],
             ),
-            onPressed: messageManager.spamSelected,
+            onPressed: () {
+              Utils.showFlushBar(
+                context,
+                "${messageManager.selectedConversations.length} conversations marked spam",
+                Icons.block
+              );
+              messageManager.spamSelected();
+            },
           ),
         ],
       ],

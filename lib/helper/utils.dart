@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 
 class Utils{
@@ -15,5 +16,31 @@ class Utils{
   static Color getAvatarColor(){
     Color avClr = _avatarColors[_randomGenerator.nextInt(_avatarColors.length)];
     return avClr;
+  }
+
+  static void showFlushBar(context, String message,IconData icon) {
+    Flushbar(
+      messageText: Text(
+        message,
+        style: TextStyle(
+          fontFamily: "Montserrat",
+          fontSize: 15,
+          color: Colors.white,
+        ),
+      ),
+      flushbarPosition: FlushbarPosition.BOTTOM,
+      flushbarStyle: FlushbarStyle.FLOATING,
+      borderRadius:7,
+      margin: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+      padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
+      icon: Icon(
+        icon,
+        size: 28.0,
+        color: Theme.of(context).primaryColor,
+      ),
+      shouldIconPulse: false,
+      dismissDirection: FlushbarDismissDirection.HORIZONTAL,
+      duration: Duration(seconds: 3),
+    )..show(context);
   }
 }
