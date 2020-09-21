@@ -14,7 +14,7 @@ class Conversation with ChangeNotifier{
   bool _isSpam=false;
   bool _isArchived=false;
 
-  Conversation({@required this.sender,@required messages}) : assert(messages.length >= 1), _messages=messages;
+  Conversation({@required this.sender,@required messages}) : assert(messages.length >= 0), _messages=messages;
 
   @override
   bool operator ==(Object other) =>

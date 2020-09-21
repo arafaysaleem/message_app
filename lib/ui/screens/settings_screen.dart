@@ -132,6 +132,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       //change from msgmanager country
                       style: TextStyle(
                         fontSize: 16,
+                        fontWeight: FontWeight.w300,
                         color: Colors.grey[600],
                       ),
                     )
@@ -164,6 +165,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       "Google Assistant, smart reply & more",
                       style: TextStyle(
                         fontSize: 16,
+                        fontWeight: FontWeight.w300,
                         color: Colors.grey[600],
                       ),
                     )
@@ -195,9 +197,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     Text(
                       "Google Assistant, smart reply & more",
                       style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.grey[600],
-                          fontWeight: FontWeight.normal),
+                        fontSize: 16,
+                        color: Colors.grey[600],
+                        fontWeight: FontWeight.w300,
+                      ),
                     ),
                   ],
                 ),

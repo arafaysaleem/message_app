@@ -335,6 +335,18 @@ class MessageManager with ChangeNotifier {
     _conversations.values.forEach((Conversation convo) => convo.readConversation());
   }
 
+  Conversation getConversation(Contact contact){
+    return _conversations[contact.number]??_createConversation(contact);
+  }
+
+  Conversation _createConversation(Contact contact){
+    _conversations[contact.number]=Conversation(
+      sender: contact,
+      messages: <Message>[],
+    );
+    return _conversations[contact.number];
+  }
+
   void deleteConversation(Conversation convo) {
     if(_conversations.containsKey(convo.sender.number)) _conversations.remove(convo.sender.number);
     else if(_archivedConversations.contains(convo)) _archivedConversations.remove(convo);

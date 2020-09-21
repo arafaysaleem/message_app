@@ -16,23 +16,24 @@ class ContactsProvider with ChangeNotifier {
     Contact(name: "Bakhtyar Bellcow", number: "03009565352", avClr: Colors.red),
     Contact(number: "03009756562", name: "Meeran", avClr: Colors.blue),
     Contact(
-        name: "Zohaib", number: "03003528563", avClr: Colors.lightGreenAccent),
+        name: "Zohaib", number: "03003528563", avClr: Colors.purpleAccent),
     Contact(number: "03012500876", name: "Mama", avClr: Colors.red),
     Contact(name: "Suraksha", number: "03010656505", avClr: Colors.blue),
     Contact(number: "03012668889", name: "Zain", avClr: Colors.amber),
     Contact(name: "Bakhtyar Bellcow", number: "03009565352", avClr: Colors.red),
     Contact(number: "03009756562", name: "Meeran", avClr: Colors.blue),
     Contact(
-        name: "Zohaib", number: "03003528563", avClr: Colors.lightGreenAccent),
+        name: "Zohaib", number: "03003528563", avClr: Colors.purpleAccent),
     Contact(number: "03012500876", name: "Mama", avClr: Colors.red),
     Contact(name: "Suraksha", number: "03010656505", avClr: Colors.blue),
     Contact(number: "03012668889", name: "Zain", avClr: Colors.amber),
     Contact(name: "Bakhtyar Bellcow", number: "03009565352", avClr: Colors.red),
     Contact(number: "03009756562", name: "Meeran", avClr: Colors.blue),
     Contact(
-        name: "Zohaib", number: "03003528563", avClr: Colors.lightGreenAccent),
+        name: "Zohaib", number: "03003528563", avClr: Colors.purpleAccent),
     Contact(number: "03012500876", name: "Mama", avClr: Colors.red),
     Contact(name: "Suraksha", number: "03010656505", avClr: Colors.blue),
+    Contact(name: "Zara", number: "03059346665", avClr: Colors.purpleAccent),
   ];
 
   ContactsProvider(this._messageManager) {
@@ -57,4 +58,19 @@ class ContactsProvider with ChangeNotifier {
       orElse: () => Contact(number: number, avClr: Utils.getAvatarColor()),
     );
   } //call from api helper
+
+  UnmodifiableListView<Contact> getFilteredContacts(String text) {
+    if (text.isEmpty) {
+      return contacts;
+    }
+    String search = text.toLowerCase();
+    List<Contact> filteredContacts = [];
+    contacts
+        .forEach((contact) {
+      if (contact.name.toLowerCase().startsWith(search)) {
+        filteredContacts.add(contact);
+      }
+    });
+    return UnmodifiableListView(filteredContacts);
+  }
 }

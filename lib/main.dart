@@ -31,6 +31,7 @@ class MyApp extends StatelessWidget {
           primaryColor: Colors.indigoAccent[700],
           scaffoldBackgroundColor: Color(0xFFfefefe),
           fontFamily: "Roboto",
+          iconTheme: IconThemeData(color: Colors.grey[800]),
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         routes: {
