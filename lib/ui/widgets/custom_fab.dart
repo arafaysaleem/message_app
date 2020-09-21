@@ -69,6 +69,7 @@ class _CustomFABState extends State<CustomFAB> with TickerProviderStateMixin{
                     expandFAB ? "Start chat" : "",
                       style: TextStyle(fontSize: 17, color: Colors.white,
                         fontWeight: FontWeight.w400,
+                        letterSpacing: 0.5,
                         height: 1
                       ),
                     ),
