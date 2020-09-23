@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:message_app/ui/screens/message_details_screen.dart';
 import 'package:provider/provider.dart';
 
 import 'providers/messages_provider.dart';

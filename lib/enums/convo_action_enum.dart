@@ -1,9 +1,14 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:message_app/helper/utils.dart';
 import 'package:provider/provider.dart';
 
-import 'package:message_app/providers/messages_provider.dart';
+import '../providers/messages_provider.dart';
+
+import '../helper/utils.dart';
+
+import '../models/conversation.dart';
+
+import '../ui/screens/message_details_screen.dart';
 
 enum ConversationActions { DELETE, DETAILS, ARCHIVE, HELP }
 
@@ -32,7 +37,7 @@ extension ConversationActionExtension on ConversationActions {
           msgManger.toggleArchiveConvo(convo);
           Navigator.of(context).pop();
           Future.delayed(Duration(milliseconds: 300)).then(
-                (value) => Utils.showFlushBar(
+            (value) => Utils.showFlushBar(
               context,
               "Conversation with ${convo.sender.name} archived",
               Icons.delete,
@@ -47,7 +52,15 @@ extension ConversationActionExtension on ConversationActions {
         }
       case ConversationActions.DETAILS:
         {
-          //pass convo to details page
+          final convo = context.read<Conversation>();
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (ctx) => ChangeNotifierProvider.value(
+                value: convo,
+                child: MessageDetailsScreen(),
+              ),
+            ),
+          );
           return;
         }
     }

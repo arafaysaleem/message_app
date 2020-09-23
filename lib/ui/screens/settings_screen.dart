@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:message_app/ui/screens/spam_blocked_msg_screen.dart';
 
 // ignore: must_be_immutable
 class SettingsScreen extends StatefulWidget {
