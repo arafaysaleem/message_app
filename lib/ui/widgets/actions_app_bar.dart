@@ -23,7 +23,7 @@ class ActionsAppBar extends StatelessWidget {
           splashColor: Colors.transparent,
           icon: Icon(
             Icons.close,
-            color: Colors.indigoAccent[700],
+            color: Theme.of(context).primaryColor,
           ),
           onPressed: messageManager.clearSelected,
         ),
@@ -33,7 +33,7 @@ class ActionsAppBar extends StatelessWidget {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
-              color: Colors.indigoAccent[700],
+              color:Theme.of(context).primaryColor,
             ),
           ),
         ),
@@ -43,7 +43,7 @@ class ActionsAppBar extends StatelessWidget {
                   splashColor: Colors.transparent,
                   icon: Icon(
                     Icons.unarchive,
-                    color: Colors.indigoAccent[700],
+                    color:Theme.of(context).primaryColor,
                   ),
                   onPressed: () {
                     Utils.showFlushBar(
@@ -58,7 +58,7 @@ class ActionsAppBar extends StatelessWidget {
                   splashColor: Colors.transparent,
                   icon: Icon(
                     Icons.archive,
-                    color: Colors.indigoAccent[700],
+                    color:Theme.of(context).primaryColor,
                   ),
                   onPressed: () {
                     Utils.showFlushBar(
@@ -73,7 +73,7 @@ class ActionsAppBar extends StatelessWidget {
           splashColor: Colors.transparent,
           icon: Icon(
             Icons.delete,
-            color: Colors.indigoAccent[700],
+            color:Theme.of(context).primaryColor,
           ),
           onPressed: () {
             Utils.showFlushBar(
@@ -89,7 +89,7 @@ class ActionsAppBar extends StatelessWidget {
             splashColor: Colors.transparent,
             icon: Icon(
               Icons.person_add,
-              color: Colors.indigoAccent[700],
+              color:Theme.of(context).primaryColor,
             ),
             onPressed: () {
               //messageManager.addContact
@@ -99,7 +99,7 @@ class ActionsAppBar extends StatelessWidget {
             splashColor: Colors.transparent,
             icon: Icon(
               Icons.block,
-              color: Colors.indigoAccent[700],
+              color:Theme.of(context).primaryColor,
             ),
             onPressed: () {
               Utils.showFlushBar(

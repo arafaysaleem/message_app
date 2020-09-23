@@ -1,7 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:message_app/ui/screens/message_details_screen.dart';
 import 'package:provider/provider.dart';
 
 import 'providers/messages_provider.dart';
@@ -29,7 +27,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Flutter Message Manager',
         theme: ThemeData(
-          primaryColor: Colors.indigoAccent[700],
+          primaryColor: Colors.lightBlueAccent[700],
           scaffoldBackgroundColor: Color(0xFFfefefe),
           fontFamily: "Roboto",
           iconTheme: IconThemeData(color: Colors.grey[800]),

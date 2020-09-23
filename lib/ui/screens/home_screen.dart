@@ -40,23 +40,29 @@ class _HomeScreenState extends State<HomeScreen> {
       body: SafeArea(
         child: Stack(
           children: <Widget>[
-            CustomScrollView(
-              controller: _controller,
-              slivers: [
-                Selector<MessageManager, int>(
-                  selector: (ctx, msgMgr) =>
-                      msgMgr.selectedConversations.length,
-                  builder: (ctx, int length, child) => CustomAppBar(
-                    length: length,
-                    child: child,
-                    duration: Duration(milliseconds: 300),
+            NotificationListener<OverscrollIndicatorNotification>(
+              onNotification: (overScroll){
+                overScroll.disallowGlow();
+                return false;
+              },
+              child: CustomScrollView(
+                controller: _controller,
+                slivers: [
+                  Selector<MessageManager, int>(
+                    selector: (ctx, msgMgr) =>
+                        msgMgr.selectedConversations.length,
+                    builder: (ctx, int length, child) => CustomAppBar(
+                      length: length,
+                      child: child,
+                      duration: Duration(milliseconds: 300),
+                    ),
+                    child: DefaultAppBar(),
                   ),
-                  child: DefaultAppBar(),
-                ),
-                ConversationsList(
-                  currentFilter: Filters.HomeScreen,
-                ),
-              ],
+                  ConversationsList(
+                    currentFilter: Filters.HomeScreen,
+                  ),
+                ],
+              ),
             ),
           ],
         ),

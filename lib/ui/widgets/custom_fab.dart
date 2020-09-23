@@ -48,7 +48,7 @@ class _CustomFABState extends State<CustomFAB> with TickerProviderStateMixin{
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 55,
+      height: 50,
       child: FloatingActionButton.extended(
         backgroundColor: Theme.of(context).primaryColor,
         isExtended: expandFAB,
@@ -59,7 +59,7 @@ class _CustomFABState extends State<CustomFAB> with TickerProviderStateMixin{
                   Icon(
                     Icons.message,
                     color: Colors.white,
-                    size: 23,
+                    size: 22,
                   ),
                   if (expandFAB) SizedBox(width: 8),
                   AnimatedSize(
@@ -69,7 +69,7 @@ class _CustomFABState extends State<CustomFAB> with TickerProviderStateMixin{
                     expandFAB ? "Start chat" : "",
                       style: TextStyle(fontSize: 17, color: Colors.white,
                         fontWeight: FontWeight.w400,
-                        letterSpacing: 0.5,
+                        letterSpacing: 0.3,
                         height: 1
                       ),
                     ),

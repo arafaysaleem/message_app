@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:message_app/enums/filters_enum.dart';
+
+import '../../enums/filters_enum.dart';
 
 import 'actions_app_bar.dart';
 
@@ -18,6 +19,7 @@ class CustomAppBar extends StatelessWidget {
       collapsedHeight: 66,
       shadowColor: Colors.transparent,
       backgroundColor: Colors.transparent,
+      automaticallyImplyLeading: false,
       floating: true,
       flexibleSpace: AnimatedPadding(
         duration: duration,

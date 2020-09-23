@@ -144,35 +144,41 @@ class _MessagesListState extends State<MessagesList> {
       child: Scrollbar(
         isAlwaysShown: true,
         controller: widget.sController,
-        child: ListView.builder(
-          keyboardDismissBehavior:
-          ScrollViewKeyboardDismissBehavior.onDrag,
-          controller: widget.sController,
-          padding: const EdgeInsets.symmetric(vertical: 10),
-          itemCount: convo.messages.length,
-          itemBuilder: (ctx, i) {
-            bool myMsg = false;
-            if (Conversation.myContact.number == convo.messages[i].number)
-              myMsg = true;
-            if (i == convo.messages.length - 1)
-              return Padding(
-                padding: const EdgeInsets.only(bottom: 60),
-                child: MessageListItem(
-                  isSpam: convo.isSpam,
-                  contact: convo.sender,
-                  msg: convo.messages[i],
-                  avClr: widget.avClr,
-                  myMessage: myMsg,
-                ),
-              );
-            return MessageListItem(
-              isSpam: convo.isSpam,
-              contact: convo.sender,
-              msg: convo.messages[i],
-              avClr: widget.avClr,
-              myMessage: myMsg,
-            );
+        child: NotificationListener<OverscrollIndicatorNotification>(
+          onNotification: (overScroll){
+            overScroll.disallowGlow();
+            return false;
           },
+          child: ListView.builder(
+            keyboardDismissBehavior:
+            ScrollViewKeyboardDismissBehavior.onDrag,
+            controller: widget.sController,
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            itemCount: convo.messages.length,
+            itemBuilder: (ctx, i) {
+              bool myMsg = false;
+              if (Conversation.myContact.number == convo.messages[i].number)
+                myMsg = true;
+              if (i == convo.messages.length - 1)
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 60),
+                  child: MessageListItem(
+                    isSpam: convo.isSpam,
+                    contact: convo.sender,
+                    msg: convo.messages[i],
+                    avClr: widget.avClr,
+                    myMessage: myMsg,
+                  ),
+                );
+              return MessageListItem(
+                isSpam: convo.isSpam,
+                contact: convo.sender,
+                msg: convo.messages[i],
+                avClr: widget.avClr,
+                myMessage: myMsg,
+              );
+            },
+          ),
         ),
       ),
     );
