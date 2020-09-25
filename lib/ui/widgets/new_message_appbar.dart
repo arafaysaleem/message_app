@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:message_app/models/conversation.dart';
+import 'package:message_app/ui/screens/message_screen.dart';
+import 'package:provider/provider.dart';
+
+import '../../providers/contacts_provider.dart';
 
 class NewMessageAppBar extends StatefulWidget {
   final TextEditingController textEditingController;
@@ -13,7 +18,7 @@ class NewMessageAppBar extends StatefulWidget {
 class _NewMessageAppBarState extends State<NewMessageAppBar> {
   double _splashRadius;
   FocusNode _focusNode;
-  bool isDialPad=false;
+  bool isDialPad = false;
 
   @override
   void initState() {
@@ -39,12 +44,23 @@ class _NewMessageAppBarState extends State<NewMessageAppBar> {
     });
   }
 
+  double getAppBarHeight(int length) {
+    double minHeight = 103;
+    for (int i = 0; i < length; i++) {
+      if (minHeight < 208)
+        minHeight += 20;
+      else
+        break;
+    }
+    return minHeight;
+  }
+
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
       automaticallyImplyLeading: false,
       floating: false,
-      collapsedHeight: 104,
+      collapsedHeight: 103,
       elevation: 3,
       shadowColor: Colors.grey[50],
       backgroundColor: Colors.white,
@@ -53,6 +69,7 @@ class _NewMessageAppBarState extends State<NewMessageAppBar> {
         width: MediaQuery.of(context).size.width,
         margin: const EdgeInsets.only(top: 4),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Row(
               children: [
@@ -66,6 +83,40 @@ class _NewMessageAppBarState extends State<NewMessageAppBar> {
                   "New Conversation",
                   style: TextStyle(fontSize: 17, fontFamily: "Poppins"),
                 ),
+                Spacer(),
+                Consumer<ContactsProvider>(
+                  builder: (ctx, contactsProvider, child) =>
+                      (contactsProvider.selectedContacts.length > 0 &&
+                              contactsProvider.createGroupActive)
+                          ? InkWell(
+                              onTap: () {
+                                Conversation convo =
+                                    contactsProvider.getNewGroupConversation;
+                                Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                    builder: (ctx) {
+                                      return ChangeNotifierProvider.value(
+                                        value: convo,
+                                        child: MessageScreen(
+                                          contact: convo.sender,
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                );
+                              },
+                              child: Text(
+                                "Next",
+                                style: TextStyle(
+                                  fontSize: 17,
+                                  fontFamily: "Poppins",
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                              ),
+                            )
+                          : SizedBox.shrink(),
+                ),
+                SizedBox(width: 13),
               ],
             ),
             Padding(
@@ -82,13 +133,17 @@ class _NewMessageAppBarState extends State<NewMessageAppBar> {
                       focusNode: _focusNode,
                       cursorColor: Theme.of(context).primaryColor,
                       textInputAction: TextInputAction.search,
+                      maxLines: null,
                       keyboardType: isDialPad
                           ? TextInputType.number
                           : TextInputType.emailAddress,
                       decoration: InputDecoration.collapsed(
-                          hintText: "Type a name, phone number, or email",
-                          hintStyle:
-                              TextStyle(fontSize: 14, color: Colors.grey[700])),
+                        hintText: "Type a name, phone number, or email",
+                        hintStyle: TextStyle(
+                          fontSize: 14,
+                          color: Colors.grey[700],
+                        ),
+                      ),
                       controller: widget.textEditingController,
                     ),
                   ),
@@ -96,7 +151,7 @@ class _NewMessageAppBarState extends State<NewMessageAppBar> {
                     onPressed: toggleKeyboardType,
                     splashRadius: _splashRadius,
                     icon: Icon(
-                      isDialPad ? Icons.dialpad:Icons.keyboard,
+                      isDialPad ? Icons.dialpad : Icons.keyboard,
                       color: Colors.grey[800],
                     ),
                   )

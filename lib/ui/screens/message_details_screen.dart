@@ -168,7 +168,7 @@ class MessageDetailsScreen extends StatelessWidget {
                   return false;
                 },
                 child: ListView(
-                  children: convo.participants
+                  children: convo.participants.sublist(1)
                       .map(
                         (member) => InkWell(
                           onTap: () {},
@@ -183,7 +183,7 @@ class MessageDetailsScreen extends StatelessWidget {
                                     radius: 20,
                                     backgroundColor: convo.isSpam
                                         ? Colors.grey[200]
-                                        : convo.sender.avClr,
+                                        : member.avClr,
                                     child: convo.sender.isAdded
                                         ? Text(
                                             member.name.substring(0, 1),
@@ -203,7 +203,7 @@ class MessageDetailsScreen extends StatelessWidget {
                                     member.name,
                                     style: TextStyle(
                                       fontSize: 16,
-                                      fontWeight: FontWeight.w500,
+                                      fontWeight: FontWeight.w400,
                                     ),
                                   ),
                                 ],

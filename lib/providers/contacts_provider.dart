@@ -1,6 +1,7 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
+import 'package:message_app/models/conversation.dart';
 
 import 'messages_provider.dart';
 
@@ -36,6 +37,9 @@ class ContactsProvider with ChangeNotifier {
     Contact(name: "Zara", number: "03059346665", avClr: Colors.purpleAccent),
   ];
 
+  final List<Contact> _selectedContacts = [];
+  bool _createGroupActive=false;
+
   ContactsProvider(this._messageManager) {
     _contacts.sort((Contact a, Contact b) => a.name.compareTo(b.name)); //sort while fetching from firebase
   }
@@ -51,6 +55,42 @@ class ContactsProvider with ChangeNotifier {
     }
     return UnmodifiableListView(last8Convos);
   }
+
+  UnmodifiableListView<Contact> get selectedContacts =>
+      UnmodifiableListView(_selectedContacts);
+
+  bool isSelected(Contact contact) => _selectedContacts.contains(contact);
+
+  bool get createGroupActive => _createGroupActive;
+
+  void toggleCreateGroupMode(){
+    _createGroupActive=!_createGroupActive;
+    notifyListeners();
+  }
+
+  void unSelectContact(Contact contact) {
+    _selectedContacts.remove(contact);
+    notifyListeners();
+  }
+
+  void selectContact(Contact contact) {
+    _selectedContacts.add(contact);
+    notifyListeners();
+  }
+
+  void toggleSelected(Contact contact) {
+    if (isSelected(contact))
+      unSelectContact(contact);
+    else
+      selectContact(contact);
+  }
+
+  void clearSelected(){
+    _selectedContacts.clear();
+    notifyListeners();
+  }
+
+  Conversation get getNewGroupConversation => _messageManager.createGroupConversation(selectedContacts);
 
   Contact getSenderContact(String number) {
     return _contacts.firstWhere(

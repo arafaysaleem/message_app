@@ -14,17 +14,20 @@ class Conversation with ChangeNotifier {
   List<Contact> _participants;
   bool _isRead = false;
   bool _isSpam = false;
-  bool _isGroup = false;
+  bool _isGroup;
+  String _groupID;
   bool _isArchived = false;
 
   Conversation({participants,
     @required this.sender,
     @required messages,
-    isGroup = false})
+    isGroup = false,
+    groupID})
       : assert(messages.length >= 0, "No. of messages can't be less than 0"),
         _messages = messages,
         _isGroup=isGroup,
-        _participants = participants ?? [];
+        _participants = participants ?? [],
+        _groupID=groupID;
 
   @override
   bool operator ==(Object other) =>

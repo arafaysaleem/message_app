@@ -1,4 +1,6 @@
 import 'dart:collection';
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 import '../models/contact.dart';
@@ -301,6 +303,17 @@ class MessageManager with ChangeNotifier {
       ],
     ),
   };
+  final Map<String, Conversation> _groups = {
+    "echo1":Conversation(
+      sender: Contact(name: "Farhan",number: "03028220488",avClr: Colors.red),
+      groupID: "echo1",
+      messages: <Message>[],
+      isGroup: true,
+      participants: <Contact>[
+        Contact(name: "Asad",number: "03028199488",avClr: Colors.blue)
+      ]
+    )
+  };
   final List<Conversation> _selectedConversations = [];
   final List<Message> _favMessages = [];
   final List<Conversation> _spammedConversations = [];
@@ -323,6 +336,12 @@ class MessageManager with ChangeNotifier {
   UnmodifiableListView<Conversation> get archivedConversations =>
       UnmodifiableListView(_archivedConversations);
 
+  UnmodifiableMapView<String, Conversation> get groupsMap =>
+      UnmodifiableMapView(_groups);
+
+  UnmodifiableListView<Conversation> get groupsConversations =>
+      UnmodifiableListView(_groups.values);
+
   void updateConversionList(Conversation convo){
     _conversations.remove(convo.sender.number); //remove
     _conversations[convo.sender.number]=convo; //and insert at end to make it appear on top
@@ -337,6 +356,19 @@ class MessageManager with ChangeNotifier {
 
   Conversation getConversation(Contact contact){
     return _conversations[contact.number]??_createConversation(contact);
+  }
+
+  Conversation createGroupConversation(groupMembers){
+    Random random = Random();
+    String groupID=random.nextInt(100000).toString();
+    _groups[groupID]=Conversation(
+      sender: groupMembers[0],
+      messages: <Message>[],
+      isGroup: groupMembers == null ? false : true,
+      groupID: groupID,
+      participants: groupMembers
+    );
+    return _groups[groupID];
   }
 
   Conversation _createConversation(Contact contact){

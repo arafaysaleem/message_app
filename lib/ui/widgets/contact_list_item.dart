@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:message_app/providers/contacts_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/messages_provider.dart';
@@ -15,23 +16,33 @@ class ContactListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final msgManager =
-        Provider.of<MessageManager>(context, listen: false);
+    final msgManager = Provider.of<MessageManager>(context, listen: false);
+    final contactsProvider =
+        Provider.of<ContactsProvider>(context, listen: false);
     return InkWell(
+      onLongPress: (){
+        if (contactsProvider.createGroupActive) {
+          contactsProvider.toggleSelected(contact);
+        }
+      },
       onTap: () {
-        Conversation convo = msgManager.getConversation(contact);
-        Navigator.of(context)
-            .push(
-              MaterialPageRoute(
-                builder: (ctx) => ChangeNotifierProvider.value(
-                  value: convo,
-                  child: MessageScreen(
-                    contact: contact,
+        if (contactsProvider.createGroupActive) {
+          contactsProvider.toggleSelected(contact);
+        } else {
+          Conversation convo = msgManager.getConversation(contact);
+          Navigator.of(context)
+              .push(
+                MaterialPageRoute(
+                  builder: (ctx) => ChangeNotifierProvider.value(
+                    value: convo,
+                    child: MessageScreen(
+                      contact: contact,
+                    ),
                   ),
                 ),
-              ),
-            )
-            .then((value) => convo.readConversation());
+              )
+              .then((value) => convo.readConversation());
+        }
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 11),
@@ -39,14 +50,37 @@ class ContactListItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             //picture
-            CircleAvatar(
-              radius: 20,
-              backgroundColor: contact.avClr,
-              child: Text(
-                contact.name.substring(0, 1),
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 19,
+            Selector<ContactsProvider, int>(
+              selector: (ctx, contactsProvider) =>
+                  contactsProvider.selectedContacts.length,
+              builder: (BuildContext context, _, child) {
+                if (contactsProvider.isSelected(contact))
+                  return CircleAvatar(
+                    radius: 20,
+                    backgroundColor: Colors.indigoAccent[700],
+                    child: Center(
+                      child: Icon(
+                        Icons.check,
+                        color: Colors.white,
+                        size: 20,
+                      ),
+                    ),
+                  );
+                return child;
+              },
+              child: CircleAvatar(
+                radius: 20,
+                backgroundColor: contact.avClr,
+                child: CircleAvatar(
+                  radius: 20,
+                  backgroundColor: contact.avClr,
+                  child: Text(
+                    contact.name.substring(0, 1),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 19,
+                    ),
+                  ),
                 ),
               ),
             ),
