@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:message_app/models/conversation.dart';
-import 'package:message_app/ui/screens/message_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/contacts_provider.dart';
+
+import '../../models/conversation.dart';
+
+import '../screens/message_screen.dart';
 
 class NewMessageAppBar extends StatefulWidget {
   final TextEditingController textEditingController;

@@ -1,12 +1,12 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
-import 'package:message_app/models/conversation.dart';
 
 import 'messages_provider.dart';
 
 import '../helper/utils.dart';
 
+import '../models/conversation.dart';
 import '../models/contact.dart';
 
 class ContactsProvider with ChangeNotifier {
