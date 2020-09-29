@@ -88,7 +88,7 @@ class _NewMessageAppBarState extends State<NewMessageAppBar> {
                 Spacer(),
                 Consumer<ContactsProvider>(
                   builder: (ctx, contactsProvider, child) =>
-                      (contactsProvider.selectedContacts.length > 0 &&
+                      (contactsProvider.selectedContacts.length > 1 &&
                               contactsProvider.createGroupActive)
                           ? InkWell(
                               onTap: () {

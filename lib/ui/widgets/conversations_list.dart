@@ -10,13 +10,13 @@ import '../../enums/filters_enum.dart';
 
 import '../../models/conversation.dart';
 
+import 'group_conversation_tile.dart';
 import 'conversation_list_item.dart';
 
 class ConversationsList extends StatelessWidget {
   final Filters currentFilter;
 
-  const ConversationsList({Key key, this.currentFilter})
-      : super(key: key);
+  const ConversationsList({Key key, this.currentFilter}) : super(key: key);
 
   getConvos(BuildContext context) {
     if (currentFilter == Filters.Archived)
@@ -25,6 +25,10 @@ class ConversationsList extends StatelessWidget {
     else if (currentFilter == Filters.SpamAndBlocked)
       return Provider.of<MessageManager>(context, listen: false)
           .spammedConversations;
+    else if (currentFilter == Filters.Groups)
+      return Provider.of<MessageManager>(context, listen: false)
+          .groupsConversations;
+
     return Provider.of<MessageManager>(context, listen: false).conversations;
   }
 
@@ -40,6 +44,10 @@ class ConversationsList extends StatelessWidget {
             length = msgManager.archivedConversations.length;
           else if (currentFilter == Filters.SpamAndBlocked)
             length = msgManager.spammedConversations.length;
+          else if (currentFilter == Filters.Groups) {
+            length = msgManager.groupsMap.length;
+            return Tuple2(msgManager.groupsMap, length);
+          }
           length = msgManager.conversationsMap.length;
           return Tuple2(msgManager.conversationsMap, length);
         },
@@ -49,7 +57,9 @@ class ConversationsList extends StatelessWidget {
             delegate: SliverChildBuilderDelegate(
               (ctx, i) => ChangeNotifierProvider.value(
                 value: convos[convos.length - i - 1],
-                child: ConversationListItem(),
+                child: currentFilter == Filters.Groups
+                    ? GroupConversationTile()
+                    : ConversationListItem(),
               ),
               childCount: convos.length,
             ),

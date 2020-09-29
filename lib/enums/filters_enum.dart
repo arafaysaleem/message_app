@@ -15,7 +15,8 @@ enum Filters {
   SpamAndBlocked,
   MessagesForWeb,
   Settings,
-  HomeScreen,
+  Individual,
+  Groups,
   Archived,
   HelpAndFeedback
 }
@@ -54,7 +55,12 @@ extension SelectedFilterExtension on Filters{
         //open chrome url
         return;
       }
-      case Filters.HomeScreen: return;
+      case Filters.Individual: return;
+      case Filters.Groups: {
+        final msgManager= context.read<MessageManager>();
+        msgManager.toggleDisplayGroupConvos();
+        return;
+      }
     }
   }
 }

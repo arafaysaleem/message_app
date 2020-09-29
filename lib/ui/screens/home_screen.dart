@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 
 import 'package:animations/animations.dart';
 
-
 import '../../providers/contacts_provider.dart';
 import '../../providers/messages_provider.dart';
 
@@ -41,7 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Stack(
           children: <Widget>[
             NotificationListener<OverscrollIndicatorNotification>(
-              onNotification: (overScroll){
+              onNotification: (overScroll) {
                 overScroll.disallowGlow();
                 return false;
               },
@@ -58,8 +57,17 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     child: DefaultAppBar(),
                   ),
-                  ConversationsList(
-                    currentFilter: Filters.HomeScreen,
+                  Selector<MessageManager, bool>(
+                    selector: (ctx, msgManger) =>
+                        msgManger.displayGroupConversations,
+                    builder: (ctx, displayGroups, child) => displayGroups
+                        ? ConversationsList(
+                            currentFilter: Filters.Groups,
+                          )
+                        : child,
+                    child: ConversationsList(
+                      currentFilter: Filters.Individual,
+                    ),
                   ),
                 ],
               ),
@@ -83,7 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         openBuilder: (ctx, _) => ChangeNotifierProvider(
-          create:(_) => ContactsProvider(context.read<MessageManager>()),
+          create: (_) => ContactsProvider(context.read<MessageManager>()),
           child: NewMessageScreen(),
         ),
       ),

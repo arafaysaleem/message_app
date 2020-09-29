@@ -307,7 +307,20 @@ class MessageManager with ChangeNotifier {
     "echo1":Conversation(
       sender: Contact(name: "Farhan",number: "03028220488",avClr: Colors.red),
       groupID: "echo1",
-      messages: <Message>[],
+      messages: <Message>[
+        Message(
+            number: "03028220488",
+            body: "First Message",
+            datetime: DateTime.now(),
+            previewPath: "hello"
+        ),
+        Message(
+          number: "03028220488",
+          body: "Second Message",
+          datetime: DateTime.now(),
+        ),
+      ],
+      groupName: "BOYS",
       isGroup: true,
       participants: <Contact>[
         Contact(name: "Asad",number: "03028199488",avClr: Colors.blue)
@@ -318,6 +331,9 @@ class MessageManager with ChangeNotifier {
   final List<Message> _favMessages = [];
   final List<Conversation> _spammedConversations = [];
   final List<Conversation> _archivedConversations = [];
+  bool _displayGroupConversations=false;
+
+  bool get displayGroupConversations => _displayGroupConversations;
 
   UnmodifiableMapView<String, Conversation> get conversationsMap =>
       UnmodifiableMapView(_conversations);
@@ -341,6 +357,11 @@ class MessageManager with ChangeNotifier {
 
   UnmodifiableListView<Conversation> get groupsConversations =>
       UnmodifiableListView(_groups.values);
+
+  void toggleDisplayGroupConvos(){
+    _displayGroupConversations=!displayGroupConversations;
+    notifyListeners();
+  }
 
   void updateConversionList(Conversation convo){
     _conversations.remove(convo.sender.number); //remove
@@ -366,6 +387,7 @@ class MessageManager with ChangeNotifier {
       messages: <Message>[],
       isGroup: groupMembers == null ? false : true,
       groupID: groupID,
+      groupName: "DEFAULT", //TODO: Change to input
       participants: groupMembers
     );
     return _groups[groupID];

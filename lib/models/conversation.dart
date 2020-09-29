@@ -15,27 +15,33 @@ class Conversation with ChangeNotifier {
   bool _isRead = false;
   bool _isSpam = false;
   bool _isGroup;
-  String _groupID;
+
+  final String _groupID;
+  String _groupName;
   bool _isArchived = false;
 
-  Conversation({participants,
-    @required this.sender,
-    @required messages,
-    isGroup = false,
-    groupID})
+  Conversation(
+      {participants,
+      @required this.sender,
+      @required messages,
+      isGroup = false,
+      groupID,
+      groupName})
       : assert(messages.length >= 0, "No. of messages can't be less than 0"),
+        assert(!isGroup || (participants != null && groupID != null && groupName != null)),
         _messages = messages,
-        _isGroup=isGroup,
+        _isGroup = isGroup,
         _participants = participants ?? [],
-        _groupID=groupID;
+        _groupID = groupID,
+        _groupName = groupName;
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is Conversation &&
-              runtimeType == other.runtimeType &&
-              sender == other.sender &&
-              _isRead == other.isRead;
+      other is Conversation &&
+          runtimeType == other.runtimeType &&
+          sender == other.sender &&
+          _isRead == other.isRead;
 
   @override
   int get hashCode => sender.hashCode ^ _isRead.hashCode;
@@ -51,13 +57,17 @@ class Conversation with ChangeNotifier {
 
   bool get isSpam => _isSpam;
 
+  String get groupID => _groupID;
+
+  String get groupName => _groupName;
+
   bool get isArchived => _isArchived;
 
   bool get isGroup => _isGroup;
 
   void addParticipant(List<Contact> _participants) {
-    if(!_isGroup) _isGroup=true;
-    this._participants=_participants;
+    if (!_isGroup) _isGroup = true;
+    this._participants = _participants;
   }
 
   void addMessage(Message msg) {
@@ -68,11 +78,14 @@ class Conversation with ChangeNotifier {
 
   void sendMessage({@required String text, previewAsset}) {
     //for sending messages
-    _messages.add(Message(
+    _messages.add(
+      Message(
         body: text.trim(),
         datetime: DateTime.now(),
         previewPath: previewAsset,
-        number: myContact.number));
+        number: myContact.number,
+      ),
+    );
     notifyListeners();
   }
 

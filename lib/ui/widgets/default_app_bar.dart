@@ -38,6 +38,10 @@ class DefaultAppBar extends StatelessWidget {
           ),
           itemBuilder: (_) => [
             PopupMenuItem(
+              child: Text("Groups"),
+              value: Filters.Groups,
+            ),
+            PopupMenuItem(
               child: Text("Mark all as read"),
               value: Filters.MarkAllAsRead,
             ),
