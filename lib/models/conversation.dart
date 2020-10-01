@@ -15,7 +15,6 @@ class Conversation with ChangeNotifier {
   bool _isRead = false;
   bool _isSpam = false;
   bool _isGroup;
-
   final String _groupID;
   String _groupName;
   bool _isArchived = false;
@@ -26,7 +25,7 @@ class Conversation with ChangeNotifier {
       @required messages,
       isGroup = false,
       groupID,
-      groupName})
+      groupName, bool isRead, bool isSpam, bool isArchived})
       : assert(messages.length >= 0, "No. of messages can't be less than 0"),
         assert(!isGroup || (participants != null && groupID != null && groupName != null)),
         _messages = messages,
@@ -42,6 +41,35 @@ class Conversation with ChangeNotifier {
           runtimeType == other.runtimeType &&
           sender == other.sender &&
           _isRead == other.isRead;
+
+  factory Conversation.fromMap(Map<String, dynamic> map) {
+    return new Conversation(
+      sender: map['sender'] as Contact,
+      messages: map['messages'] as List<Message>,
+      participants: map['participants'] as List<Contact>,
+      isRead: map['isRead'] as bool,
+      isSpam: map['isSpam'] as bool,
+      isGroup: map['isGroup'] as bool,
+      groupID: map['groupID'] as String,
+      groupName: map['groupName'] as String,
+      isArchived: map['isArchived'] as bool,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    // ignore: unnecessary_cast
+    return {
+      'sender': this.sender,
+      'messages': this._messages,
+      'participants': this._participants,
+      'isRead': this._isRead,
+      'isSpam': this._isSpam,
+      'isGroup': this._isGroup,
+      'groupID': this._groupID,
+      'groupName': this._groupName,
+      'isArchived': this._isArchived,
+    } as Map<String, dynamic>;
+  }
 
   @override
   int get hashCode => sender.hashCode ^ _isRead.hashCode;

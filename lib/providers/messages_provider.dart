@@ -8,6 +8,7 @@ import '../models/conversation.dart';
 import '../models/message.dart';
 
 class MessageManager with ChangeNotifier {
+  //initialise with firestore
   final Map<String, Conversation> _conversations = {
     "03028220488": Conversation(
       sender: Contact(name: "Farhan",number: "03028220488",avClr: Colors.red),
@@ -327,10 +328,12 @@ class MessageManager with ChangeNotifier {
       ]
     )
   };
-  final List<Conversation> _selectedConversations = [];
-  final List<Message> _favMessages = [];
   final List<Conversation> _spammedConversations = [];
   final List<Conversation> _archivedConversations = [];
+
+  //reset on app start
+  final List<Conversation> _selectedConversations = [];
+  final List<Message> _favMessages = [];
   bool _displayGroupConversations=false;
 
   bool get displayGroupConversations => _displayGroupConversations;

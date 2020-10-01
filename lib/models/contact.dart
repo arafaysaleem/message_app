@@ -7,6 +7,27 @@ class Contact{
   final Color avClr;
   final bool isBlocked;
 
+  factory Contact.fromMap(Map<String, dynamic> map) {
+    return new Contact(
+      name: map['name'] as String,
+      picturePath: map['picturePath'] as String,
+      number: map['number'] as String,
+      avClr: map['avClr'] as Color,
+      isBlocked: map['isBlocked'] as bool,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    // ignore: unnecessary_cast
+    return {
+      'name': this._name,
+      'picturePath': this.picturePath,
+      'number': this.number,
+      'avClr': this.avClr,
+      'isBlocked': this.isBlocked,
+    } as Map<String, dynamic>;
+  }
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
