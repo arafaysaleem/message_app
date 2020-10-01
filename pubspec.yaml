@@ -14,6 +14,7 @@ dependencies:
   animations: ^1.1.2
   tuple: ^1.0.3
   flushbar: ^1.10.4
+  cloud_firestore: ^0.14.1+1
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:message_app/providers/messages_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
@@ -30,7 +31,10 @@ class MessageScreen extends StatelessWidget {
         backgroundColor: Colors.white.withOpacity(0.9),
         leading: IconButton(
           splashRadius: _splashRadius,
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () {
+            if(convo.messages.isEmpty) context.read<MessageManager>().deleteConversation(convo);
+            Navigator.of(context).pop();
+          },
           icon: Icon(Icons.arrow_back),
         ),
         iconTheme: IconThemeData(color: Colors.grey[800]),

@@ -376,6 +376,7 @@ class MessageManager with ChangeNotifier {
 
   void readAllConversations() {
     _conversations.values.forEach((Conversation convo) => convo.readConversation());
+    //TODO: mark all read firestore
   }
 
   Conversation getConversation(Contact contact){
@@ -394,6 +395,7 @@ class MessageManager with ChangeNotifier {
       participants: groupMembers
     );
     return _groups[groupID];
+    //TODO: create group on firebase
   }
 
   Conversation _createConversation(Contact contact){
@@ -402,6 +404,7 @@ class MessageManager with ChangeNotifier {
       messages: <Message>[],
     );
     return _conversations[contact.number];
+    //TODO: create convo on firebase
   }
 
   void deleteConversation(Conversation convo) {
@@ -409,10 +412,12 @@ class MessageManager with ChangeNotifier {
     else if(_archivedConversations.contains(convo)) _archivedConversations.remove(convo);
     else if(_spammedConversations.contains(convo)) _spammedConversations.remove(convo);
     notifyListeners();
+    //TODO: delete from firebase
   }
 
   void deleteSelected() {
     _selectedConversations.forEach((Conversation convo) => deleteConversation(convo));
+    //TODO: delete all on firebase
     clearSelected();
   }
 
@@ -433,11 +438,13 @@ class MessageManager with ChangeNotifier {
       }
       convo.toggleArchived();
     });
+    //TODO: mark all archive on firebase
     clearSelected();
   }
 
   void spamSelected() {
     toggleSpamConvo(_selectedConversations[0]); //bcz only one can be spammed
+    //TODO: spam convo on firebase
   }
 
   void unSelectConversation(Conversation convo) {
@@ -467,6 +474,7 @@ class MessageManager with ChangeNotifier {
       _archivedConversations.add(convo);
     }
     convo.toggleArchived();
+    //TODO: mark archive on firebase
     notifyListeners();
   }
 
@@ -480,6 +488,7 @@ class MessageManager with ChangeNotifier {
       _spammedConversations.add(convo);
     }
     convo.toggleSpam();
+    //TODO: mark all archive on firebase
     clearSelected();
   }
 

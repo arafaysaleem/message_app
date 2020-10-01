@@ -66,7 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           )
                         : child,
                     child: ConversationsList(
-                      currentFilter: Filters.Individual,
+                      currentFilter: Filters.Conversation,
                     ),
                   ),
                 ],

@@ -3,6 +3,8 @@ import 'dart:collection';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import '../enums/conversation_type_enum.dart';
+
 import 'contact.dart';
 import 'message.dart';
 
@@ -25,9 +27,13 @@ class Conversation with ChangeNotifier {
       @required messages,
       isGroup = false,
       groupID,
-      groupName, bool isRead, bool isSpam, bool isArchived})
+      groupName,
+      bool isRead,
+      bool isSpam,
+      bool isArchived})
       : assert(messages.length >= 0, "No. of messages can't be less than 0"),
-        assert(!isGroup || (participants != null && groupID != null && groupName != null)),
+        assert(!isGroup ||
+            (participants != null && groupID != null && groupName != null)),
         _messages = messages,
         _isGroup = isGroup,
         _participants = participants ?? [],
@@ -57,7 +63,6 @@ class Conversation with ChangeNotifier {
   }
 
   Map<String, dynamic> toMap() {
-    // ignore: unnecessary_cast
     return {
       'sender': this.sender,
       'messages': this._messages,
@@ -68,7 +73,7 @@ class Conversation with ChangeNotifier {
       'groupID': this._groupID,
       'groupName': this._groupName,
       'isArchived': this._isArchived,
-    } as Map<String, dynamic>;
+    };
   }
 
   @override
@@ -92,6 +97,12 @@ class Conversation with ChangeNotifier {
   bool get isArchived => _isArchived;
 
   bool get isGroup => _isGroup;
+
+  ConversationType get conversationType {
+    if (_isArchived) return ConversationType.ARCHIVED;
+    else if(_isSpam) return ConversationType.SPAMMED;
+    return ConversationType.NORMAL;
+  }
 
   void addParticipant(List<Contact> _participants) {
     if (!_isGroup) _isGroup = true;

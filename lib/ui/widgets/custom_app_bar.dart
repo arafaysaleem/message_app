@@ -55,7 +55,7 @@ class CustomAppBar extends StatelessWidget {
                 ? child
                 : ActionsAppBar(
                     length: length,
-                    currentFilter: Filters.Individual,
+                    currentFilter: Filters.Conversation,
                   ),
           ),
         ),
