@@ -3,11 +3,17 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
+import '../services/firestore_database.dart';
+
 import '../models/contact.dart';
 import '../models/conversation.dart';
 import '../models/message.dart';
 
 class MessageManager with ChangeNotifier {
+  final FirestoreDatabase _firestoredb;
+
+  MessageManager(this._firestoredb);
+
   //initialise with firestore
   final Map<String, Conversation> _conversations = {
     "03028220488": Conversation(
@@ -336,6 +342,7 @@ class MessageManager with ChangeNotifier {
   final List<Message> _favMessages = [];
   bool _displayGroupConversations=false;
 
+
   bool get displayGroupConversations => _displayGroupConversations;
 
   UnmodifiableMapView<String, Conversation> get conversationsMap =>
@@ -376,7 +383,7 @@ class MessageManager with ChangeNotifier {
 
   void readAllConversations() {
     _conversations.values.forEach((Conversation convo) => convo.readConversation());
-    //TODO: mark all read firestore
+    //TODO: _firestoredb.markAllConversationsRead();
   }
 
   Conversation getConversation(Contact contact){
@@ -394,8 +401,8 @@ class MessageManager with ChangeNotifier {
       groupName: "DEFAULT", //TODO: Change to input
       participants: groupMembers
     );
+    //TODO: _firestoredb.addOrUpdateGroup(_groups[groupID]);
     return _groups[groupID];
-    //TODO: create group on firebase
   }
 
   Conversation _createConversation(Contact contact){
@@ -403,8 +410,8 @@ class MessageManager with ChangeNotifier {
       sender: contact,
       messages: <Message>[],
     );
+    //TODO: _firestoredb.addOrUpdateConversation(_conversations[contact.number]);
     return _conversations[contact.number];
-    //TODO: create convo on firebase
   }
 
   void deleteConversation(Conversation convo) {
@@ -412,12 +419,20 @@ class MessageManager with ChangeNotifier {
     else if(_archivedConversations.contains(convo)) _archivedConversations.remove(convo);
     else if(_spammedConversations.contains(convo)) _spammedConversations.remove(convo);
     notifyListeners();
-    //TODO: delete from firebase
+    //TODO: _firestoredb.deleteConversation(convo);
+  }
+
+  void deleteGroup(Conversation convo) {
+    if(_groups.containsKey(convo.groupID)) _groups.remove(convo.groupID);
+    // else if(_archivedGroups.contains(convo)) _archivedGroups.remove(convo);
+    // else if(_spammedGroups.contains(convo)) _spammedGroups.remove(convo);
+    notifyListeners();
+    //TODO: _firestoredb.deleteGroup(convo);
   }
 
   void deleteSelected() {
     _selectedConversations.forEach((Conversation convo) => deleteConversation(convo));
-    //TODO: delete all on firebase
+    //TODO: _firestoredb.deleteSelectedConversations(_selectedConversations);
     clearSelected();
   }
 
@@ -438,13 +453,12 @@ class MessageManager with ChangeNotifier {
       }
       convo.toggleArchived();
     });
-    //TODO: mark all archive on firebase
+    //TODO: _firestoredb.archiveSelectedConversations(_selectedConversations);
     clearSelected();
   }
 
   void spamSelected() {
     toggleSpamConvo(_selectedConversations[0]); //bcz only one can be spammed
-    //TODO: spam convo on firebase
   }
 
   void unSelectConversation(Conversation convo) {
@@ -474,7 +488,7 @@ class MessageManager with ChangeNotifier {
       _archivedConversations.add(convo);
     }
     convo.toggleArchived();
-    //TODO: mark archive on firebase
+    //TODO: _firestoredb.archiveSelectedConversations([convo]);
     notifyListeners();
   }
 
@@ -488,7 +502,7 @@ class MessageManager with ChangeNotifier {
       _spammedConversations.add(convo);
     }
     convo.toggleSpam();
-    //TODO: mark all archive on firebase
+    //TODO: _firestoredb.spamSelectedConversation(convo);
     clearSelected();
   }
 

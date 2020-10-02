@@ -22,9 +22,22 @@ class FirestoreDatabase {
         data: conversation.toMap(),
       );
 
-  Future<void> markAllConversationsRead(List<Conversation> conversations) {
-    return _service.batchActon(path: FirestorePath.conversations(uid), changes: {'isRead':true});
-  }
+  void archiveSelectedConversations(List<Conversation> _archivedConvos) =>
+      _archivedConvos.forEach(addOrUpdateConversation);
+
+  Future<void> spamSelectedConversation(Conversation _spammedConvo) =>
+      addOrUpdateConversation(_spammedConvo);
+
+  Future<void> markAllConversationsRead() => _service.batchActon(
+        path: FirestorePath.conversations(uid),
+        changes: {'isRead': true},
+        queryBuilder: (query) => query
+            .where('isSpam', isEqualTo: false)
+            .where('isArchived', isEqualTo: false),
+      );
+
+  void deleteSelectedConversations(List<Conversation> _convos) =>
+      _convos.forEach(deleteConversation);
 
   Future<void> deleteConversation(Conversation conversation) =>
       _service.deleteData(

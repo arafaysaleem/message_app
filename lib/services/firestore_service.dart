@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
-import 'package:message_app/services/firestore_path.dart';
 
 class FirestoreService {
   FirestoreService._();
+
   static final instance = FirestoreService._();
 
   Future<void> setData({
@@ -22,12 +22,19 @@ class FirestoreService {
     await reference.delete();
   }
 
-  Future<void> batchActon({@required String path,@required Map<String,dynamic> changes}) async {
+  Future<void> batchActon({
+    String path,
+    @required Map<String, dynamic> changes,
+    Query Function(Query query) queryBuilder,
+  }) async {
     final batchUpdate = FirebaseFirestore.instance.batch();
 
-    final querySnapshot = await FirebaseFirestore.instance
-        .collection(path)
-        .get();
+    Query query = FirebaseFirestore.instance.collection(path);
+    if (queryBuilder != null) {
+      query = queryBuilder(query);
+    }
+
+    final querySnapshot = await query.get();
 
     for (DocumentSnapshot ds in querySnapshot.docs) {
       batchUpdate.update(ds.reference, changes);
