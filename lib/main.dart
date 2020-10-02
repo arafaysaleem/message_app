@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:message_app/services/firestore_database.dart';
 import 'package:provider/provider.dart';
 
 import 'providers/messages_provider.dart';
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (ctx) => MessageManager(),
+      create: (ctx) => MessageManager(FirestoreDatabase(uid: "Rafay123")),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Flutter Message Manager',

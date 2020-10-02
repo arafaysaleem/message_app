@@ -1,4 +1,4 @@
-import '../enums/conversation_type_enum.dart';
+//import '../enums/conversation_type_enum.dart';
 
 class FirestorePath{
   static String conversations(String uid) => 'users/$uid/conversations';
