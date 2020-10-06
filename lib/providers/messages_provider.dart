@@ -342,7 +342,6 @@ class MessageManager with ChangeNotifier {
   final List<Message> _favMessages = [];
   bool _displayGroupConversations=false;
 
-
   bool get displayGroupConversations => _displayGroupConversations;
 
   UnmodifiableMapView<String, Conversation> get conversationsMap =>
@@ -367,6 +366,14 @@ class MessageManager with ChangeNotifier {
 
   UnmodifiableListView<Conversation> get groupsConversations =>
       UnmodifiableListView(_groups.values);
+
+  // void addAllToFirebase(){ //only use this to add convos to firebase
+  //   conversations.forEach(_firestoredb.addOrUpdateConversation);
+  // }
+  //
+  // void addGroupsToFirebase(){ //only use this to add groups to firebase
+  //   groupsConversations.forEach(_firestoredb.addOrUpdateGroup);
+  // }
 
   void toggleDisplayGroupConvos(){
     _displayGroupConversations=!displayGroupConversations;

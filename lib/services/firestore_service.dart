@@ -28,7 +28,7 @@ class FirestoreService {
     Query Function(Query query) queryBuilder,
   }) async {
     final batchUpdate = FirebaseFirestore.instance.batch();
-
+    print('$path');
     Query query = FirebaseFirestore.instance.collection(path);
     if (queryBuilder != null) {
       query = queryBuilder(query);

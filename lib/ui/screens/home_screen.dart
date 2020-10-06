@@ -24,14 +24,22 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   ScrollController _controller = ScrollController();
-  double initialPosition = 0.0;
-  double endPosition = 0.0;
-  double distance = 0.0;
+  // bool runOnce=false;
 
   dispose() {
     _controller.dispose();
     super.dispose();
   }
+
+  // @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
+  //   if(!runOnce) {
+  //     context.read<MessageManager>().addAllToFirebase();
+  //     context.read<MessageManager>().addGroupsToFirebase();
+  //     runOnce=true;
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {

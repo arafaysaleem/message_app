@@ -64,9 +64,9 @@ class Conversation with ChangeNotifier {
 
   Map<String, dynamic> toMap() {
     return {
-      'sender': this.sender,
-      'messages': this._messages,
-      'participants': this._participants,
+      'sender': this.sender.toMap(),
+      'messages': this._messages.map((msg) => msg.toMap()).toList(),
+      'participants': this._participants.map((contact) => contact.toMap()).toList(),
       'isRead': this._isRead,
       'isSpam': this._isSpam,
       'isGroup': this._isGroup,

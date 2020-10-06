@@ -12,7 +12,7 @@ class Contact{
       name: map['name'] as String,
       picturePath: map['picturePath'] as String,
       number: map['number'] as String,
-      avClr: map['avClr'] as Color,
+      avClr: Color(map['avClr']),
       isBlocked: map['isBlocked'] as bool,
     );
   }
@@ -23,7 +23,7 @@ class Contact{
       'name': this._name,
       'picturePath': this.picturePath,
       'number': this.number,
-      'avClr': this.avClr,
+      'avClr': '0x${this.avClr.value.toRadixString(16).padLeft(8, '0')}',
       'isBlocked': this.isBlocked,
     } as Map<String, dynamic>;
   }
