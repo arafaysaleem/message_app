@@ -26,7 +26,10 @@ class FirestoreDatabase {
       _archivedConvos.forEach(addOrUpdateConversation);
 
   Future<void> spamSelectedConversation(Conversation _spammedConvo) =>
-      addOrUpdateConversation(_spammedConvo);
+      _service.documentAction(
+        path: FirestorePath.conversation(uid, _spammedConvo.sender.number),
+        changes: {'isSpam': _spammedConvo.isSpam},
+      );
 
   Future<void> markAllConversationsRead() => _service.batchActon(
         path: FirestorePath.conversations(uid),
@@ -35,9 +38,6 @@ class FirestoreDatabase {
             .where('isSpam', isEqualTo: false)
             .where('isArchived', isEqualTo: false),
       );
-
-  void deleteSelectedConversations(List<Conversation> _convos) =>
-      _convos.forEach(deleteConversation);
 
   Future<void> deleteConversation(Conversation conversation) =>
       _service.deleteData(
@@ -65,11 +65,14 @@ class FirestoreDatabase {
         builder: (data, documentId) => Conversation.fromMap(data),
       );
 
-  Stream<List<Conversation>> allConversationsStream() =>
-      _service.collectionStream(
-        path: FirestorePath.conversations(uid),
-        builder: (data, _) => Conversation.fromMap(data),
-      );
+  /// This method fetches all conversations including spammed and archived
+  /// in one list.
+  ///
+  /// Stream<List<Conversation>> allConversationsStream() =>
+  ///     _service.collectionStream(
+  ///       path: FirestorePath.conversations(uid),
+  ///       builder: (data, _) => Conversation.fromMap(data),
+  ///     );
 
   Stream<List<Conversation>> normalStream() =>
       _service.collectionStream<Conversation>(
@@ -99,7 +102,7 @@ class FirestoreDatabase {
 
   Stream<List<Conversation>> groupsStream({Conversation conversation}) =>
       _service.collectionStream<Conversation>(
-        path: FirestorePath.conversations(uid),
+        path: FirestorePath.groups(uid),
         queryBuilder: (query) => query.where('isGroup', isEqualTo: true),
         builder: (data, _) => Conversation.fromMap(data),
         sort: (lhs, rhs) => rhs.groupName.compareTo(lhs.groupName),

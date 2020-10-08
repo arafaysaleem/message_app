@@ -24,6 +24,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   ScrollController _controller = ScrollController();
+
   // bool runOnce=false;
 
   dispose() {
@@ -63,7 +64,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: child,
                       duration: Duration(milliseconds: 300),
                     ),
-                    child: DefaultAppBar(),
+                    child: DefaultAppBar(
+                      currentFilter: context.select<MessageManager, bool>(
+                              (msgManager) =>
+                                  msgManager.displayGroupConversations)
+                          ? Filters.Groups
+                          : Filters.Conversation,
+                    ),
                   ),
                   Selector<MessageManager, bool>(
                     selector: (ctx, msgManger) =>

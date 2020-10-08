@@ -14,68 +14,39 @@ import 'ui/screens/home_screen.dart';
 import 'ui/screens/settings_screen.dart';
 import 'ui/screens/web_message_screen.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: Colors.white, statusBarBrightness: Brightness.dark));
+      statusBarColor: Colors.black, statusBarBrightness: Brightness.light));
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Message Manager',
-      theme: ThemeData(
-        primaryColor: Colors.lightBlueAccent[700],
-        scaffoldBackgroundColor: Color(0xFFfefefe),
-        fontFamily: "Roboto",
-        iconTheme: IconThemeData(color: Colors.grey[800]),
-        visualDensity: VisualDensity.adaptivePlatformDensity,
+    return ChangeNotifierProvider(
+      create: (ctx) => MessageManager(firestoredb: FirestoreDatabase(uid: "Rafay123")),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Flutter Message Manager',
+        theme: ThemeData(
+          primaryColor: Colors.lightBlueAccent[700],
+          scaffoldBackgroundColor: Color(0xFFfefefe),
+          fontFamily: "Roboto",
+          iconTheme: IconThemeData(color: Colors.grey[800]),
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+        ),
+        routes: {
+          "/": (_) => HomeScreen(),
+          ArchivedMessagesScreen.routeName: (_) => ArchivedMessagesScreen(),
+          SpamAndBlockedMessagesScreen.routeName: (_) =>
+              SpamAndBlockedMessagesScreen(),
+          SettingsScreen.routeName: (_) => SettingsScreen(),
+          MessagesForWebScreen.routeName: (_) => MessagesForWebScreen(),
+        },
       ),
-      initialRoute: FirebaseInitializer.routeName,
-      routes: {
-        "/": (_) => HomeScreen(),
-        FirebaseInitializer.routeName: (_) => FirebaseInitializer(),
-        ArchivedMessagesScreen.routeName: (_) => ArchivedMessagesScreen(),
-        SpamAndBlockedMessagesScreen.routeName: (_) =>
-            SpamAndBlockedMessagesScreen(),
-        SettingsScreen.routeName: (_) => SettingsScreen(),
-        MessagesForWebScreen.routeName: (_) => MessagesForWebScreen(),
-      },
-    );
-  }
-}
-
-class FirebaseInitializer extends StatelessWidget {
-  static const routeName= "FirebaseInitialise";
-  final Future<FirebaseApp> _initialization = Firebase.initializeApp();
-
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: _initialization,
-      builder: (ctx, snapshot) {
-
-        // Once complete, show your application
-        if (snapshot.connectionState == ConnectionState.done) {
-          return ChangeNotifierProvider(
-            create: (ctx) => MessageManager(FirestoreDatabase(uid: "Rafay123")),
-            child: HomeScreen(),
-          );
-        }
-
-        // Otherwise, show error/loading
-        return Scaffold(
-          body: Container(
-            child: Center(
-              child: snapshot.hasError
-                  ? Text("Error loading firebase data")
-                  : CircularProgressIndicator(),
-            ),
-          ),
-        );
-      },
     );
   }
 }

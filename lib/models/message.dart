@@ -26,7 +26,7 @@ class Message{
     return new Message(
       number: map['number'] as String,
       body: map['body'] as String,
-      datetime: map['datetime'] as DateTime,
+      datetime: map['datetime'].toDate() as DateTime,
       previewPath: map['previewPath'] as String,
       isFav: map['isFav'] as bool,
     );

@@ -151,7 +151,7 @@ class ConversationListItem extends StatelessWidget {
                 ),
               ),
             ),
-          ).then((value) => convo.readConversation());
+          ).then((_) => convo.readConversation()).then((_) => msgManager.updateConversionList(convo));
         }
       },
       onLongPress: () {

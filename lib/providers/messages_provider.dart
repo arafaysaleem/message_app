@@ -12,10 +12,17 @@ import '../models/message.dart';
 class MessageManager with ChangeNotifier {
   final FirestoreDatabase _firestoredb;
 
-  MessageManager(this._firestoredb);
+  MessageManager({@required firestoredb}) : _firestoredb = firestoredb {
+    _initializeData();
+  }
 
   //initialise with firestore
-  final Map<String, Conversation> _conversations = {
+  final Map<String, Conversation> _conversations = Map();
+  final Map<String, Conversation> _groups = Map();
+  List<Conversation> _spammedConversations = [];
+  List<Conversation> _archivedConversations = [];
+
+  /*final Map<String, Conversation> _conversations = {
     "03028220488": Conversation(
       sender: Contact(name: "Farhan",number: "03028220488",avClr: Colors.red),
       messages: [
@@ -333,14 +340,14 @@ class MessageManager with ChangeNotifier {
         Contact(name: "Asad",number: "03028199488",avClr: Colors.blue)
       ]
     )
-  };
-  final List<Conversation> _spammedConversations = [];
-  final List<Conversation> _archivedConversations = [];
+  };*/
+  // final List<Conversation> _spammedConversations = [];
+  // final List<Conversation> _archivedConversations = [];
 
   //reset on app start
   final List<Conversation> _selectedConversations = [];
   final List<Message> _favMessages = [];
-  bool _displayGroupConversations=false;
+  bool _displayGroupConversations = false;
 
   bool get displayGroupConversations => _displayGroupConversations;
 
@@ -353,7 +360,8 @@ class MessageManager with ChangeNotifier {
   UnmodifiableListView<Conversation> get selectedConversations =>
       UnmodifiableListView(_selectedConversations);
 
-  UnmodifiableListView<Message> get favMsgs => UnmodifiableListView(_favMessages);
+  UnmodifiableListView<Message> get favMsgs =>
+      UnmodifiableListView(_favMessages);
 
   UnmodifiableListView<Conversation> get spammedConversations =>
       UnmodifiableListView(_spammedConversations);
@@ -375,45 +383,81 @@ class MessageManager with ChangeNotifier {
   //   groupsConversations.forEach(_firestoredb.addOrUpdateGroup);
   // }
 
-  void toggleDisplayGroupConvos(){
-    _displayGroupConversations=!displayGroupConversations;
+  void _initializeData() {
+    _initializeConversationsMap();
+    _initializeSpammedConversations();
+    _initializeArchivedConversations();
+    _initializeGroupsMap();
+  }
+
+  /// Stream based methods
+  void _initializeGroupsMap() =>
+      _firestoredb.groupsStream().listen((tempGroups) {
+        tempGroups.forEach((group) => _groups[group.groupID] = group);
+        notifyListeners();
+      });
+
+  void _initializeConversationsMap() =>
+      _firestoredb.normalStream().listen((tempConversations) {
+        tempConversations
+            .forEach((convo) => _conversations[convo.sender.number] = convo);
+        notifyListeners();
+      });
+
+  void _initializeSpammedConversations() =>
+      _firestoredb.spammedStream().listen((spammedConvos) {
+        _spammedConversations = spammedConvos;
+        notifyListeners();
+      });
+
+  void _initializeArchivedConversations() =>
+      _firestoredb.archivedStream().listen((archivedConvos) {
+        _spammedConversations = archivedConvos;
+        notifyListeners();
+      });
+
+  void toggleDisplayGroupConvos() {
+    _displayGroupConversations = !displayGroupConversations;
     notifyListeners();
   }
 
-  void updateConversionList(Conversation convo){
+  void updateConversionList(Conversation convo) {
     _conversations.remove(convo.sender.number); //remove
-    _conversations[convo.sender.number]=convo; //and insert at end to make it appear on top
+    _conversations[convo.sender.number] =
+        convo; //and insert at end to make it appear on top
     notifyListeners();
+    _firestoredb.addOrUpdateConversation(_conversations[convo.sender.number]);
   }
 
   bool isSelected(Conversation convo) => _selectedConversations.contains(convo);
 
   void readAllConversations() {
-    _conversations.values.forEach((Conversation convo) => convo.readConversation());
-    //TODO: _firestoredb.markAllConversationsRead();
+    _conversations.values
+        .forEach((Conversation convo) => convo.readConversation());
+    _firestoredb.markAllConversationsRead();
   }
 
-  Conversation getConversation(Contact contact){
-    return _conversations[contact.number]??_createConversation(contact);
+  Conversation getConversation(Contact contact) {
+    return _conversations[contact.number] ?? _createConversation(contact);
   }
 
-  Conversation createGroupConversation(groupMembers){
+  Conversation createGroupConversation(groupMembers) {
     Random random = Random();
-    String groupID=random.nextInt(100000).toString();
-    _groups[groupID]=Conversation(
-      sender: groupMembers[0],
-      messages: <Message>[],
-      isGroup: groupMembers == null ? false : true,
-      groupID: groupID,
-      groupName: "DEFAULT", //TODO: Change to input
-      participants: groupMembers
-    );
+    String groupID = random.nextInt(100000).toString();
+    _groups[groupID] = Conversation(
+        sender: groupMembers[0],
+        messages: <Message>[],
+        isGroup: groupMembers == null ? false : true,
+        groupID: groupID,
+        groupName: "DEFAULT",
+        //TODO: Change to input
+        participants: groupMembers);
     //TODO: _firestoredb.addOrUpdateGroup(_groups[groupID]);
     return _groups[groupID];
   }
 
-  Conversation _createConversation(Contact contact){
-    _conversations[contact.number]=Conversation(
+  Conversation _createConversation(Contact contact) {
+    _conversations[contact.number] = Conversation(
       sender: contact,
       messages: <Message>[],
     );
@@ -422,15 +466,18 @@ class MessageManager with ChangeNotifier {
   }
 
   void deleteConversation(Conversation convo) {
-    if(_conversations.containsKey(convo.sender.number)) _conversations.remove(convo.sender.number);
-    else if(_archivedConversations.contains(convo)) _archivedConversations.remove(convo);
-    else if(_spammedConversations.contains(convo)) _spammedConversations.remove(convo);
+    if (_conversations.containsKey(convo.sender.number))
+      _conversations.remove(convo.sender.number);
+    else if (_archivedConversations.contains(convo))
+      _archivedConversations.remove(convo);
+    else if (_spammedConversations.contains(convo))
+      _spammedConversations.remove(convo);
     notifyListeners();
-    //TODO: _firestoredb.deleteConversation(convo);
+    _firestoredb.deleteConversation(convo);
   }
 
   void deleteGroup(Conversation convo) {
-    if(_groups.containsKey(convo.groupID)) _groups.remove(convo.groupID);
+    if (_groups.containsKey(convo.groupID)) _groups.remove(convo.groupID);
     // else if(_archivedGroups.contains(convo)) _archivedGroups.remove(convo);
     // else if(_spammedGroups.contains(convo)) _spammedGroups.remove(convo);
     notifyListeners();
@@ -438,12 +485,12 @@ class MessageManager with ChangeNotifier {
   }
 
   void deleteSelected() {
-    _selectedConversations.forEach((Conversation convo) => deleteConversation(convo));
-    //TODO: _firestoredb.deleteSelectedConversations(_selectedConversations);
+    _selectedConversations
+        .forEach((Conversation convo) => deleteConversation(convo));
     clearSelected();
   }
 
-  void clearSelected(){
+  void clearSelected() {
     _selectedConversations.clear();
     notifyListeners();
   }
@@ -521,5 +568,4 @@ class MessageManager with ChangeNotifier {
     msg.isFav = !msg.isFav;
     notifyListeners();
   }
-
 }

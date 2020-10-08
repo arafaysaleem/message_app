@@ -12,7 +12,7 @@ class Contact{
       name: map['name'] as String,
       picturePath: map['picturePath'] as String,
       number: map['number'] as String,
-      avClr: Color(map['avClr']),
+      avClr: Color(int.tryParse(map['avClr'])),
       isBlocked: map['isBlocked'] as bool,
     );
   }

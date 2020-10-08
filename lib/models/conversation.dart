@@ -50,9 +50,9 @@ class Conversation with ChangeNotifier {
 
   factory Conversation.fromMap(Map<String, dynamic> map) {
     return new Conversation(
-      sender: map['sender'] as Contact,
-      messages: map['messages'] as List<Message>,
-      participants: map['participants'] as List<Contact>,
+      sender: Contact.fromMap(map['sender']),
+      messages: deserializeMessages(map['messages']),
+      participants: deserializeParticipants(map['participants']),
       isRead: map['isRead'] as bool,
       isSpam: map['isSpam'] as bool,
       isGroup: map['isGroup'] as bool,
@@ -65,8 +65,8 @@ class Conversation with ChangeNotifier {
   Map<String, dynamic> toMap() {
     return {
       'sender': this.sender.toMap(),
-      'messages': this._messages.map((msg) => msg.toMap()).toList(),
-      'participants': this._participants.map((contact) => contact.toMap()).toList(),
+      'messages': serializeMessages(),
+      'participants': serializeParticipants(),
       'isRead': this._isRead,
       'isSpam': this._isSpam,
       'isGroup': this._isGroup,
@@ -97,6 +97,18 @@ class Conversation with ChangeNotifier {
   bool get isArchived => _isArchived;
 
   bool get isGroup => _isGroup;
+
+  serializeMessages(){
+    return _messages.map((msg) => msg.toMap()).toList();
+  }
+
+  static List<Message> deserializeMessages(msgs) => msgs.map((msg) => Message.fromMap(msg)).toList().cast<Message>();
+
+  serializeParticipants(){
+    return _participants.map((contact) => contact.toMap()).toList();
+  }
+
+  static List<Contact> deserializeParticipants(members) => members.map((contact) => Contact.fromMap(contact)).toList().cast<Contact>();
 
   ConversationType get conversationType {
     if (_isArchived) return ConversationType.ARCHIVED;

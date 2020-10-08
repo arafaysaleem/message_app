@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 import '../../enums/filters_enum.dart';
 
 class DefaultAppBar extends StatelessWidget {
+  final Filters currentFilter;
+
+  const DefaultAppBar({Key key, @required this.currentFilter}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -38,7 +42,7 @@ class DefaultAppBar extends StatelessWidget {
           ),
           itemBuilder: (_) => [
             PopupMenuItem(
-              child: Text("Groups"),
+              child: currentFilter == Filters.Conversation ? Text("Groups") : Text("Individuals"),
               value: Filters.Groups,
             ),
             PopupMenuItem(
