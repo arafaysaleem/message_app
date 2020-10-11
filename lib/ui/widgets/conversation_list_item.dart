@@ -141,17 +141,15 @@ class ConversationListItem extends StatelessWidget {
         if (msgManager.selectedConversations.length >= 1) {
           msgManager.toggleSelected(convo);
         } else {
-          Navigator.of(context)
-              .push(
-                MaterialPageRoute(
-                  builder: (ctx) => ChangeNotifierProvider.value(
-                    value: convo,
-                    child: MessageScreen(),
-                  ),
-                ),
-              )
-              .then((value) => convo.readConversation())
-              .then((value) => msgManager.updateConversionList(convo));
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (ctx) => ChangeNotifierProvider.value(
+                value: convo,
+                child: MessageScreen(),
+              ),
+            ),
+          );
+          msgManager.readConversation(convo);
         }
       },
       onLongPress: () {

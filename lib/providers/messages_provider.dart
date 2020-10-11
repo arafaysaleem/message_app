@@ -431,6 +431,16 @@ class MessageManager with ChangeNotifier {
 
   bool isSelected(Conversation convo) => _selectedConversations.contains(convo);
 
+  void sendConversationMessages({@required Conversation convo, @required String text}){
+    convo.sendMessage(text: text);
+    _firestoredb.addMessages(convo);
+  }
+
+  void readConversation(Conversation convo){
+    convo.readConversation();
+    _firestoredb.readConversation(convo);
+  }
+
   void readAllConversations() {
     _conversations.values
         .forEach((Conversation convo) => convo.readConversation());
@@ -472,8 +482,8 @@ class MessageManager with ChangeNotifier {
       _archivedConversations.remove(convo);
     else if (_spammedConversations.contains(convo))
       _spammedConversations.remove(convo);
-    notifyListeners();
     _firestoredb.deleteConversation(convo);
+    notifyListeners();
   }
 
   void deleteGroup(Conversation convo) {

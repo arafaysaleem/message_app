@@ -27,10 +27,10 @@ class _BottomMessageBarState extends State<BottomMessageBar> {
 
   void sendMessage(Conversation convo, BuildContext context) {
     setState(() {
-      convo.sendMessage(text: _textEditingController.text.trim());
+      final msgMgr = context.read<MessageManager>();
+      msgMgr.sendConversationMessages(convo: convo,text: _textEditingController.text.trim());
       _textEditingController.clear();
       widget.sController.jumpTo(widget.sController.position.maxScrollExtent);
-      final msgMgr = context.read<MessageManager>();
       if (convo.isArchived) msgMgr.toggleArchiveConvo(convo);
       msgMgr.updateConversionList(convo);
     });

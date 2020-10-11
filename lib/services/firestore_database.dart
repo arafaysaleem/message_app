@@ -22,6 +22,16 @@ class FirestoreDatabase {
         data: conversation.toMap(),
       );
 
+  Future<void> readConversation(Conversation conversation) => _service.documentAction(
+    path: FirestorePath.conversation(uid, conversation.sender.number),
+    changes: {'isRead': conversation.isRead},
+  );
+
+  Future<void> addMessages(Conversation conversation) => _service.documentAction(
+    path: FirestorePath.conversation(uid, conversation.sender.number),
+    changes: {'messages': conversation.serializeMessages()},
+  );
+
   void archiveSelectedConversations(List<Conversation> _archivedConvos) =>
       _archivedConvos.forEach(addOrUpdateConversation);
 

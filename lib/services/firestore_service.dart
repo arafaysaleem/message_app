@@ -25,19 +25,12 @@ class FirestoreService {
   Future<void> documentAction({
     @required String path,
     @required Map<String, dynamic> changes,
-    Query Function(Query query) queryBuilder,
   }) async {
       print('$path');
-      Query query = FirebaseFirestore.instance.collection(path);
-      if (queryBuilder != null) {
-        query = queryBuilder(query);
-      }
 
-      final querySnapshot = await query.get();
+      final docRef = FirebaseFirestore.instance.doc(path);
 
-      for (DocumentSnapshot ds in querySnapshot.docs) {
-        ds.reference.update(changes);
-    }
+      docRef.update(changes);
   }
 
   Future<void> batchActon({
