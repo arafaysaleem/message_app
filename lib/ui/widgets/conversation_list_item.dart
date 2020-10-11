@@ -140,18 +140,18 @@ class ConversationListItem extends StatelessWidget {
       onTap: () {
         if (msgManager.selectedConversations.length >= 1) {
           msgManager.toggleSelected(convo);
-        }
-        else {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (ctx) => ChangeNotifierProvider.value(
-                value: convo,
-                child: MessageScreen(
-                  contact: convo.sender,
+        } else {
+          Navigator.of(context)
+              .push(
+                MaterialPageRoute(
+                  builder: (ctx) => ChangeNotifierProvider.value(
+                    value: convo,
+                    child: MessageScreen(),
+                  ),
                 ),
-              ),
-            ),
-          ).then((_) => convo.readConversation()).then((_) => msgManager.updateConversionList(convo));
+              )
+              .then((value) => convo.readConversation())
+              .then((value) => msgManager.updateConversionList(convo));
         }
       },
       onLongPress: () {
@@ -162,7 +162,6 @@ class ConversationListItem extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-
             //picture
             getProfilePicture(),
 

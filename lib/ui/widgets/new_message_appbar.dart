@@ -99,9 +99,7 @@ class _NewMessageAppBarState extends State<NewMessageAppBar> {
                                     builder: (ctx) {
                                       return ChangeNotifierProvider.value(
                                         value: convo,
-                                        child: MessageScreen(
-                                          contact: convo.sender,
-                                        ),
+                                        child: MessageScreen(),
                                       );
                                     },
                                   ),

@@ -203,9 +203,7 @@ class GroupConversationTile extends StatelessWidget {
                 MaterialPageRoute(
                   builder: (ctx) => ChangeNotifierProvider.value(
                     value: convo,
-                    child: MessageScreen(
-                      contact: convo.sender,
-                    ),
+                    child: MessageScreen(),
                   ),
                 ),
               )

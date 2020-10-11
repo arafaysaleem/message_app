@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:message_app/providers/messages_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
+
+import '../../providers/messages_provider.dart';
 
 import '../../helper/utils.dart';
 
@@ -17,9 +18,6 @@ import '../widgets/bottom_message_bar.dart';
 class MessageScreen extends StatelessWidget {
   final double _splashRadius = 21;
   ScrollController _sController = ScrollController();
-
-  MessageScreen({Key key, @required contact})
-      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

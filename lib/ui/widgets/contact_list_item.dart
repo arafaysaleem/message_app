@@ -35,9 +35,7 @@ class ContactListItem extends StatelessWidget {
                 MaterialPageRoute(
                   builder: (ctx) => ChangeNotifierProvider.value(
                     value: convo,
-                    child: MessageScreen(
-                      contact: contact,
-                    ),
+                    child: MessageScreen(),
                   ),
                 ),
               )

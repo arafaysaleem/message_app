@@ -14,30 +14,33 @@ class Conversation with ChangeNotifier {
   final Contact sender;
   final List<Message> _messages;
   List<Contact> _participants;
-  bool _isRead = false;
-  bool _isSpam = false;
+  bool _isRead;
+  bool _isSpam;
   bool _isGroup;
   final String _groupID;
   String _groupName;
-  bool _isArchived = false;
+  bool _isArchived;
 
-  Conversation(
-      {participants,
-      @required this.sender,
-      @required messages,
-      isGroup = false,
-      groupID,
-      groupName,
-      bool isRead,
-      bool isSpam,
-      bool isArchived})
-      : assert(messages.length >= 0, "No. of messages can't be less than 0"),
+  Conversation({
+    participants,
+    @required this.sender,
+    @required messages,
+    isGroup = false,
+    groupID,
+    groupName,
+    bool isRead = false,
+    bool isSpam = false,
+    bool isArchived = false,
+  })  : assert(messages.length >= 0, "No. of messages can't be less than 0"),
         assert(!isGroup ||
             (participants != null && groupID != null && groupName != null)),
         _messages = messages,
         _isGroup = isGroup,
         _participants = participants ?? [],
         _groupID = groupID,
+        _isRead = isRead,
+        _isSpam = isSpam,
+        _isArchived = isArchived,
         _groupName = groupName;
 
   @override
@@ -98,21 +101,26 @@ class Conversation with ChangeNotifier {
 
   bool get isGroup => _isGroup;
 
-  serializeMessages(){
+  serializeMessages() {
     return _messages.map((msg) => msg.toMap()).toList();
   }
 
-  static List<Message> deserializeMessages(msgs) => msgs.map((msg) => Message.fromMap(msg)).toList().cast<Message>();
+  static List<Message> deserializeMessages(msgs) =>
+      msgs.map((msg) => Message.fromMap(msg)).toList().cast<Message>();
 
-  serializeParticipants(){
+  serializeParticipants() {
     return _participants.map((contact) => contact.toMap()).toList();
   }
 
-  static List<Contact> deserializeParticipants(members) => members.map((contact) => Contact.fromMap(contact)).toList().cast<Contact>();
+  static List<Contact> deserializeParticipants(members) => members
+      .map((contact) => Contact.fromMap(contact))
+      .toList()
+      .cast<Contact>();
 
   ConversationType get conversationType {
-    if (_isArchived) return ConversationType.ARCHIVED;
-    else if(_isSpam) return ConversationType.SPAMMED;
+    if (_isArchived)
+      return ConversationType.ARCHIVED;
+    else if (_isSpam) return ConversationType.SPAMMED;
     return ConversationType.NORMAL;
   }
 
@@ -164,7 +172,8 @@ class Conversation with ChangeNotifier {
   }
 
   void readConversation() {
-    if (!_isRead) _isRead = true;
+    if (_isRead) return;
+    _isRead = true;
     notifyListeners();
   }
 
