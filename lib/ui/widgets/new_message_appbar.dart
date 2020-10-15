@@ -76,7 +76,15 @@ class _NewMessageAppBarState extends State<NewMessageAppBar> {
             Row(
               children: [
                 IconButton(
-                  onPressed: () => Navigator.of(context).pop(),
+                  onPressed: () {
+                    final contactProvider = context.read<ContactsProvider>();
+                    if (contactProvider.createGroupActive) {
+                      contactProvider.toggleCreateGroupMode();
+                      contactProvider.clearSelected();
+                    } else {
+                      Navigator.of(context).pop();
+                    }
+                  },
                   splashRadius: _splashRadius,
                   icon: Icon(Icons.arrow_back),
                 ),
@@ -114,7 +122,16 @@ class _NewMessageAppBarState extends State<NewMessageAppBar> {
                                 ),
                               ),
                             )
-                          : SizedBox.shrink(),
+                          : contactsProvider.createGroupActive
+                              ? Text(
+                                  "Next",
+                                  style: TextStyle(
+                                    fontSize: 17,
+                                    fontFamily: "Poppins",
+                                    color: Colors.grey,
+                                  ),
+                                )
+                              : SizedBox.shrink(),
                 ),
                 SizedBox(width: 13),
               ],
