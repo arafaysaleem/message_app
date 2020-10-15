@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:provider/provider.dart';
 
 import '../../providers/messages_provider.dart';
@@ -20,7 +21,7 @@ class ContactListItem extends StatelessWidget {
     final contactsProvider =
         Provider.of<ContactsProvider>(context, listen: false);
     return InkWell(
-      onLongPress: (){
+      onLongPress: () {
         if (contactsProvider.createGroupActive) {
           contactsProvider.toggleSelected(contact);
         }
@@ -30,16 +31,15 @@ class ContactListItem extends StatelessWidget {
           contactsProvider.toggleSelected(contact);
         } else {
           Conversation convo = msgManager.getConversation(contact);
-          Navigator.of(context)
-              .push(
-                MaterialPageRoute(
-                  builder: (ctx) => ChangeNotifierProvider.value(
-                    value: convo,
-                    child: MessageScreen(),
-                  ),
-                ),
-              )
-              .then((value) => convo.readConversation());
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (ctx) => ChangeNotifierProvider.value(
+                value: convo,
+                child: MessageScreen(),
+              ),
+            ),
+          );
+          msgManager.readConversation(convo);
         }
       },
       child: Padding(

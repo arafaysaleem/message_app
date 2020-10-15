@@ -55,12 +55,16 @@ class ConversationsList extends StatelessWidget {
           final List<Conversation> convos = getConvos(ctx);
           return SliverList(
             delegate: SliverChildBuilderDelegate(
-              (ctx, i) => ChangeNotifierProvider.value(
-                value: convos[convos.length - i - 1],
-                child: currentFilter == Filters.Groups
-                    ? GroupConversationTile()
-                    : ConversationListItem(),
-              ),
+              (ctx, i) {
+                final convo=convos[convos.length - i - 1];
+                if(convo.messages.isNotEmpty) return ChangeNotifierProvider.value(
+                  value: convo,
+                  child: currentFilter == Filters.Groups
+                      ? GroupConversationTile()
+                      : ConversationListItem(),
+                );
+                return SizedBox.shrink();
+              },
               childCount: convos.length,
             ),
           );

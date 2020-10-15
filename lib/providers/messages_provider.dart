@@ -471,7 +471,7 @@ class MessageManager with ChangeNotifier {
       sender: contact,
       messages: <Message>[],
     );
-    //TODO: _firestoredb.addOrUpdateConversation(_conversations[contact.number]);
+    _firestoredb.addOrUpdateConversation(_conversations[contact.number]);
     return _conversations[contact.number];
   }
 
