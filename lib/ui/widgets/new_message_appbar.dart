@@ -5,6 +5,7 @@ import '../../providers/contacts_provider.dart';
 
 import '../../models/conversation.dart';
 
+import '../screens/create_new_group_screen.dart';
 import '../screens/message_screen.dart';
 
 class NewMessageAppBar extends StatefulWidget {
@@ -99,24 +100,18 @@ class _NewMessageAppBarState extends State<NewMessageAppBar> {
                       (contactsProvider.selectedContacts.length > 1 &&
                               contactsProvider.createGroupActive)
                           ? InkWell(
-                              onTap: () {
-                                Conversation convo =
-                                    contactsProvider.getNewGroupConversation;
-                                Navigator.of(context).pushReplacement(
-                                  MaterialPageRoute(
-                                    builder: (ctx) {
-                                      return ChangeNotifierProvider.value(
-                                        value: convo,
-                                        child: MessageScreen(),
-                                      );
-                                    },
+                              onTap: () => Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (ctx) => ChangeNotifierProvider.value(
+                                    value: contactsProvider,
+                                    child: NewGroupScreen(),
                                   ),
-                                );
-                              },
+                                ),
+                              ),
                               child: Text(
                                 "Next",
                                 style: TextStyle(
-                                  fontSize: 17,
+                                  fontSize: 15,
                                   fontFamily: "Poppins",
                                   color: Theme.of(context).primaryColor,
                                 ),
@@ -126,7 +121,7 @@ class _NewMessageAppBarState extends State<NewMessageAppBar> {
                               ? Text(
                                   "Next",
                                   style: TextStyle(
-                                    fontSize: 17,
+                                    fontSize: 15,
                                     fontFamily: "Poppins",
                                     color: Colors.grey,
                                   ),

@@ -431,12 +431,13 @@ class MessageManager with ChangeNotifier {
 
   bool isSelected(Conversation convo) => _selectedConversations.contains(convo);
 
-  void sendConversationMessages({@required Conversation convo, @required String text}){
+  void sendConversationMessages(
+      {@required Conversation convo, @required String text}) {
     convo.sendMessage(text: text);
     _firestoredb.addMessages(convo);
   }
 
-  void readConversation(Conversation convo){
+  void readConversation(Conversation convo) {
     convo.readConversation();
     _firestoredb.readConversation(convo);
   }
@@ -451,18 +452,19 @@ class MessageManager with ChangeNotifier {
     return _conversations[contact.number] ?? _createConversation(contact);
   }
 
-  Conversation createGroupConversation(groupMembers) {
+  Conversation createGroupConversation(
+      groupMembers, groupName) {
     Random random = Random();
     String groupID = random.nextInt(100000).toString();
     _groups[groupID] = Conversation(
-        sender: groupMembers[0],
-        messages: <Message>[],
-        isGroup: groupMembers == null ? false : true,
-        groupID: groupID,
-        groupName: "DEFAULT",
-        //TODO: Change to input
-        participants: groupMembers);
-    //TODO: _firestoredb.addOrUpdateGroup(_groups[groupID]);
+      sender: groupMembers[0],
+      messages: <Message>[],
+      isGroup: groupMembers == null ? false : true,
+      groupID: groupID,
+      groupName: groupName,
+      participants: groupMembers,
+    );
+    _firestoredb.addOrUpdateGroup(_groups[groupID]);
     return _groups[groupID];
   }
 

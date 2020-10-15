@@ -90,7 +90,9 @@ class ContactsProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Conversation get getNewGroupConversation => _messageManager.createGroupConversation(selectedContacts);
+  Conversation createNewGroupConversation(String groupName) {
+    return _messageManager.createGroupConversation(selectedContacts,groupName.isNotEmpty ? groupName : "DEFAULT");
+  }
 
   Contact getSenderContact(String number) {
     return _contacts.firstWhere(
