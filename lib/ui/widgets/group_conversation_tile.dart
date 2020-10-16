@@ -42,76 +42,73 @@ class GroupConversationTile extends StatelessWidget {
               top: 4,
               child: convo.isSpam
                   ? Container(
-                margin: EdgeInsets.all(2),
-                child: Center(
-                  child: Icon(
-                    Icons.error,
-                    color: Colors.redAccent,
-                    size: 30,
-                  ),
-                ),
-              )
+                      margin: EdgeInsets.all(2),
+                      child: Center(
+                        child: Icon(
+                          Icons.error,
+                          color: Colors.redAccent,
+                          size: 30,
+                        ),
+                      ),
+                    )
                   : Container(
-                height: 20,
-                width: 20,
-                decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: convo.sender.avClr
-                ),
-                child: Center(
-                  child: convo.sender.isAdded
-                      ? Text(
-                    convo.sender.name.substring(0, 1),
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 10,
+                      height: 20,
+                      width: 20,
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle, color: convo.sender.avClr),
+                      child: Center(
+                        child: convo.sender.isAdded
+                            ? Text(
+                                convo.sender.name.substring(0, 1),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 10,
+                                ),
+                              )
+                            : Icon(
+                                Icons.person,
+                                color: Colors.white,
+                                size: 10,
+                              ),
+                      ),
                     ),
-                  )
-                      : Icon(
-                    Icons.person,
-                    color: Colors.white,
-                    size: 10,
-                  ),
-                ),
-              ),
             ),
             Positioned(
               bottom: 4,
               right: 4,
               child: convo.isSpam
                   ? Container(
-                margin: EdgeInsets.all(2),
-                child: Center(
-                  child: Icon(
-                    Icons.error,
-                    color: Colors.redAccent,
-                    size: 30,
-                  ),
-                ),
-              )
+                      margin: EdgeInsets.all(2),
+                      child: Center(
+                        child: Icon(
+                          Icons.error,
+                          color: Colors.redAccent,
+                          size: 30,
+                        ),
+                      ),
+                    )
                   : Container(
-                height: 20,
-                width: 20,
-                decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: convo.participants[0].avClr
-                ),
-                child: Center(
-                  child: convo.participants[0].isAdded
-                      ? Text(
-                    convo.participants[0].name.substring(0, 1),
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 10,
+                      height: 20,
+                      width: 20,
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: convo.participants[0].avClr),
+                      child: Center(
+                        child: convo.participants[0].isAdded
+                            ? Text(
+                                convo.participants[0].name.substring(0, 1),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 10,
+                                ),
+                              )
+                            : Icon(
+                                Icons.person,
+                                color: Colors.white,
+                                size: 10,
+                              ),
+                      ),
                     ),
-                  )
-                      : Icon(
-                    Icons.person,
-                    color: Colors.white,
-                    size: 10,
-                  ),
-                ),
-              ),
             ),
           ],
         ),
@@ -198,19 +195,19 @@ class GroupConversationTile extends StatelessWidget {
         if (msgManager.selectedConversations.length >= 1) {
           // msgManager.toggleSelected(convo);
         } else {
-          Navigator.of(context)
-              .push(
-                MaterialPageRoute(
-                  builder: (ctx) => ChangeNotifierProvider.value(
-                    value: convo,
-                    child: MessageScreen(),
-                  ),
-                ),
-              )
-              .then((value) => convo.readConversation());
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (ctx) => ChangeNotifierProvider.value(
+                value: convo,
+                child: MessageScreen(),
+              ),
+            ),
+          );
+          msgManager.readGroup(convo);
         }
       },
       onLongPress: () {
+        //TODO: select multiple groups for actions
         // msgManager.toggleSelected(convo);
       },
       child: Padding(

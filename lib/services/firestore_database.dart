@@ -27,6 +27,11 @@ class FirestoreDatabase {
     changes: {'isRead': conversation.isRead},
   );
 
+  Future<void> readGroup(Conversation conversation) => _service.documentAction(
+    path: FirestorePath.group(uid, conversation.groupID),
+    changes: {'isRead': conversation.isRead},
+  );
+
   Future<void> addMessages(Conversation conversation) => _service.documentAction(
     path: FirestorePath.conversation(uid, conversation.sender.number),
     changes: {'messages': conversation.serializeMessages()},

@@ -65,7 +65,7 @@ class _NewGroupScreenState extends State<NewGroupScreen> {
                   },
                 ),
               );
-              context.read<MessageManager>().readConversation(convo);
+              context.read<MessageManager>().readGroup(convo);
             },
             child: Padding(
               padding: const EdgeInsets.all(17.0),

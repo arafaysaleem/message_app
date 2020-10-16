@@ -448,6 +448,11 @@ class MessageManager with ChangeNotifier {
     _firestoredb.readConversation(convo);
   }
 
+  void readGroup(Conversation convo) {
+    convo.readConversation();
+    _firestoredb.readGroup(convo);
+  }
+
   void readAllConversations() {
     _conversations.values
         .forEach((Conversation convo) => convo.readConversation());
