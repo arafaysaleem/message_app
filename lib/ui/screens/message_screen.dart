@@ -30,7 +30,12 @@ class MessageScreen extends StatelessWidget {
         leading: IconButton(
           splashRadius: _splashRadius,
           onPressed: () {
-            if(convo.messages.isEmpty) context.read<MessageManager>().deleteConversation(convo);
+            if(convo.messages.isEmpty){
+              if(convo.isGroup) {
+                context.read<MessageManager>().deleteGroup(convo);
+              }
+              else context.read<MessageManager>().deleteConversation(convo);
+            }
             Navigator.of(context).pop();
           },
           icon: Icon(Icons.arrow_back),

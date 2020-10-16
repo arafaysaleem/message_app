@@ -422,11 +422,17 @@ class MessageManager with ChangeNotifier {
   }
 
   void updateConversionList(Conversation convo) {
+    if(convo.isGroup){
+      _groups.remove(convo.groupID); //remove
+      _groups[convo.groupID] = convo; //and insert at end to make it appear on top
+      _firestoredb.addOrUpdateGroup(_groups[convo.groupID]);
+    }
+    else{
     _conversations.remove(convo.sender.number); //remove
-    _conversations[convo.sender.number] =
-        convo; //and insert at end to make it appear on top
-    notifyListeners();
+    _conversations[convo.sender.number] = convo; //and insert at end to make it appear on top
     _firestoredb.addOrUpdateConversation(_conversations[convo.sender.number]);
+    }
+    notifyListeners();
   }
 
   bool isSelected(Conversation convo) => _selectedConversations.contains(convo);
@@ -452,8 +458,7 @@ class MessageManager with ChangeNotifier {
     return _conversations[contact.number] ?? _createConversation(contact);
   }
 
-  Conversation createGroupConversation(
-      groupMembers, groupName) {
+  Conversation createGroupConversation(groupMembers, groupName) {
     Random random = Random();
     String groupID = random.nextInt(100000).toString();
     _groups[groupID] = Conversation(
@@ -465,6 +470,7 @@ class MessageManager with ChangeNotifier {
       participants: groupMembers,
     );
     _firestoredb.addOrUpdateGroup(_groups[groupID]);
+    print(_conversations);
     return _groups[groupID];
   }
 
@@ -492,8 +498,8 @@ class MessageManager with ChangeNotifier {
     if (_groups.containsKey(convo.groupID)) _groups.remove(convo.groupID);
     // else if(_archivedGroups.contains(convo)) _archivedGroups.remove(convo);
     // else if(_spammedGroups.contains(convo)) _spammedGroups.remove(convo);
+    _firestoredb.deleteGroup(convo);
     notifyListeners();
-    //TODO: _firestoredb.deleteGroup(convo);
   }
 
   void deleteSelected() {

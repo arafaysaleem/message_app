@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:message_app/providers/messages_provider.dart';
 
 import 'package:provider/provider.dart';
 
@@ -57,7 +58,6 @@ class _NewGroupScreenState extends State<NewGroupScreen> {
               Navigator.of(context).pushReplacement(
                 MaterialPageRoute(
                   builder: (ctx) {
-                    //TODO handle group deleteion on empty message
                     return ChangeNotifierProvider.value(
                       value: convo,
                       child: MessageScreen(),
@@ -65,6 +65,7 @@ class _NewGroupScreenState extends State<NewGroupScreen> {
                   },
                 ),
               );
+              context.read<MessageManager>().readConversation(convo);
             },
             child: Padding(
               padding: const EdgeInsets.all(17.0),
