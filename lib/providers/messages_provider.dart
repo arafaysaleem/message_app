@@ -444,11 +444,13 @@ class MessageManager with ChangeNotifier {
   }
 
   void readConversation(Conversation convo) {
+    if(convo.isRead) return;
     convo.readConversation();
     _firestoredb.readConversation(convo);
   }
 
   void readGroup(Conversation convo) {
+    if(convo.isRead) return;
     convo.readConversation();
     _firestoredb.readGroup(convo);
   }

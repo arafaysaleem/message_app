@@ -71,7 +71,7 @@ class MessageDetailsScreen extends StatelessWidget {
             ),
             SizedBox(height: 22),
             Text(
-              "${convo.participants.length+1} PERSON",
+              "${convo.participants.length + 1} PERSON",
               style: TextStyle(
                 fontSize: 11,
                 fontWeight: FontWeight.w600,
@@ -161,9 +161,9 @@ class MessageDetailsScreen extends StatelessWidget {
             SizedBox(height: 5),
 
             //List of group members
-            Expanded(
+            if(convo.isGroup) Expanded(
               child: NotificationListener<OverscrollIndicatorNotification>(
-                onNotification: (overScroll){
+                onNotification: (overScroll) {
                   overScroll.disallowGlow();
                   return false;
                 },
