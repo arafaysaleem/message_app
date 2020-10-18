@@ -53,9 +53,6 @@ class FirestoreDatabase {
     });
   }
 
-  void archiveSelectedConversations(List<Conversation> _archivedConvos) =>
-      _archivedConvos.forEach(addOrUpdateConversation);
-
   Future<void> spamSelectedConversation(Conversation _spammedConvo) {
     return _service.documentAction(
       path: FirestorePath.conversation(uid, _spammedConvo.sender.number),
