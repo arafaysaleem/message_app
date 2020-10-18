@@ -392,7 +392,7 @@ class MessageManager with ChangeNotifier {
 
   /// Stream based methods
   void _initializeGroupsMap() =>
-      _firestoredb.groupsStream().listen((tempGroups) {
+      _firestoredb.normalGroupsStream().listen((tempGroups) {
         tempGroups.forEach((group) => _groups[group.groupID] = group);
         notifyListeners();
       });

@@ -16,6 +16,7 @@ class FirestoreDatabase {
   FirestoreDatabase({@required this.uid})
       : assert(uid != null, 'Cannot create FirestoreDatabase with null uid');
 
+  /// Updates an entire conversation document or adds it if it doesn't exist.
   Future<void> addOrUpdateConversation(Conversation conversation) {
     return _service.setData(
       path: FirestorePath.conversation(uid, conversation.sender.number),
@@ -23,6 +24,9 @@ class FirestoreDatabase {
     );
   }
 
+  /// Sets the conversation isRead to true.
+  /// Updates only the specific isRead field instead of updating
+  /// the whole document
   Future<void> readConversation(Conversation conversation) {
     return _service.documentAction(
       path: FirestorePath.conversation(uid, conversation.sender.number),
@@ -30,6 +34,9 @@ class FirestoreDatabase {
     );
   }
 
+  /// Sets the group isRead to true.
+  /// Updates only the specific isRead field instead of updating
+  /// the whole document
   Future<void> readGroup(Conversation conversation) {
     return _service.documentAction(
       path: FirestorePath.group(uid, conversation.groupID),
@@ -37,6 +44,10 @@ class FirestoreDatabase {
     );
   }
 
+  /// Updates the messages list for a conversation to add the new
+  /// messages. Updates only the specific messages field instead of updating
+  /// the whole document.
+  /// Calls the serialiseMessages() method to convert messages to a map.
   Future<void> addMessages(Conversation conversation) {
     return _service.documentAction(
       path: FirestorePath.conversation(uid, conversation.sender.number),
@@ -44,6 +55,9 @@ class FirestoreDatabase {
     );
   }
 
+  /// Iterates over the conversations list to toggle the isArchived field.
+  /// Updates only the specific isArchived field instead of updating
+  /// the whole document.
   void toggleArchiveSelectedConversations(List<Conversation> _archivedConvos) {
     _archivedConvos.forEach((convo) {
       _service.documentAction(
@@ -53,6 +67,9 @@ class FirestoreDatabase {
     });
   }
 
+  /// Sets the isSpam field for the conversation.
+  /// Updates only the specific isSpam field instead of updating
+  /// the whole document.
   Future<void> spamSelectedConversation(Conversation _spammedConvo) {
     return _service.documentAction(
       path: FirestorePath.conversation(uid, _spammedConvo.sender.number),
@@ -60,6 +77,10 @@ class FirestoreDatabase {
     );
   }
 
+  /// Performs a batchAction to perform the provided changes on all
+  /// the documents in the collection "conversations".
+  /// It only applies this operation on normal conversations by filtering
+  /// out any spammed or archived conversations.
   Future<void> markAllConversationsRead() {
     return _service.batchActon(
       path: FirestorePath.conversations(uid),
@@ -70,12 +91,14 @@ class FirestoreDatabase {
     );
   }
 
+  /// Deletes the provided conversation document.
   Future<void> deleteConversation(Conversation conversation) {
     return _service.deleteData(
       path: FirestorePath.conversation(uid, conversation.sender.number),
     );
   }
 
+  /// Updates an entire group document or adds it if it doesn't exist.
   Future<void> addOrUpdateGroup(Conversation conversation) {
     return _service.setData(
       path: FirestorePath.group(uid, conversation.groupID),
@@ -83,12 +106,15 @@ class FirestoreDatabase {
     );
   }
 
+  /// Deletes the provided group document.
   Future<void> deleteGroup(Conversation conversation) {
     return _service.deleteData(
       path: FirestorePath.group(uid, conversation.groupID),
     );
   }
 
+  /// Returns a stream of a single conversation fetched from the conversation
+  /// document at the provided number.
   Stream<Conversation> conversationStream({@required String number}) {
     return _service.documentStream(
       path: FirestorePath.conversation(uid, number),
@@ -96,6 +122,8 @@ class FirestoreDatabase {
     );
   }
 
+  /// Returns a stream of a single group fetched from the group
+  /// document at the provided groupID.
   Stream<Conversation> groupStream({@required String groupID}) {
     return _service.documentStream(
       path: FirestorePath.group(uid, groupID),
@@ -112,6 +140,9 @@ class FirestoreDatabase {
   ///       builder: (data, _) => Conversation.fromMap(data),
   ///     );
 
+  /// Returns a stream of a list of all normal conversations
+  /// that are neither spammed nor archived, sorted in ascending
+  /// order.
   Stream<List<Conversation>> normalStream() {
     return _service.collectionStream<Conversation>(
       path: FirestorePath.conversations(uid),
@@ -123,6 +154,8 @@ class FirestoreDatabase {
     );
   }
 
+  /// Returns a stream of a list of all spammed conversations,
+  /// sorted in ascending order.
   Stream<List<Conversation>> spammedStream() {
     return _service.collectionStream<Conversation>(
       path: FirestorePath.conversations(uid),
@@ -132,6 +165,8 @@ class FirestoreDatabase {
     );
   }
 
+  /// Returns a stream of a list of all archived conversations,
+  /// sorted in ascending order.
   Stream<List<Conversation>> archivedStream({Conversation conversation}) {
     return _service.collectionStream<Conversation>(
       path: FirestorePath.conversations(uid),
@@ -141,10 +176,16 @@ class FirestoreDatabase {
     );
   }
 
-  Stream<List<Conversation>> groupsStream({Conversation conversation}) {
+  /// Returns a stream of a list of all normal groups
+  /// that are neither spammed nor archived, sorted in ascending
+  /// order.
+  Stream<List<Conversation>> normalGroupsStream({Conversation conversation}) {
     return _service.collectionStream<Conversation>(
       path: FirestorePath.groups(uid),
-      queryBuilder: (query) => query.where('isGroup', isEqualTo: true),
+      queryBuilder: (query) => query
+          .where('isGroup', isEqualTo: true)
+          .where('isSpam', isEqualTo: false)
+          .where('isArchived', isEqualTo: false),
       builder: (data, _) => Conversation.fromMap(data),
       sort: (lhs, rhs) => rhs.groupName.compareTo(lhs.groupName),
     );
