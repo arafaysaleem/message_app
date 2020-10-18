@@ -4,8 +4,11 @@ import 'package:flutter/foundation.dart';
 class FirestoreService {
   FirestoreService._();
 
+  /// Singleton instance of a firestoreService class.
   static final instance = FirestoreService._();
 
+  /// Sets the data for the document/collection existing
+  /// at the provided path.
   Future<void> setData({
     @required String path,
     @required Map<String, dynamic> data,
@@ -16,12 +19,17 @@ class FirestoreService {
     await reference.set(data, SetOptions(merge: merge));
   }
 
+  /// Deletes the document/collection existing at the
+  /// provided path.
   Future<void> deleteData({@required String path}) async {
     final reference = FirebaseFirestore.instance.doc(path);
     print('delete: $path');
     await reference.delete();
   }
 
+  /// Updates data in a single document existing at the provided
+  /// path by performing the changes according to the supplied
+  /// changes map.
   Future<void> documentAction({
     @required String path,
     @required Map<String, dynamic> changes,
@@ -33,6 +41,10 @@ class FirestoreService {
       docRef.update(changes);
   }
 
+  /// Updates data in a list of documents of a single collection
+  /// existing at the provided path. The documents are filted by
+  /// the queryBuilder and updated by performing the changes according
+  /// to the supplied changes map.
   Future<void> batchActon({
     @required String path,
     @required Map<String, dynamic> changes,
@@ -53,6 +65,8 @@ class FirestoreService {
     await batchUpdate.commit();
   }
 
+  /// Returns a stream of collection mapped to a list of type T,
+  /// existing at the provided path and filtered using the queryBuilder.
   Stream<List<T>> collectionStream<T>({
     @required String path,
     @required T Function(Map<String, dynamic> data, String documentID) builder,
@@ -76,6 +90,8 @@ class FirestoreService {
     });
   }
 
+  /// Returns a stream of document mapped to a list of type T,
+  /// existing at the provided path.
   Stream<T> documentStream<T>({
     @required String path,
     @required T Function(Map<String, dynamic> data, String documentID) builder,
