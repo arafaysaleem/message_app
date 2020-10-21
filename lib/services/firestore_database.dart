@@ -68,6 +68,7 @@ class FirestoreDatabase {
   /// the whole document.
   void toggleArchiveSelectedConversations(List<Conversation> _archivedConvos) {
     _archivedConvos.forEach((convo) {
+      print("${convo.isArchived}\t${convo.sender}");
       _service.documentAction(
         path: FirestorePath.conversation(uid, convo.sender.number),
         changes: {'isArchived': convo.isArchived},
@@ -178,7 +179,9 @@ class FirestoreDatabase {
   Stream<List<Conversation>> archivedStream({Conversation conversation}) {
     return _service.collectionStream<Conversation>(
       path: FirestorePath.conversations(uid),
-      queryBuilder: (query) => query.where('isArchived', isEqualTo: true),
+      queryBuilder: (query) => query
+          .where('isArchived', isEqualTo: true)
+          .where('isSpam', isEqualTo: false),
       builder: (data, _) => Conversation.fromMap(data),
       sort: (lhs, rhs) => rhs.sender.name.compareTo(lhs.sender.name),
     );
