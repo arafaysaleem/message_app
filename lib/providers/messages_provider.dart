@@ -412,7 +412,7 @@ class MessageManager with ChangeNotifier {
 
   void _initializeArchivedConversations() =>
       _firestoredb.archivedStream().listen((archivedConvos) {
-        _spammedConversations = archivedConvos;
+        _archivedConversations = archivedConvos;
         notifyListeners();
       });
 
@@ -503,6 +503,7 @@ class MessageManager with ChangeNotifier {
 
   void deleteGroup(Conversation convo) {
     if (_groups.containsKey(convo.groupID)) _groups.remove(convo.groupID);
+    //TODO: add support for group archiving and spamming
     // else if(_archivedGroups.contains(convo)) _archivedGroups.remove(convo);
     // else if(_spammedGroups.contains(convo)) _spammedGroups.remove(convo);
     _firestoredb.deleteGroup(convo);
@@ -532,7 +533,7 @@ class MessageManager with ChangeNotifier {
       }
       convo.toggleArchived();
     });
-    //TODO: _firestoredb.archiveSelectedConversations(_selectedConversations);
+    _firestoredb.toggleArchiveSelectedConversations(_selectedConversations);
     clearSelected();
   }
 
@@ -567,7 +568,7 @@ class MessageManager with ChangeNotifier {
       _archivedConversations.add(convo);
     }
     convo.toggleArchived();
-    //TODO: _firestoredb.archiveSelectedConversations([convo]);
+    _firestoredb.toggleArchiveSelectedConversations([convo]);
     notifyListeners();
   }
 
