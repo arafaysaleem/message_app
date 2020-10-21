@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../enums/filters_enum.dart';
+import '../../../enums/filters_enum.dart';
 
-import '../../providers/messages_provider.dart';
+import '../../../providers/messages_provider.dart';
 
-import '../../helper/utils.dart';
+import '../../../helper/utils.dart';
 
 class ActionsAppBar extends StatelessWidget {
   final int length;

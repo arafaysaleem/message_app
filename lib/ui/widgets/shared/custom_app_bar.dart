@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../enums/filters_enum.dart';
+import '../../../enums/filters_enum.dart';
 
 import 'actions_app_bar.dart';
 

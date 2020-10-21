@@ -11,9 +11,9 @@ import '../../enums/filters_enum.dart';
 
 import 'new_message_screen.dart';
 
-import '../widgets/custom_app_bar.dart';
+import '../widgets/shared/custom_app_bar.dart';
 import '../widgets/custom_fab.dart';
-import '../widgets/default_app_bar.dart';
+import '../widgets/shared/default_app_bar.dart';
 import '../widgets/shared/conversations_list.dart';
 
 // ignore: must_be_immutable

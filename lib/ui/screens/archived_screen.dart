@@ -6,7 +6,7 @@ import '../../providers/messages_provider.dart';
 import '../../enums/filters_enum.dart';
 
 import '../widgets/shared/conversations_list.dart';
-import '../widgets/actions_app_bar.dart';
+import '../widgets/shared/actions_app_bar.dart';
 
 class ArchivedMessagesScreen extends StatelessWidget {
   static const routeName = "ArchivedMessagesScreen";
