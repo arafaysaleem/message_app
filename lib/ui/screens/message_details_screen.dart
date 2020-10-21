@@ -171,7 +171,9 @@ class MessageDetailsScreen extends StatelessWidget {
                   children: convo.participants.sublist(1)
                       .map(
                         (member) => InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            //TODO: Add feature to add new group participant
+                          },
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 10),
                             child: SizedBox(

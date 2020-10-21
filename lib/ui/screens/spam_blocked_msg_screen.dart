@@ -46,6 +46,7 @@ class SpamAndBlockedMessagesScreen extends StatelessWidget {
                   ),
                   child: SpamAppBar(),
                 ),
+                //TODO: Add empty spam box message
                 ConversationsList(
                   currentFilter: Filters.SpamAndBlocked,
                 ),

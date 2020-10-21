@@ -22,6 +22,7 @@ class MessageManager with ChangeNotifier {
   List<Conversation> _spammedConversations = [];
   List<Conversation> _archivedConversations = [];
 
+  //TODO: Delete these comments after app done
   /*final Map<String, Conversation> _conversations = {
     "03028220488": Conversation(
       sender: Contact(name: "Farhan",number: "03028220488",avClr: Colors.red),
@@ -375,6 +376,7 @@ class MessageManager with ChangeNotifier {
   UnmodifiableListView<Conversation> get groupsConversations =>
       UnmodifiableListView(_groups.values);
 
+  //TODO: Delete these comments after app done
   // void addAllToFirebase(){ //only use this to add convos to firebase
   //   conversations.forEach(_firestoredb.addOrUpdateConversation);
   // }

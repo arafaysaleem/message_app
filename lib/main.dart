@@ -27,6 +27,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
+      //TODO: Add firebase auth, get uid from authUser
       create: (ctx) => MessageManager(firestoredb: FirestoreDatabase(uid: "Rafay123")),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -39,6 +40,7 @@ class MyApp extends StatelessWidget {
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         routes: {
+          //TODO: Change to enum of page type
           "/": (_) => HomeScreen(),
           ArchivedMessagesScreen.routeName: (_) => ArchivedMessagesScreen(),
           SpamAndBlockedMessagesScreen.routeName: (_) =>
