@@ -12,7 +12,7 @@ import '../../models/message.dart';
 
 import '../../enums/convo_action_enum.dart';
 
-import '../widgets/bottom_message_bar.dart';
+import '../widgets/shared/bottom_message_bar.dart';
 
 // ignore: must_be_immutable
 class MessageScreen extends StatelessWidget {

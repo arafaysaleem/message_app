@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import '../../providers/messages_provider.dart';
+import '../../../providers/messages_provider.dart';
 
-import '../../models/conversation.dart';
+import '../../../models/conversation.dart';
 
-import '../screens/message_screen.dart';
+import '../../screens/message_screen.dart';
 
 // ignore: must_be_immutable
 class ConversationListItem extends StatelessWidget {

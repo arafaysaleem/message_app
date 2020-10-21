@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 
-import '../../providers/messages_provider.dart';
+import '../../../providers/messages_provider.dart';
 
-import '../../enums/filters_enum.dart';
+import '../../../enums/filters_enum.dart';
 
-import '../../models/conversation.dart';
+import '../../../models/conversation.dart';
 
-import 'group_conversation_tile.dart';
+import '../group_conversation_tile.dart';
 import 'conversation_list_item.dart';
 
 class ConversationsList extends StatelessWidget {

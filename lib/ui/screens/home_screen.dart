@@ -14,7 +14,7 @@ import 'new_message_screen.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/custom_fab.dart';
 import '../widgets/default_app_bar.dart';
-import '../widgets/conversations_list.dart';
+import '../widgets/shared/conversations_list.dart';
 
 // ignore: must_be_immutable
 class HomeScreen extends StatefulWidget {

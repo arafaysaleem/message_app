@@ -5,7 +5,7 @@ import '../../providers/messages_provider.dart';
 
 import '../../enums/filters_enum.dart';
 
-import '../widgets/conversations_list.dart';
+import '../widgets/shared/conversations_list.dart';
 import '../widgets/actions_app_bar.dart';
 
 class SpamAndBlockedMessagesScreen extends StatelessWidget {

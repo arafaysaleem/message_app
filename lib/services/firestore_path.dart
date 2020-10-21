@@ -1,5 +1,3 @@
-//import '../enums/conversation_type_enum.dart';
-
 class FirestorePath{
 
   /// Path to a collection of conversations of a user.

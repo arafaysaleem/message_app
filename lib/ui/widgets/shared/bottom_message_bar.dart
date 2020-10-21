@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../providers/messages_provider.dart';
+import '../../../providers/messages_provider.dart';
 
-import '../../helper/utils.dart';
+import '../../../helper/utils.dart';
 
-import '../../models/conversation.dart';
+import '../../../models/conversation.dart';
 
 class BottomMessageBar extends StatefulWidget {
   final ScrollController sController;
