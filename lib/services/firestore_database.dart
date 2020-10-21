@@ -17,12 +17,20 @@ class FirestoreDatabase {
       : assert(uid != null, 'Cannot create FirestoreDatabase with null uid');
 
   /// Updates an entire conversation document or adds it if it doesn't exist.
+  /// Setting merge to true would only update the document with the new changes
+  /// instead of re writing all field.
   Future<void> addOrUpdateConversation(Conversation conversation) {
     return _service.setData(
       path: FirestorePath.conversation(uid, conversation.sender.number),
       data: conversation.toMap(),
     );
   }
+
+  /*
+  * Most of the below specified methods for document action can be removed
+  * and all the work can be done by addOrUpdate method. However, you won't have
+  * control over what's being updated and to what value it is being updated.final
+  */
 
   /// Sets the conversation isRead to true.
   /// Updates only the specific isRead field instead of updating
