@@ -584,7 +584,7 @@ class MessageManager with ChangeNotifier {
       _spammedConversations.add(convo);
     }
     convo.toggleSpam();
-    //TODO: _firestoredb.spamSelectedConversation(convo);
+    _firestoredb.spamSelectedConversation(convo);
     clearSelected();
   }
 

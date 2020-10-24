@@ -80,6 +80,7 @@ class FirestoreDatabase {
   /// Updates only the specific isSpam field instead of updating
   /// the whole document.
   Future<void> spamSelectedConversation(Conversation _spammedConvo) {
+    print("Spam: ${_spammedConvo.sender}");
     return _service.documentAction(
       path: FirestorePath.conversation(uid, _spammedConvo.sender.number),
       changes: {'isSpam': _spammedConvo.isSpam},
