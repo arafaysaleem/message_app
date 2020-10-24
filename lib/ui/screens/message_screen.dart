@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
@@ -30,11 +31,11 @@ class MessageScreen extends StatelessWidget {
         leading: IconButton(
           splashRadius: _splashRadius,
           onPressed: () {
-            if(convo.messages.isEmpty){
-              if(convo.isGroup) {
+            if (convo.messages.isEmpty) {
+              if (convo.isGroup) {
                 context.read<MessageManager>().deleteGroup(convo);
-              }
-              else context.read<MessageManager>().deleteConversation(convo);
+              } else
+                context.read<MessageManager>().deleteConversation(convo);
             }
             Navigator.of(context).pop();
           },
@@ -61,10 +62,10 @@ class MessageScreen extends StatelessWidget {
             icon: Icon(Icons.search),
           ),
           PopupMenuButton(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(4)
-            ),
-            onSelected: (ConversationActions filter) => filter.actionOnConversation(context, convo),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+            onSelected: (ConversationActions filter) =>
+                filter.actionOnConversation(context, convo),
             icon: Icon(
               Icons.more_vert,
             ),
@@ -73,10 +74,11 @@ class MessageScreen extends StatelessWidget {
                 child: Text("Details"),
                 value: ConversationActions.DETAILS,
               ),
-              PopupMenuItem(
-                child: Text(convo.isArchived?"Unarchive":"Archive"),
-                value: ConversationActions.ARCHIVE,
-              ),
+              if (!convo.isSpam)
+                PopupMenuItem(
+                  child: Text(convo.isArchived ? "Unarchive" : "Archive"),
+                  value: ConversationActions.ARCHIVE,
+                ),
               PopupMenuItem(
                 child: Text("Delete"),
                 value: ConversationActions.DELETE,
@@ -91,20 +93,99 @@ class MessageScreen extends StatelessWidget {
       ),
       body: Stack(
         children: [
+
           //MessagesList
           Positioned(
             top: 0,
             left: 0,
             right: 0,
             bottom: 0,
-            child: MessagesList(sController: _sController, avClr: convo.sender.avClr),
+            child: MessagesList(
+                sController: _sController, avClr: convo.sender.avClr),
           ),
 
           //Bottom Text Input Bar
-          Positioned(
+          if (!convo.isSpam) Positioned(
             bottom: 0,
             child: BottomMessageBar(sController: _sController),
           ),
+
+          //Unspam
+          if (convo.isSpam)
+            Positioned(
+              top: 0,
+              right: 0,
+              left: 0,
+              child: Card(
+                margin: EdgeInsets.zero,
+                color: Colors.grey[100].withOpacity(0.93),
+                elevation: 1,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(15, 18, 15, 5),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+
+                      //Icon and text
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Icon(
+                            Icons.block,
+                            size: 28,
+                            color: Colors.grey[700],
+                          ),
+
+                          SizedBox(width: 30),
+
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Blocked",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+
+                                SizedBox(height: 5),
+
+                                Text(
+                                  "To move this conversation out of \"Spam & blocked\" and get messages again, unblock ${convo.sender.name}",
+                                  style: TextStyle(
+                                    color: Colors.grey[700],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+
+                      //Unblock button
+                      FlatButton(
+                        onPressed: () {},
+                        splashColor: Theme.of(context).primaryColor.withOpacity(0.3),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        highlightColor: Theme.of(context).primaryColor.withOpacity(0.2),
+                        child: Text(
+                          "Unblock",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            color: Theme.of(context).primaryColor,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
         ],
       ),
     );
@@ -112,22 +193,22 @@ class MessageScreen extends StatelessWidget {
 }
 
 class MessagesList extends StatefulWidget {
-
   final ScrollController sController;
   final avClr;
 
-  const MessagesList({Key key, @required this.sController, @required this.avClr}) : super(key: key);
+  const MessagesList(
+      {Key key, @required this.sController, @required this.avClr})
+      : super(key: key);
 
   @override
   _MessagesListState createState() => _MessagesListState();
 }
 
 class _MessagesListState extends State<MessagesList> {
-
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback(
-            (_) => widget.sController.jumpTo(widget.sController.position.maxScrollExtent));
+    WidgetsBinding.instance.addPostFrameCallback((_) =>
+        widget.sController.jumpTo(widget.sController.position.maxScrollExtent));
     super.initState();
   }
 
@@ -145,20 +226,19 @@ class _MessagesListState extends State<MessagesList> {
 
   @override
   Widget build(BuildContext context) {
-    final convo = Provider.of<Conversation>(context,listen:false);
+    final convo = Provider.of<Conversation>(context, listen: false);
     return GestureDetector(
       onTap: disableKeyboard,
       child: Scrollbar(
         isAlwaysShown: true,
         controller: widget.sController,
         child: NotificationListener<OverscrollIndicatorNotification>(
-          onNotification: (overScroll){
+          onNotification: (overScroll) {
             overScroll.disallowGlow();
             return false;
           },
           child: ListView.builder(
-            keyboardDismissBehavior:
-            ScrollViewKeyboardDismissBehavior.onDrag,
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             controller: widget.sController,
             padding: const EdgeInsets.symmetric(vertical: 10),
             itemCount: convo.messages.length,
@@ -192,7 +272,6 @@ class _MessagesListState extends State<MessagesList> {
   }
 }
 
-
 class MessageListItem extends StatefulWidget {
   final isSpam, contact;
   final Message msg;
@@ -212,8 +291,9 @@ class MessageListItem extends StatefulWidget {
   _MessageListItemState createState() => _MessageListItemState();
 }
 
-class _MessageListItemState extends State<MessageListItem> with SingleTickerProviderStateMixin{
-  bool showDate=false;
+class _MessageListItemState extends State<MessageListItem>
+    with SingleTickerProviderStateMixin {
+  bool showDate = false;
 
   @override
   Widget build(BuildContext context) {
@@ -222,12 +302,15 @@ class _MessageListItemState extends State<MessageListItem> with SingleTickerProv
           ? const EdgeInsets.fromLTRB(8, 0, 30, 0)
           : const EdgeInsets.fromLTRB(30, 0, 8, 0),
       child: Column(
-        crossAxisAlignment: widget.myMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+        crossAxisAlignment: widget.myMessage
+            ? CrossAxisAlignment.end
+            : CrossAxisAlignment.start,
         children: [
           Row(
             crossAxisAlignment: CrossAxisAlignment.end,
-            mainAxisAlignment:
-                !widget.myMessage ? MainAxisAlignment.start : MainAxisAlignment.end,
+            mainAxisAlignment: !widget.myMessage
+                ? MainAxisAlignment.start
+                : MainAxisAlignment.end,
             children: [
               if (!widget.myMessage)
                 widget.isSpam
@@ -257,8 +340,15 @@ class _MessageListItemState extends State<MessageListItem> with SingleTickerProv
             ],
           ),
           Padding(
-            padding: widget.myMessage ? const EdgeInsets.only(top: 3,right: 10) : const EdgeInsets.only(top: 3,left: 55),
-            child: AnimatedSize(vsync: this,curve: Curves.decelerate,duration: Duration(milliseconds: 200),child: showDate ? getDate(convoDate: false) : SizedBox.shrink()),
+            padding: widget.myMessage
+                ? const EdgeInsets.only(top: 3, right: 10)
+                : const EdgeInsets.only(top: 3, left: 55),
+            child: AnimatedSize(
+                vsync: this,
+                curve: Curves.decelerate,
+                duration: Duration(milliseconds: 200),
+                child:
+                    showDate ? getDate(convoDate: false) : SizedBox.shrink()),
           ),
         ],
       ),
@@ -275,14 +365,15 @@ class _MessageListItemState extends State<MessageListItem> with SingleTickerProv
           InkWell(
             splashColor: Colors.transparent,
             highlightColor: Colors.transparent,
-            onTap: (){
+            onTap: () {
               setState(() {
-                showDate=!showDate;
+                showDate = !showDate;
               });
             },
             child: Container(
               decoration: BoxDecoration(
-                color: widget.myMessage ? Utils.myMessageColor : Utils.greyColor,
+                color:
+                    widget.myMessage ? Utils.myMessageColor : Utils.greyColor,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(15),
                   topRight: Radius.circular(15),
@@ -350,18 +441,20 @@ class _MessageListItemState extends State<MessageListItem> with SingleTickerProv
           InkWell(
             splashColor: Colors.transparent,
             highlightColor: Colors.transparent,
-            onTap: (){
+            onTap: () {
               setState(() {
-                showDate=!showDate;
+                showDate = !showDate;
               });
             },
             child: Container(
               decoration: BoxDecoration(
-                color: widget.myMessage ? Utils.myMessageColor : Utils.greyColor,
+                color:
+                    widget.myMessage ? Utils.myMessageColor : Utils.greyColor,
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
                 child: Text(
                   widget.msg.body,
                   style: TextStyle(
@@ -382,14 +475,18 @@ class _MessageListItemState extends State<MessageListItem> with SingleTickerProv
 
   Widget getDate({@required bool convoDate}) {
     final msgDaysAgo = DateTime.now().difference(widget.msg.datetime).inDays;
-    String date='';
-    if(convoDate){
-      if(msgDaysAgo == 0) return SizedBox.shrink();
-      else if(msgDaysAgo > 0 && msgDaysAgo <= 6) date = DateFormat(DateFormat.ABBR_WEEKDAY).format(widget.msg.datetime);
-      else if(msgDaysAgo > 6 && msgDaysAgo <= 365) date = DateFormat("MMM dd").format(widget.msg.datetime);
-      else date = DateFormat("dd/MM/yy").format(widget.msg.datetime);
+    String date = '';
+    if (convoDate) {
+      if (msgDaysAgo == 0)
+        return SizedBox.shrink();
+      else if (msgDaysAgo > 0 && msgDaysAgo <= 6)
+        date = DateFormat(DateFormat.ABBR_WEEKDAY).format(widget.msg.datetime);
+      else if (msgDaysAgo > 6 && msgDaysAgo <= 365)
+        date = DateFormat("MMM dd").format(widget.msg.datetime);
+      else
+        date = DateFormat("dd/MM/yy").format(widget.msg.datetime);
       return Padding(
-        padding: const EdgeInsets.fromLTRB(0,14,0,10),
+        padding: const EdgeInsets.fromLTRB(0, 14, 0, 10),
         child: Text(
           date + " - " + DateFormat('h:mm a').format(widget.msg.datetime),
           style: TextStyle(
@@ -399,11 +496,14 @@ class _MessageListItemState extends State<MessageListItem> with SingleTickerProv
           ),
         ),
       );
-    }
-    else{
-      if(msgDaysAgo > 0 && msgDaysAgo <= 6) date = DateFormat(DateFormat.ABBR_WEEKDAY).format(widget.msg.datetime) + " - ";
-      else if(msgDaysAgo > 6 && msgDaysAgo <= 365) date = DateFormat("MMM dd").format(widget.msg.datetime) + " - ";
-      else if(msgDaysAgo > 365) date = DateFormat("dd/MM/yy").format(widget.msg.datetime) + " - ";
+    } else {
+      if (msgDaysAgo > 0 && msgDaysAgo <= 6)
+        date = DateFormat(DateFormat.ABBR_WEEKDAY).format(widget.msg.datetime) +
+            " - ";
+      else if (msgDaysAgo > 6 && msgDaysAgo <= 365)
+        date = DateFormat("MMM dd").format(widget.msg.datetime) + " - ";
+      else if (msgDaysAgo > 365)
+        date = DateFormat("dd/MM/yy").format(widget.msg.datetime) + " - ";
       return Text(
         date + DateFormat('h:mm a').format(widget.msg.datetime),
         style: TextStyle(
