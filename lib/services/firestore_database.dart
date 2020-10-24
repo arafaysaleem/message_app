@@ -180,8 +180,7 @@ class FirestoreDatabase {
     return _service.collectionStream<Conversation>(
       path: FirestorePath.conversations(uid),
       queryBuilder: (query) => query
-          .where('isArchived', isEqualTo: true)
-          .where('isSpam', isEqualTo: false),
+          .where('isArchived', isEqualTo: true),
       builder: (data, _) => Conversation.fromMap(data),
       sort: (lhs, rhs) => rhs.sender.name.compareTo(lhs.sender.name),
     );
