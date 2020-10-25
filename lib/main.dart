@@ -17,6 +17,7 @@ import 'ui/screens/web_message_screen.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  //TODO: Set status bar color to white
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: Colors.black, statusBarBrightness: Brightness.light));
   runApp(MyApp());
