@@ -28,7 +28,7 @@ class FirestoreDatabase {
 
   /*
   * Most of the below specified methods for document action can be removed
-  * and all the work can be done by addOrUpdate method. However, you won't have
+  * and all the work can be done by addOrUpdate method by specifying merge true. However, you won't have
   * control over what's being updated and to what value it is being updated.final
   */
 
