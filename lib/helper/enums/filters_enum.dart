@@ -2,12 +2,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../providers/messages_provider.dart';
+import '../../providers/messages_provider.dart';
 
-import '../ui/screens/archived_screen.dart';
-import '../ui/screens/settings_screen.dart';
-import '../ui/screens/spam_blocked_msg_screen.dart';
-import '../ui/screens/web_message_screen.dart';
+import '../../ui/screens/archived_screen.dart';
+import '../../ui/screens/settings_screen.dart';
+import '../../ui/screens/spam_blocked_msg_screen.dart';
+import '../../ui/screens/web_message_screen.dart';
 
 enum Filters {
   MarkAllAsRead,

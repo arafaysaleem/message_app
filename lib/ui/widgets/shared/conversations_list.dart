@@ -6,7 +6,7 @@ import 'package:tuple/tuple.dart';
 
 import '../../../providers/messages_provider.dart';
 
-import '../../../enums/filters_enum.dart';
+import '../../../helper/enums/filters_enum.dart';
 
 import '../../../models/conversation.dart';
 

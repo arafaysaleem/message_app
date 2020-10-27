@@ -3,10 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../providers/contacts_provider.dart';
 
-import '../../models/conversation.dart';
-
 import '../screens/create_new_group_screen.dart';
-import '../screens/message_screen.dart';
 
 class NewMessageAppBar extends StatefulWidget {
   final TextEditingController textEditingController;

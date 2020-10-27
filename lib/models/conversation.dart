@@ -3,7 +3,7 @@ import 'dart:collection';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import '../enums/conversation_type_enum.dart';
+import '../helper/enums/conversation_type_enum.dart';
 
 import 'contact.dart';
 import 'message.dart';

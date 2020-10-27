@@ -2,13 +2,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../providers/messages_provider.dart';
+import '../../providers/messages_provider.dart';
 
-import '../helper/utils.dart';
+import '../utils.dart';
 
-import '../models/conversation.dart';
+import '../../models/conversation.dart';
 
-import '../ui/screens/message_details_screen.dart';
+import '../../ui/screens/message_details_screen.dart';
 
 enum ConversationActions { DELETE, DETAILS, ARCHIVE, HELP }
 

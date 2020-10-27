@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
@@ -11,7 +10,7 @@ import '../../helper/utils.dart';
 import '../../models/conversation.dart';
 import '../../models/message.dart';
 
-import '../../enums/convo_action_enum.dart';
+import '../../helper/enums/convo_action_enum.dart';
 
 import '../widgets/shared/bottom_message_bar.dart';
 

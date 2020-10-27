@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../providers/messages_provider.dart';
 
-import '../../enums/filters_enum.dart';
+import '../../helper/enums/filters_enum.dart';
 
 import '../widgets/shared/conversations_list.dart';
 import '../widgets/shared/actions_app_bar.dart';

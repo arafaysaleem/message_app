@@ -7,7 +7,7 @@ import 'package:animations/animations.dart';
 import '../../providers/contacts_provider.dart';
 import '../../providers/messages_provider.dart';
 
-import '../../enums/filters_enum.dart';
+import '../../helper/enums/filters_enum.dart';
 
 import 'new_message_screen.dart';
 
