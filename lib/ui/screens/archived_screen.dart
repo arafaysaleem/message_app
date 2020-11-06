@@ -10,10 +10,10 @@ import '../widgets/shared/actions_app_bar.dart';
 
 class ArchivedMessagesScreen extends StatelessWidget {
   static const routeName = "ArchivedMessagesScreen";
+
   @override
   Widget build(BuildContext context) {
     final currConvoTypeFilter = ModalRoute.of(context).settings.arguments;
-    print(currConvoTypeFilter);
     return Scaffold(
       body: SafeArea(
         child: Stack(
@@ -21,8 +21,9 @@ class ArchivedMessagesScreen extends StatelessWidget {
             CustomScrollView(
               slivers: [
                 Selector<MessageManager, int>(
-                  selector: (ctx, msgMgr) => msgMgr.selectedConversations.length,
-                  builder: (ctx, int length, child) =>  SliverAppBar(
+                  selector: (ctx, msgMgr) =>
+                      msgMgr.selectedConversations.length,
+                  builder: (ctx, int length, child) => SliverAppBar(
                     forceElevated: false,
                     toolbarHeight: 58,
                     collapsedHeight: 60,
@@ -38,9 +39,9 @@ class ArchivedMessagesScreen extends StatelessWidget {
                         child: length == 0
                             ? child
                             : ActionsAppBar(
-                          length: length,
-                          currentFilter: Filters.Archived,
-                        ),
+                                length: length,
+                                currentFilter: Filters.Archived,
+                              ),
                         duration: Duration(milliseconds: 300),
                       ),
                     ),
@@ -48,13 +49,15 @@ class ArchivedMessagesScreen extends StatelessWidget {
                   child: ArchivedAppBar(),
                 ),
                 ConversationsList(
-                  currentFilter: currConvoTypeFilter == Filters.Groups ? Filters.ArchivedGroups : Filters.Archived,
+                  currentFilter: currConvoTypeFilter == Filters.Groups
+                      ? Filters.ArchivedGroups
+                      : Filters.Archived,
                 ),
               ],
             ),
           ],
         ),
-      )
+      ),
     );
   }
 }
@@ -83,7 +86,7 @@ class ArchivedAppBar extends StatelessWidget {
         actions: [
           PopupMenuButton(
             shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
             onSelected: (Filters filter) => filter.actionOnFilter(context),
             icon: Icon(
               Icons.more_vert,
@@ -101,4 +104,3 @@ class ArchivedAppBar extends StatelessWidget {
     );
   }
 }
-

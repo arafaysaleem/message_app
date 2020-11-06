@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 
 class EmptyConversationsBox extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-
         SizedBox(height: 200),
 
         //Skeleton row
@@ -32,23 +30,18 @@ class EmptyConversationsBox extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-
                     Container(
                       height: 11,
                       width: color == Colors.black26 ? 50 : 95,
                       color: color,
                     ),
-
                     SizedBox(height: 7),
-
                     Container(
                       height: 6,
                       width: 140,
                       color: color,
                     ),
-
                     SizedBox(height: 7),
-
                     Container(
                       height: 6,
                       width: 30,

@@ -5,7 +5,8 @@ import '../../../helper/enums/filters_enum.dart';
 class DefaultAppBar extends StatelessWidget {
   final Filters currentFilter;
 
-  const DefaultAppBar({Key key, @required this.currentFilter}) : super(key: key);
+  const DefaultAppBar({Key key, @required this.currentFilter})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,9 +33,7 @@ class DefaultAppBar extends StatelessWidget {
           ),
         ),
         PopupMenuButton(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(4)
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
           onSelected: (Filters filter) => filter.actionOnFilter(context),
           icon: Icon(
             Icons.more_vert,
@@ -42,7 +41,9 @@ class DefaultAppBar extends StatelessWidget {
           ),
           itemBuilder: (_) => [
             PopupMenuItem(
-              child: currentFilter == Filters.Conversation ? Text("Groups") : Text("Individuals"),
+              child: currentFilter == Filters.Conversation
+                  ? Text("Groups")
+                  : Text("Individuals"),
               value: Filters.Groups,
             ),
             PopupMenuItem(

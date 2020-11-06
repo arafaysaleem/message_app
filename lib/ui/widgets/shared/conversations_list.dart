@@ -1,7 +1,6 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
-import 'package:message_app/ui/widgets/shared/empty_conversations_box.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 
@@ -13,30 +12,35 @@ import '../../../models/conversation.dart';
 
 import '../group_conversation_tile.dart';
 import 'conversation_list_item.dart';
+import 'empty_conversations_box.dart';
 
 class ConversationsList extends StatelessWidget {
   final Filters currentFilter;
 
-  const ConversationsList({Key key, @required this.currentFilter}) : super(key: key);
+  const ConversationsList({Key key, @required this.currentFilter})
+      : super(key: key);
 
   getConvos(BuildContext context) {
-    if (currentFilter == Filters.Archived)
-      return Provider.of<MessageManager>(context, listen: false)
-          .archivedConversations;
-    else if (currentFilter == Filters.SpamAndBlocked)
-      return Provider.of<MessageManager>(context, listen: false)
-          .spammedConversations;
-    else if (currentFilter == Filters.Groups)
-      return Provider.of<MessageManager>(context, listen: false)
-          .groupsConversations;
-    else if (currentFilter == Filters.ArchivedGroups)
-      return Provider.of<MessageManager>(context, listen: false)
-          .archivedGroups;
-    else if (currentFilter == Filters.SpammedGroups)
-      return Provider.of<MessageManager>(context, listen: false)
-          .spammedGroups;
-
-    return Provider.of<MessageManager>(context, listen: false).conversations;
+    final msgManager = Provider.of<MessageManager>(context, listen: false);
+    switch (currentFilter) {
+      case Filters.EnableDarkMode:
+      case Filters.HelpAndFeedback:
+      case Filters.MarkAllAsRead:
+      case Filters.Settings:
+      case Filters.MessagesForWeb:
+      case Filters.Conversation:
+      case Filters.Archived:
+        return msgManager.archivedConversations;
+      case Filters.SpamAndBlocked:
+        return msgManager.spammedConversations;
+      case Filters.Groups:
+        return msgManager.groupsConversations;
+      case Filters.ArchivedGroups:
+        return msgManager.archivedGroups;
+      case Filters.SpammedGroups:
+        return msgManager.spammedGroups;
+    }
+    return msgManager.conversations;
   }
 
   @override
@@ -56,7 +60,8 @@ class ConversationsList extends StatelessWidget {
               length = msgManager.archivedGroups.length;
             else if (currentFilter == Filters.SpammedGroups)
               length = msgManager.spammedGroups.length;
-            else length = msgManager.groupsMap.length;
+            else
+              length = msgManager.groupsMap.length;
             return Tuple2(msgManager.groupsMap, length);
           }
           length = msgManager.conversationsMap.length;
@@ -64,17 +69,23 @@ class ConversationsList extends StatelessWidget {
         },
         builder: (ctx, __, _) {
           final List<Conversation> convos = getConvos(ctx);
-          if(convos.isEmpty) return SliverToBoxAdapter(child: EmptyConversationsBox());
+          if (convos.isEmpty)
+            return SliverToBoxAdapter(child: EmptyConversationsBox());
           return SliverList(
             delegate: SliverChildBuilderDelegate(
               (ctx, i) {
-                final convo=convos[convos.length - i - 1];
-                if(convo.messages.isNotEmpty) return ChangeNotifierProvider.value(
-                  value: convo,
-                  child: {Filters.SpammedGroups,Filters.ArchivedGroups,Filters.Groups}.contains(currentFilter)
-                      ? GroupConversationTile()
-                      : ConversationListItem(),
-                );
+                final convo = convos[convos.length - i - 1];
+                if (convo.messages.isNotEmpty)
+                  return ChangeNotifierProvider.value(
+                    value: convo,
+                    child: {
+                      Filters.SpammedGroups,
+                      Filters.ArchivedGroups,
+                      Filters.Groups
+                    }.contains(currentFilter)
+                        ? GroupConversationTile()
+                        : ConversationListItem(),
+                  );
                 return SizedBox.shrink();
               },
               childCount: convos.length,

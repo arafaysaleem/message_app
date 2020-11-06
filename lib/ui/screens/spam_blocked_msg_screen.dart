@@ -9,7 +9,7 @@ import '../widgets/shared/conversations_list.dart';
 import '../widgets/shared/actions_app_bar.dart';
 
 class SpamAndBlockedMessagesScreen extends StatelessWidget {
-  static const routeName="SpamAndBlockedMessagesScreen";
+  static const routeName = "SpamAndBlockedMessagesScreen";
 
   @override
   Widget build(BuildContext context) {
@@ -21,8 +21,9 @@ class SpamAndBlockedMessagesScreen extends StatelessWidget {
             CustomScrollView(
               slivers: [
                 Selector<MessageManager, int>(
-                  selector: (ctx, msgMgr) => msgMgr.selectedConversations.length,
-                  builder: (ctx, int length, child) =>  SliverAppBar(
+                  selector: (ctx, msgMgr) =>
+                      msgMgr.selectedConversations.length,
+                  builder: (ctx, int length, child) => SliverAppBar(
                     forceElevated: false,
                     toolbarHeight: 58,
                     collapsedHeight: 60,
@@ -38,9 +39,9 @@ class SpamAndBlockedMessagesScreen extends StatelessWidget {
                         child: length == 0
                             ? child
                             : ActionsAppBar(
-                          length: length,
-                          currentFilter: Filters.SpamAndBlocked,
-                        ),
+                                length: length,
+                                currentFilter: Filters.SpamAndBlocked,
+                              ),
                         duration: Duration(milliseconds: 300),
                       ),
                     ),
@@ -48,14 +49,15 @@ class SpamAndBlockedMessagesScreen extends StatelessWidget {
                   child: SpamAppBar(),
                 ),
                 ConversationsList(
-                  currentFilter: currConvoTypeFilter == Filters.Groups ? Filters.SpammedGroups : Filters.SpamAndBlocked,
+                  currentFilter: currConvoTypeFilter == Filters.Groups
+                      ? Filters.SpammedGroups
+                      : Filters.SpamAndBlocked,
                 ),
               ],
             ),
           ],
         ),
-      )
-      ,
+      ),
     );
   }
 }
@@ -83,9 +85,8 @@ class SpamAppBar extends StatelessWidget {
         ),
         actions: [
           PopupMenuButton(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(4)
-            ),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
             onSelected: (Filters filter) => filter.actionOnFilter(context),
             icon: Icon(
               Icons.more_vert,
@@ -107,4 +108,3 @@ class SpamAppBar extends StatelessWidget {
     );
   }
 }
-
