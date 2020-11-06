@@ -47,7 +47,6 @@ class ArchivedMessagesScreen extends StatelessWidget {
                   ),
                   child: ArchivedAppBar(),
                 ),
-                //TODO: Add empty archive box message
                 ConversationsList(
                   currentFilter: currConvoTypeFilter == Filters.Groups ? Filters.ArchivedGroups : Filters.Archived,
                 ),
