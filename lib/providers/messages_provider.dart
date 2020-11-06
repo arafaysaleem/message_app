@@ -527,7 +527,6 @@ class MessageManager with ChangeNotifier {
 
   void deleteGroup(Conversation group) {
     if (_groups.containsKey(group.groupID)) _groups.remove(group.groupID);
-    //TODO: add support for group archiving and spamming
     else if(_archivedGroups.contains(group)) _archivedGroups.remove(group);
     else if(_spammedGroups.contains(group)) _spammedGroups.remove(group);
     _firestoredb.deleteGroup(group);

@@ -207,7 +207,6 @@ class GroupConversationTile extends StatelessWidget {
         }
       },
       onLongPress: () {
-        //TODO: select multiple groups for actions
         msgManager.toggleSelected(convo);
       },
       child: Padding(
