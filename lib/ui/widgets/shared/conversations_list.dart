@@ -1,6 +1,7 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
+import 'package:message_app/ui/widgets/shared/empty_conversations_box.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 
@@ -63,6 +64,7 @@ class ConversationsList extends StatelessWidget {
         },
         builder: (ctx, __, _) {
           final List<Conversation> convos = getConvos(ctx);
+          if(convos.isEmpty) return SliverToBoxAdapter(child: EmptyConversationsBox());
           return SliverList(
             delegate: SliverChildBuilderDelegate(
               (ctx, i) {
