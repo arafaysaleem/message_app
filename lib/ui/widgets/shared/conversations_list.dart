@@ -29,6 +29,7 @@ class ConversationsList extends StatelessWidget {
       case Filters.Settings:
       case Filters.MessagesForWeb:
       case Filters.Conversation:
+        return msgManager.conversations;
       case Filters.Archived:
         return msgManager.archivedConversations;
       case Filters.SpamAndBlocked:
@@ -40,7 +41,6 @@ class ConversationsList extends StatelessWidget {
       case Filters.SpammedGroups:
         return msgManager.spammedGroups;
     }
-    return msgManager.conversations;
   }
 
   @override
