@@ -193,7 +193,7 @@ class GroupConversationTile extends StatelessWidget {
       highlightColor: Colors.transparent,
       onTap: () {
         if (msgManager.selectedConversations.length >= 1) {
-          // msgManager.toggleSelected(convo);
+          msgManager.toggleSelected(convo);
         } else {
           Navigator.of(context).push(
             MaterialPageRoute(
@@ -208,7 +208,7 @@ class GroupConversationTile extends StatelessWidget {
       },
       onLongPress: () {
         //TODO: select multiple groups for actions
-        // msgManager.toggleSelected(convo);
+        msgManager.toggleSelected(convo);
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 11),

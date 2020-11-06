@@ -13,11 +13,13 @@ enum Filters {
   MarkAllAsRead,
   EnableDarkMode,
   SpamAndBlocked,
+  SpammedGroups,
   MessagesForWeb,
   Settings,
   Conversation,
   Groups,
   Archived,
+  ArchivedGroups,
   HelpAndFeedback
 }
 
@@ -31,11 +33,19 @@ extension SelectedFilterExtension on Filters{
         return;
       }
       case Filters.Archived: {
-        Navigator.of(context).pushReplacementNamed(ArchivedMessagesScreen.routeName);
+        Navigator.of(context).pushReplacementNamed(ArchivedMessagesScreen.routeName,arguments: Filters.Conversation);
         return;
       }
       case Filters.SpamAndBlocked: {
-        Navigator.of(context).pushReplacementNamed(SpamAndBlockedMessagesScreen.routeName);
+        Navigator.of(context).pushReplacementNamed(SpamAndBlockedMessagesScreen.routeName, arguments: Filters.Conversation);
+        return;
+      }
+      case Filters.ArchivedGroups: {
+        Navigator.of(context).pushReplacementNamed(ArchivedMessagesScreen.routeName, arguments: Filters.Groups);
+        return;
+      }
+      case Filters.SpammedGroups: {
+        Navigator.of(context).pushReplacementNamed(SpamAndBlockedMessagesScreen.routeName, arguments: Filters.Groups);
         return;
       }
       case Filters.Settings: {

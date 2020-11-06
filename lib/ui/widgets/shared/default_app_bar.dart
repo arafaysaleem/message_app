@@ -66,6 +66,14 @@ class DefaultAppBar extends StatelessWidget {
               value: Filters.SpamAndBlocked,
             ),
             PopupMenuItem(
+              child: Text("Archived Groups"),
+              value: Filters.ArchivedGroups,
+            ),
+            PopupMenuItem(
+              child: Text("Spammed Groups"),
+              value: Filters.SpammedGroups,
+            ),
+            PopupMenuItem(
               child: Text("Settings"),
               value: Filters.Settings,
             ),

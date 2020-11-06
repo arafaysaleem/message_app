@@ -66,8 +66,8 @@ class FirestoreDatabase {
   /// Iterates over the conversations list to toggle the isArchived field.
   /// Updates only the specific isArchived field instead of updating
   /// the whole document.
-  void toggleArchiveSelectedConversations(List<Conversation> _archivedConvos) {
-    _archivedConvos.forEach((convo) {
+  void toggleArchiveSelectedConversations(List<Conversation> archivedConvos) {
+    archivedConvos.forEach((convo) {
       print("${convo.isArchived}\t${convo.sender}");
       _service.documentAction(
         path: FirestorePath.conversation(uid, convo.sender.number),
@@ -76,14 +76,38 @@ class FirestoreDatabase {
     });
   }
 
+  /// Iterates over the groups list to toggle the isArchived field.
+  /// Updates only the specific isArchived field instead of updating
+  /// the whole document.
+  void toggleArchiveSelectedGroups(List<Conversation> archivedGroups) {
+    archivedGroups.forEach((group) {
+      print("${group.isArchived}\t${group.groupID}\t${group.groupName}");
+      _service.documentAction(
+        path: FirestorePath.group(uid, group.groupID),
+        changes: {'isArchived': group.isArchived},
+      );
+    });
+  }
+
   /// Sets the isSpam field for the conversation.
   /// Updates only the specific isSpam field instead of updating
   /// the whole document.
-  Future<void> spamSelectedConversation(Conversation _spammedConvo) {
-    print("Spam: ${_spammedConvo.sender}");
+  Future<void> spamSelectedConversation(Conversation spammedConvo) {
+    print("Spam: ${spammedConvo.sender}");
     return _service.documentAction(
-      path: FirestorePath.conversation(uid, _spammedConvo.sender.number),
-      changes: {'isSpam': _spammedConvo.isSpam},
+      path: FirestorePath.conversation(uid, spammedConvo.sender.number),
+      changes: {'isSpam': spammedConvo.isSpam},
+    );
+  }
+
+  /// Sets the isSpam field for the group.
+  /// Updates only the specific isSpam field instead of updating
+  /// the whole document.
+  Future<void> spamSelectedGroup(Conversation spammedGroup) {
+    print("Spam: ${spammedGroup.groupID}, ${spammedGroup.groupName}");
+    return _service.documentAction(
+      path: FirestorePath.group(uid, spammedGroup.groupID),
+      changes: {'isSpam': spammedGroup.isSpam},
     );
   }
 
@@ -187,6 +211,7 @@ class FirestoreDatabase {
     );
   }
 
+
   /// Returns a stream of a list of all normal groups
   /// that are neither spammed nor archived, sorted in ascending
   /// order.
@@ -197,6 +222,29 @@ class FirestoreDatabase {
           .where('isGroup', isEqualTo: true)
           .where('isSpam', isEqualTo: false)
           .where('isArchived', isEqualTo: false),
+      builder: (data, _) => Conversation.fromMap(data),
+      sort: (lhs, rhs) => rhs.groupName.compareTo(lhs.groupName),
+    );
+  }
+
+  /// Returns a stream of a list of all spammed groups,
+  /// sorted in ascending order.
+  Stream<List<Conversation>> spammedGroupsStream() {
+    return _service.collectionStream<Conversation>(
+      path: FirestorePath.groups(uid),
+      queryBuilder: (query) => query.where('isSpam', isEqualTo: true),
+      builder: (data, _) => Conversation.fromMap(data),
+      sort: (lhs, rhs) => rhs.groupName.compareTo(lhs.groupName),
+    );
+  }
+
+  /// Returns a stream of a list of all archived groups,
+  /// sorted in ascending order.
+  Stream<List<Conversation>> archivedGroupsStream({Conversation conversation}) {
+    return _service.collectionStream<Conversation>(
+      path: FirestorePath.groups(uid),
+      queryBuilder: (query) => query
+          .where('isArchived', isEqualTo: true),
       builder: (data, _) => Conversation.fromMap(data),
       sort: (lhs, rhs) => rhs.groupName.compareTo(lhs.groupName),
     );

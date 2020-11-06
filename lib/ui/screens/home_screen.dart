@@ -67,8 +67,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     child: DefaultAppBar(
                       currentFilter: context.select<MessageManager, bool>(
-                              (msgManager) =>
-                                  msgManager.displayGroupConversations)
+                        (msgManager) => msgManager.displayGroupConversations,
+                      )
                           ? Filters.Groups
                           : Filters.Conversation,
                     ),

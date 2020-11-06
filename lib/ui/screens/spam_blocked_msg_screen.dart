@@ -13,6 +13,7 @@ class SpamAndBlockedMessagesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final currConvoTypeFilter = ModalRoute.of(context).settings.arguments;
     return Scaffold(
       body: SafeArea(
         child: Stack(
@@ -48,7 +49,7 @@ class SpamAndBlockedMessagesScreen extends StatelessWidget {
                 ),
                 //TODO: Add empty spam box message
                 ConversationsList(
-                  currentFilter: Filters.SpamAndBlocked,
+                  currentFilter: currConvoTypeFilter == Filters.Groups ? Filters.SpammedGroups : Filters.SpamAndBlocked,
                 ),
               ],
             ),

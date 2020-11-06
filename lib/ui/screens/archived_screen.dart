@@ -10,9 +10,10 @@ import '../widgets/shared/actions_app_bar.dart';
 
 class ArchivedMessagesScreen extends StatelessWidget {
   static const routeName = "ArchivedMessagesScreen";
-
   @override
   Widget build(BuildContext context) {
+    final currConvoTypeFilter = ModalRoute.of(context).settings.arguments;
+    print(currConvoTypeFilter);
     return Scaffold(
       body: SafeArea(
         child: Stack(
@@ -48,7 +49,7 @@ class ArchivedMessagesScreen extends StatelessWidget {
                 ),
                 //TODO: Add empty archive box message
                 ConversationsList(
-                  currentFilter: Filters.Archived,
+                  currentFilter: currConvoTypeFilter == Filters.Groups ? Filters.ArchivedGroups : Filters.Archived,
                 ),
               ],
             ),

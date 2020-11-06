@@ -21,6 +21,8 @@ class MessageManager with ChangeNotifier {
   final Map<String, Conversation> _groups = Map();
   List<Conversation> _spammedConversations = [];
   List<Conversation> _archivedConversations = [];
+  List<Conversation> _spammedGroups = [];
+  List<Conversation> _archivedGroups = [];
 
   //TODO: Delete these comments after app done
   /*final Map<String, Conversation> _conversations = {
@@ -370,6 +372,12 @@ class MessageManager with ChangeNotifier {
   UnmodifiableListView<Conversation> get archivedConversations =>
       UnmodifiableListView(_archivedConversations);
 
+  UnmodifiableListView<Conversation> get spammedGroups =>
+      UnmodifiableListView(_spammedGroups);
+
+  UnmodifiableListView<Conversation> get archivedGroups =>
+      UnmodifiableListView(_archivedGroups);
+
   UnmodifiableMapView<String, Conversation> get groupsMap =>
       UnmodifiableMapView(_groups);
 
@@ -389,6 +397,8 @@ class MessageManager with ChangeNotifier {
     _initializeConversationsMap();
     _initializeSpammedConversations();
     _initializeArchivedConversations();
+    _initializeArchivedGroups();
+    _initializeSpammedGroups();
     _initializeGroupsMap();
   }
 
@@ -415,6 +425,18 @@ class MessageManager with ChangeNotifier {
   void _initializeArchivedConversations() =>
       _firestoredb.archivedStream().listen((archivedConvos) {
         _archivedConversations = archivedConvos;
+        notifyListeners();
+      });
+
+  void _initializeSpammedGroups() =>
+      _firestoredb.spammedGroupsStream().listen((spammedGroups) {
+        _spammedGroups = spammedGroups;
+        notifyListeners();
+      });
+
+  void _initializeArchivedGroups() =>
+      _firestoredb.archivedGroupsStream().listen((archivedGroups) {
+        _archivedGroups = archivedGroups;
         notifyListeners();
       });
 
@@ -503,12 +525,12 @@ class MessageManager with ChangeNotifier {
     notifyListeners();
   }
 
-  void deleteGroup(Conversation convo) {
-    if (_groups.containsKey(convo.groupID)) _groups.remove(convo.groupID);
+  void deleteGroup(Conversation group) {
+    if (_groups.containsKey(group.groupID)) _groups.remove(group.groupID);
     //TODO: add support for group archiving and spamming
-    // else if(_archivedGroups.contains(convo)) _archivedGroups.remove(convo);
-    // else if(_spammedGroups.contains(convo)) _spammedGroups.remove(convo);
-    _firestoredb.deleteGroup(convo);
+    else if(_archivedGroups.contains(group)) _archivedGroups.remove(group);
+    else if(_spammedGroups.contains(group)) _spammedGroups.remove(group);
+    _firestoredb.deleteGroup(group);
     notifyListeners();
   }
 
@@ -524,18 +546,36 @@ class MessageManager with ChangeNotifier {
   }
 
   void archiveSelected() {
-    _selectedConversations.forEach((Conversation convo) {
-      if (convo.isArchived) {
-        _archivedConversations.remove(convo);
-        _conversations[convo.sender.number] = convo;
-      } else {
-        _conversations
-            .removeWhere((number, converse) => number == convo.sender.number);
-        _archivedConversations.add(convo);
-      }
-      convo.toggleArchived();
-    });
-    _firestoredb.toggleArchiveSelectedConversations(_selectedConversations);
+    // If first item is a group conversation, it means all selected are groups
+    if(_selectedConversations[0].isGroup){
+      _selectedConversations.forEach((Conversation group) {
+        if (group.isArchived) {
+          _archivedGroups.remove(group);
+          _groups[group.groupID] = group;
+        } else {
+          _groups
+              .removeWhere((groupID, _) => groupID == group.groupID);
+          _archivedGroups.add(group);
+        }
+        group.toggleArchived();
+      });
+      _firestoredb.toggleArchiveSelectedGroups(_selectedConversations);
+    }
+    // else all are individual conversations
+    else{
+      _selectedConversations.forEach((Conversation convo) {
+        if (convo.isArchived) {
+          _archivedConversations.remove(convo);
+          _conversations[convo.sender.number] = convo;
+        } else {
+          _conversations
+              .removeWhere((number, _) => number == convo.sender.number);
+          _archivedConversations.add(convo);
+        }
+        convo.toggleArchived();
+      });
+      _firestoredb.toggleArchiveSelectedConversations(_selectedConversations);
+    }
     clearSelected();
   }
 
@@ -561,30 +601,58 @@ class MessageManager with ChangeNotifier {
   }
 
   void toggleArchiveConvo(Conversation convo) {
-    if (convo.isArchived) {
-      _archivedConversations.remove(convo);
-      _conversations[convo.sender.number] = convo;
-    } else {
-      _conversations
-          .removeWhere((number, converse) => number == convo.sender.number);
-      _archivedConversations.add(convo);
+    if(convo.isGroup) {
+      if (convo.isArchived) {
+        _archivedGroups.remove(convo);
+        _groups[convo.groupID] = convo;
+      } else {
+        _groups
+            .removeWhere((groupID, _) => groupID == convo.groupID);
+        _archivedGroups.add(convo);
+      }
+      convo.toggleArchived();
+      _firestoredb.toggleArchiveSelectedGroups([convo]);
     }
-    convo.toggleArchived();
-    _firestoredb.toggleArchiveSelectedConversations([convo]);
+    else{
+      if (convo.isArchived) {
+        _archivedConversations.remove(convo);
+        _conversations[convo.sender.number] = convo;
+      } else {
+        _conversations
+            .removeWhere((number, _) => number == convo.sender.number);
+        _archivedConversations.add(convo);
+      }
+      convo.toggleArchived();
+      _firestoredb.toggleArchiveSelectedConversations([convo]);
+    }
     notifyListeners();
   }
 
   void toggleSpamConvo(Conversation convo) {
-    if (convo.isSpam) {
-      _spammedConversations.remove(convo);
-      _conversations[convo.sender.number] = convo;
-    } else {
-      _conversations
-          .removeWhere((number, converse) => number == convo.sender.number);
-      _spammedConversations.add(convo);
+    if(convo.isGroup){
+      if (convo.isSpam) {
+        _spammedGroups.remove(convo);
+        _groups[convo.groupID] = convo;
+      } else {
+        _groups
+            .removeWhere((groupID, _) => groupID == convo.groupID);
+        _spammedGroups.add(convo);
+      }
+      convo.toggleSpam();
+      _firestoredb.spamSelectedGroup(convo);
     }
-    convo.toggleSpam();
-    _firestoredb.spamSelectedConversation(convo);
+    else{
+      if (convo.isSpam) {
+        _spammedConversations.remove(convo);
+        _conversations[convo.sender.number] = convo;
+      } else {
+        _conversations
+            .removeWhere((number, converse) => number == convo.sender.number);
+        _spammedConversations.add(convo);
+      }
+      convo.toggleSpam();
+      _firestoredb.spamSelectedConversation(convo);
+    }
     clearSelected();
   }
 
