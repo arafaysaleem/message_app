@@ -17,7 +17,7 @@ import 'ui/screens/web_message_screen.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  
+  // TODO: Set status bar color to white
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: Colors.black, statusBarBrightness: Brightness.light));
   runApp(MyApp());
@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      
+      // TODO: Add firebase auth, get uid from authUser
       create: (ctx) =>
           MessageManager(firestoredb: FirestoreDatabase(uid: "Rafay123")),
       child: MaterialApp(

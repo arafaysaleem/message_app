@@ -10,6 +10,7 @@ import '../models/conversation.dart';
 import '../models/contact.dart';
 
 class ContactsProvider with ChangeNotifier {
+  // TODO: Add firestore support to store and sync contacts
   final MessageManager _messageManager;
   final List<Contact> _contacts = [
     Contact(name: "Bakh", number: "03328652868", avClr: Colors.blue),
