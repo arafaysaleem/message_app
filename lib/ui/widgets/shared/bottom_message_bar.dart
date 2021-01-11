@@ -91,7 +91,6 @@ class _BottomMessageBarState extends State<BottomMessageBar> {
                 onSubmitted: (String msg) {
                   if (msg.isEmpty) return;
                   sendMessage(convo, context);
-                  //TODO: add regex check for any urls to show preview and it as a path
                 },
                 decoration: InputDecoration(
                   contentPadding: const EdgeInsets.all(16),

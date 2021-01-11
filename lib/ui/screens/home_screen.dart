@@ -76,7 +76,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   Selector<MessageManager, bool>(
                     selector: (ctx, msgManger) =>
                         msgManger.displayGroupConversations,
-                    //TODO: Add empty inbox message
                     builder: (ctx, displayGroups, child) => displayGroups
                         ? ConversationsList(
                             currentFilter: Filters.Groups,

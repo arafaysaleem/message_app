@@ -172,7 +172,6 @@ class MessageDetailsScreen extends StatelessWidget {
                       .map(
                         (member) => InkWell(
                           onTap: () {
-                            //TODO: Add feature to add new group participant
                           },
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 10),
