@@ -1,5 +1,7 @@
 import 'package:flutter/foundation.dart';
 
+import 'conversation.dart';
+
 class Message{
   final String number;
   final String body;
@@ -21,6 +23,8 @@ class Message{
   Message({@required this.number, @required this.body,@required this.datetime, this.previewPath, bool isFav});
 
   bool get hasPreview => previewPath != null;
+
+  bool get isMyMessage => Conversation.myContact.number == this.number;
 
   factory Message.fromMap(Map<String, dynamic> map) {
     return new Message(

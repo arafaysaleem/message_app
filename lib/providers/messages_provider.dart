@@ -462,8 +462,8 @@ class MessageManager with ChangeNotifier {
   bool isSelected(Conversation convo) => _selectedConversations.contains(convo);
 
   void sendConversationMessages(
-      {@required Conversation convo, @required String text}) {
-    convo.sendMessage(text: text);
+      {@required Conversation convo, @required String text, @required String previewPath}) {
+    convo.sendMessage(text: text,previewAsset: previewPath);
     _firestoredb.addMessages(convo);
   }
 

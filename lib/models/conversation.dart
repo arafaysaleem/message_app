@@ -135,7 +135,7 @@ class Conversation with ChangeNotifier {
     notifyListeners();
   }
 
-  void sendMessage({@required String text, previewAsset}) {
+  void sendMessage({@required String text, @required previewAsset}) {
     //for sending messages
     _messages.add(
       Message(

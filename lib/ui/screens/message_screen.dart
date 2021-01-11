@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
@@ -13,6 +14,7 @@ import '../../models/message.dart';
 import '../../helper/enums/convo_action_enum.dart';
 
 import '../widgets/shared/bottom_message_bar.dart';
+import '../widgets/custom_link_preview.dart';
 
 // ignore: must_be_immutable
 class MessageScreen extends StatelessWidget {
@@ -61,10 +63,8 @@ class MessageScreen extends StatelessWidget {
             icon: Icon(Icons.search),
           ),
           PopupMenuButton(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-            onSelected: (ConversationActions filter) =>
-                filter.actionOnConversation(context, convo),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+            onSelected: (ConversationActions filter) => filter.actionOnConversation(context, convo),
             icon: Icon(
               Icons.more_vert,
             ),
@@ -92,22 +92,21 @@ class MessageScreen extends StatelessWidget {
       ),
       body: Stack(
         children: [
-
           //MessagesList
           Positioned(
             top: 0,
             left: 0,
             right: 0,
             bottom: 0,
-            child: MessagesList(
-                sController: _sController, avClr: convo.sender.avClr),
+            child: MessagesList(sController: _sController, avClr: convo.sender.avClr),
           ),
 
           //Bottom Text Input Bar
-          if (!convo.isSpam) Positioned(
-            bottom: 0,
-            child: BottomMessageBar(sController: _sController),
-          ),
+          if (!convo.isSpam)
+            Positioned(
+              bottom: 0,
+              child: BottomMessageBar(sController: _sController),
+            ),
 
           //Unspam
           if (convo.isSpam)
@@ -125,7 +124,6 @@ class MessageScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-
                       //Icon and text
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -135,9 +133,7 @@ class MessageScreen extends StatelessWidget {
                             size: 28,
                             color: Colors.grey[700],
                           ),
-
                           SizedBox(width: 30),
-
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -149,9 +145,7 @@ class MessageScreen extends StatelessWidget {
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
-
                                 SizedBox(height: 5),
-
                                 Text(
                                   "To move this conversation out of \"Spam & blocked\" and get messages again, unblock ${convo.sender.name}",
                                   style: TextStyle(
@@ -195,9 +189,7 @@ class MessagesList extends StatefulWidget {
   final ScrollController sController;
   final avClr;
 
-  const MessagesList(
-      {Key key, @required this.sController, @required this.avClr})
-      : super(key: key);
+  const MessagesList({Key key, @required this.sController, @required this.avClr}) : super(key: key);
 
   @override
   _MessagesListState createState() => _MessagesListState();
@@ -206,8 +198,8 @@ class MessagesList extends StatefulWidget {
 class _MessagesListState extends State<MessagesList> {
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) =>
-        widget.sController.jumpTo(widget.sController.position.maxScrollExtent));
+    WidgetsBinding.instance.addPostFrameCallback(
+        (_) => widget.sController.jumpTo(widget.sController.position.maxScrollExtent));
     super.initState();
   }
 
@@ -242,9 +234,6 @@ class _MessagesListState extends State<MessagesList> {
             padding: const EdgeInsets.symmetric(vertical: 10),
             itemCount: convo.messages.length,
             itemBuilder: (ctx, i) {
-              bool myMsg = false;
-              if (Conversation.myContact.number == convo.messages[i].number)
-                myMsg = true;
               if (i == convo.messages.length - 1)
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 60),
@@ -253,7 +242,6 @@ class _MessagesListState extends State<MessagesList> {
                     contact: convo.sender,
                     msg: convo.messages[i],
                     avClr: widget.avClr,
-                    myMessage: myMsg,
                   ),
                 );
               return MessageListItem(
@@ -261,7 +249,6 @@ class _MessagesListState extends State<MessagesList> {
                 contact: convo.sender,
                 msg: convo.messages[i],
                 avClr: widget.avClr,
-                myMessage: myMsg,
               );
             },
           ),
@@ -275,7 +262,6 @@ class MessageListItem extends StatefulWidget {
   final isSpam, contact;
   final Message msg;
   final Color avClr;
-  final bool myMessage;
 
   const MessageListItem({
     Key key,
@@ -283,84 +269,74 @@ class MessageListItem extends StatefulWidget {
     @required this.avClr,
     @required this.contact,
     @required this.msg,
-    @required this.myMessage,
   }) : super(key: key);
 
   @override
   _MessageListItemState createState() => _MessageListItemState();
 }
 
-class _MessageListItemState extends State<MessageListItem>
-    with SingleTickerProviderStateMixin {
+class _MessageListItemState extends State<MessageListItem> with SingleTickerProviderStateMixin {
+  TapGestureRecognizer _recognizer;
+
   bool showDate = false;
 
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: !widget.myMessage
-          ? const EdgeInsets.fromLTRB(8, 0, 30, 0)
-          : const EdgeInsets.fromLTRB(30, 0, 8, 0),
-      child: Column(
-        crossAxisAlignment: widget.myMessage
-            ? CrossAxisAlignment.end
-            : CrossAxisAlignment.start,
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            mainAxisAlignment: !widget.myMessage
-                ? MainAxisAlignment.start
-                : MainAxisAlignment.end,
-            children: [
-              if (!widget.myMessage)
-                widget.isSpam
-                    ? Icon(
-                        Icons.block,
-                        color: Colors.grey[700],
-                      )
-                    : CircleAvatar(
-                        radius: 18.5,
-                        backgroundColor: widget.avClr,
-                        child: widget.contact.isAdded
-                            ? Text(
-                                widget.contact.name.substring(0, 1),
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 19,
-                                ),
-                              )
-                            : Icon(
-                                Icons.person,
-                                color: Colors.white,
-                                size: 20,
-                              ),
-                      ),
-              SizedBox(width: 8),
-              widget.msg.hasPreview ? getPreviewMessage() : getTextMessage(),
-            ],
+  bool get isPreview => widget.msg.hasPreview;
+
+  bool get isMyMessage => widget.msg.isMyMessage;
+
+  DateTime get messageDate => widget.msg.datetime;
+
+  Widget buildDate({@required bool convoDate}) {
+    final msgDaysAgo = DateTime.now().difference(messageDate).inDays;
+    String date = '';
+    if (convoDate) {
+      if (msgDaysAgo == 0)
+        return SizedBox.shrink();
+      else if (msgDaysAgo > 0 && msgDaysAgo <= 6)
+        date = DateFormat(DateFormat.ABBR_WEEKDAY).format(messageDate);
+      else if (msgDaysAgo > 6 && msgDaysAgo <= 365)
+        date = DateFormat("MMM dd").format(messageDate);
+      else
+        date = DateFormat("dd/MM/yy").format(messageDate);
+      return Padding(
+        padding: const EdgeInsets.fromLTRB(0, 14, 0, 10),
+        child: Text(
+          date + " - " + DateFormat('h:mm a').format(messageDate),
+          style: TextStyle(
+            fontSize: 11,
+            fontFamily: "Poppins",
+            fontWeight: FontWeight.w500,
           ),
-          Padding(
-            padding: widget.myMessage
-                ? const EdgeInsets.only(top: 3, right: 10)
-                : const EdgeInsets.only(top: 3, left: 55),
-            child: AnimatedSize(
-                vsync: this,
-                curve: Curves.decelerate,
-                duration: Duration(milliseconds: 200),
-                child:
-                    showDate ? getDate(convoDate: false) : SizedBox.shrink()),
-          ),
-        ],
-      ),
-    );
+        ),
+      );
+    } else {
+      if (msgDaysAgo > 0 && msgDaysAgo <= 6)
+        date = DateFormat(DateFormat.ABBR_WEEKDAY).format(messageDate) + " - ";
+      else if (msgDaysAgo > 6 && msgDaysAgo <= 365)
+        date = DateFormat("MMM dd").format(messageDate) + " - ";
+      else if (msgDaysAgo > 365) date = DateFormat("dd/MM/yy").format(messageDate) + " - ";
+      return Text(
+        date + DateFormat('h:mm a').format(messageDate),
+        style: TextStyle(
+          fontSize: 11,
+          fontFamily: "Poppins",
+          fontWeight: FontWeight.w500,
+        ),
+      );
+    }
   }
 
-  getPreviewMessage() {
+  Widget buildPreviewMessage() {
     return Expanded(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          getDate(convoDate: true),
+          //Animated Date
+          buildDate(convoDate: true),
+
           SizedBox(height: 7),
+
+          //Text Message
           InkWell(
             splashColor: Colors.transparent,
             highlightColor: Colors.transparent,
@@ -371,8 +347,7 @@ class _MessageListItemState extends State<MessageListItem>
             },
             child: Container(
               decoration: BoxDecoration(
-                color:
-                    widget.myMessage ? Utils.myMessageColor : Utils.greyColor,
+                color: isMyMessage ? Utils.myMessageColor : Utils.greyColor,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(15),
                   topRight: Radius.circular(15),
@@ -380,24 +355,22 @@ class _MessageListItemState extends State<MessageListItem>
               ),
               child: Center(
                 child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-                  child: Text(
-                    widget.msg.body,
-                    style: TextStyle(
-                      fontSize: 16,
-                      height: 1.3,
-                      color: widget.myMessage
-                          ? Utils.myMessageTextColor
-                          : Colors.grey[900],
+                  padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+                  child: RichText(
+                    text: TextSpan(
+                      children: getMessageSpans(),
                     ),
                   ),
                 ),
               ),
             ),
           ),
+
+          //Preview
           InkWell(
-            onTap: () {},
+            onTap: () {
+              Utils.launchURL(widget.msg.previewPath);
+            },
             splashColor: Colors.grey[100],
             highlightColor: Colors.grey[100],
             child: Container(
@@ -410,17 +383,9 @@ class _MessageListItemState extends State<MessageListItem>
                   color: Utils.greyColor,
                 ),
               ),
-              padding: const EdgeInsets.symmetric(vertical: 10),
+              padding: const EdgeInsets.all(10),
               child: Center(
-                child: Column(
-                  children: [
-                    Icon(Icons.refresh),
-                    SizedBox(height: 5),
-                    Text(
-                      "Tap to load preview",
-                    )
-                  ],
-                ),
+                child: CustomLinkPreview(previewPath: widget.msg.previewPath),
               ),
             ),
           ),
@@ -429,14 +394,43 @@ class _MessageListItemState extends State<MessageListItem>
     );
   }
 
-  getTextMessage() {
+  List<TextSpan> getMessageSpans(){
+    return Utils.splitMessageComponents(widget.msg.body).map((s) {
+      return (s == '\$url\$')
+          ? TextSpan(
+        style: TextStyle(
+          decoration: TextDecoration.underline,
+          fontSize: 16,
+          height: 1.3,
+          color: isMyMessage ? Utils.myMessageTextColor : Colors.grey[900],
+        ),
+        text: widget.msg.previewPath,
+        recognizer: _recognizer
+          ..onTap = () async => Utils.launchURL(widget.msg.previewPath),
+      )
+          : TextSpan(
+        text: s,
+        style: TextStyle(
+          fontSize: 16,
+          height: 1.3,
+          color: isMyMessage ? Utils.myMessageTextColor : Colors.grey[900],
+        ),
+      );
+    }).toList();
+  }
+
+  Widget buildTextMessage() {
     return Flexible(
       fit: FlexFit.loose,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          getDate(convoDate: true),
+          //Animated Date
+          buildDate(convoDate: true),
+
           SizedBox(height: 7),
+
+          //Text
           InkWell(
             splashColor: Colors.transparent,
             highlightColor: Colors.transparent,
@@ -447,21 +441,17 @@ class _MessageListItemState extends State<MessageListItem>
             },
             child: Container(
               decoration: BoxDecoration(
-                color:
-                    widget.myMessage ? Utils.myMessageColor : Utils.greyColor,
+                color: isMyMessage ? Utils.myMessageColor : Utils.greyColor,
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+                padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
                 child: Text(
                   widget.msg.body,
                   style: TextStyle(
                     fontSize: 16,
                     height: 1.3,
-                    color: widget.myMessage
-                        ? Utils.myMessageTextColor
-                        : Colors.grey[900],
+                    color: isMyMessage ? Utils.myMessageTextColor : Colors.grey[900],
                   ),
                 ),
               ),
@@ -472,45 +462,97 @@ class _MessageListItemState extends State<MessageListItem>
     );
   }
 
-  Widget getDate({@required bool convoDate}) {
-    final msgDaysAgo = DateTime.now().difference(widget.msg.datetime).inDays;
-    String date = '';
-    if (convoDate) {
-      if (msgDaysAgo == 0)
-        return SizedBox.shrink();
-      else if (msgDaysAgo > 0 && msgDaysAgo <= 6)
-        date = DateFormat(DateFormat.ABBR_WEEKDAY).format(widget.msg.datetime);
-      else if (msgDaysAgo > 6 && msgDaysAgo <= 365)
-        date = DateFormat("MMM dd").format(widget.msg.datetime);
-      else
-        date = DateFormat("dd/MM/yy").format(widget.msg.datetime);
-      return Padding(
-        padding: const EdgeInsets.fromLTRB(0, 14, 0, 10),
-        child: Text(
-          date + " - " + DateFormat('h:mm a').format(widget.msg.datetime),
-          style: TextStyle(
-            fontSize: 11,
-            fontFamily: "Poppins",
-            fontWeight: FontWeight.w500,
+  Widget buildMyMessage() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(30, 0, 8, 0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              SizedBox(width: 8),
+              isPreview ? buildPreviewMessage() : buildTextMessage(),
+            ],
           ),
-        ),
-      );
-    } else {
-      if (msgDaysAgo > 0 && msgDaysAgo <= 6)
-        date = DateFormat(DateFormat.ABBR_WEEKDAY).format(widget.msg.datetime) +
-            " - ";
-      else if (msgDaysAgo > 6 && msgDaysAgo <= 365)
-        date = DateFormat("MMM dd").format(widget.msg.datetime) + " - ";
-      else if (msgDaysAgo > 365)
-        date = DateFormat("dd/MM/yy").format(widget.msg.datetime) + " - ";
-      return Text(
-        date + DateFormat('h:mm a').format(widget.msg.datetime),
-        style: TextStyle(
-          fontSize: 11,
-          fontFamily: "Poppins",
-          fontWeight: FontWeight.w500,
-        ),
-      );
-    }
+          Padding(
+            padding: const EdgeInsets.only(top: 3, right: 10),
+            child: AnimatedSize(
+              vsync: this,
+              curve: Curves.decelerate,
+              duration: Duration(milliseconds: 200),
+              child: showDate ? buildDate(convoDate: false) : SizedBox.shrink(),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildOthersMessage() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(8, 0, 30, 0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              widget.isSpam
+                  ? Icon(
+                      Icons.block,
+                      color: Colors.grey[700],
+                    )
+                  : CircleAvatar(
+                      radius: 18.5,
+                      backgroundColor: widget.avClr,
+                      child: widget.contact.isAdded
+                          ? Text(
+                              widget.contact.name.substring(0, 1),
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 19,
+                              ),
+                            )
+                          : Icon(
+                              Icons.person,
+                              color: Colors.white,
+                              size: 20,
+                            ),
+                    ),
+              SizedBox(width: 8),
+              isPreview ? buildPreviewMessage() : buildTextMessage(),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 3, left: 55),
+            child: AnimatedSize(
+              vsync: this,
+              curve: Curves.decelerate,
+              duration: Duration(milliseconds: 200),
+              child: showDate ? buildDate(convoDate: false) : SizedBox.shrink(),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  initState() {
+    super.initState();
+    _recognizer = TapGestureRecognizer();
+  }
+
+  @override
+  void dispose() {
+    _recognizer.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return isMyMessage ? buildMyMessage() : buildOthersMessage();
   }
 }

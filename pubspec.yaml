@@ -16,6 +16,10 @@ dependencies:
   flushbar: ^1.10.4
   cloud_firestore: ^0.14.1+1
   firebase_core: ^0.5.0
+  linkify: ^3.0.0
+  url_launcher: ^5.7.10
+  flutter_link_preview: ^1.5.6
+  cached_network_image: ^2.5.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

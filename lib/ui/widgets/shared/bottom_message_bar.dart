@@ -28,7 +28,9 @@ class _BottomMessageBarState extends State<BottomMessageBar> {
   void sendMessage(Conversation convo, BuildContext context) {
     setState(() {
       final msgMgr = context.read<MessageManager>();
-      msgMgr.sendConversationMessages(convo: convo,text: _textEditingController.text.trim());
+      String msg = _textEditingController.text.trim();
+      String path = Utils.extractUrl(msg);
+      msgMgr.sendConversationMessages(convo: convo, text: msg, previewPath: path);
       _textEditingController.clear();
       widget.sController.jumpTo(widget.sController.position.maxScrollExtent);
       if (convo.isArchived) msgMgr.toggleArchiveConvo(convo);
@@ -91,7 +93,6 @@ class _BottomMessageBarState extends State<BottomMessageBar> {
                 onSubmitted: (String msg) {
                   if (msg.isEmpty) return;
                   sendMessage(convo, context);
-                  // TODO: add regex check for any urls to show preview and it as a path
                 },
                 decoration: InputDecoration(
                   contentPadding: const EdgeInsets.all(16),
