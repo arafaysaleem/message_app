@@ -8,7 +8,7 @@ import '../../helper/enums/filters_enum.dart';
 import '../widgets/shared/conversations_list.dart';
 import '../widgets/shared/actions_app_bar.dart';
 
-class SpamAndBlockedMessagesScreen extends StatelessWidget {
+class SpamBlockedMessagesScreen extends StatelessWidget {
   static const routeName = "SpamAndBlockedMessagesScreen";
 
   @override

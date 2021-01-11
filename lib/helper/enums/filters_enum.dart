@@ -37,7 +37,7 @@ extension SelectedFilterExtension on Filters{
         return;
       }
       case Filters.SpamAndBlocked: {
-        Navigator.of(context).pushReplacementNamed(SpamAndBlockedMessagesScreen.routeName, arguments: Filters.Conversation);
+        Navigator.of(context).pushReplacementNamed(SpamBlockedMessagesScreen.routeName, arguments: Filters.Conversation);
         return;
       }
       case Filters.ArchivedGroups: {
@@ -45,7 +45,7 @@ extension SelectedFilterExtension on Filters{
         return;
       }
       case Filters.SpammedGroups: {
-        Navigator.of(context).pushReplacementNamed(SpamAndBlockedMessagesScreen.routeName, arguments: Filters.Groups);
+        Navigator.of(context).pushReplacementNamed(SpamBlockedMessagesScreen.routeName, arguments: Filters.Groups);
         return;
       }
       case Filters.Settings: {
