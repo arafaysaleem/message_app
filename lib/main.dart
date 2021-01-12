@@ -17,15 +17,19 @@ import 'ui/screens/web_message_screen.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  // TODO: Set status bar color to white
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: Colors.black, statusBarBrightness: Brightness.light));
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle.dark.copyWith(
+        statusBarColor: Colors.white,
+        statusBarIconBrightness: Brightness.dark,
+        statusBarBrightness: Brightness.dark,
+      ),
+    );
     return ChangeNotifierProvider(
       // TODO: Add firebase auth, get uid from authUser
       create: (ctx) =>
@@ -37,13 +41,18 @@ class MyApp extends StatelessWidget {
           primaryColor: Colors.lightBlueAccent[700],
           scaffoldBackgroundColor: Color(0xFFfefefe),
           fontFamily: "Roboto",
+          appBarTheme: AppBarTheme(
+            brightness: Brightness.light,
+            iconTheme: IconThemeData(color: Colors.grey[800]),
+          ),
           iconTheme: IconThemeData(color: Colors.grey[800]),
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         routes: {
           "/": (_) => HomeScreen(),
           ArchivedMessagesScreen.routeName: (_) => ArchivedMessagesScreen(),
-          SpamBlockedMessagesScreen.routeName: (_) => SpamBlockedMessagesScreen(),
+          SpamBlockedMessagesScreen.routeName: (_) =>
+              SpamBlockedMessagesScreen(),
           SettingsScreen.routeName: (_) => SettingsScreen(),
           MessagesForWebScreen.routeName: (_) => MessagesForWebScreen(),
         },
