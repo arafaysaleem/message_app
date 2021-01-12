@@ -38,7 +38,7 @@ class Contact{
   @override
   int get hashCode => number.hashCode;
 
-  Contact({@required this.avClr, this.isBlocked, name, this.picturePath, @required this.number}) : _name=name;
+  Contact({@required this.avClr, this.isBlocked = false, name, this.picturePath, @required this.number}) : _name=name;
 
   String get name => _name?? "${number.substring(0, 4)} ${number.substring(4)}" ;
 

@@ -40,6 +40,7 @@ class ContactsProvider with ChangeNotifier {
 
   final List<Contact> _selectedContacts = [];
   bool _createGroupActive=false;
+  bool _addMemberActive=false;
 
   ContactsProvider(this._messageManager) {
     _contacts.sort((Contact a, Contact b) => a.name.compareTo(b.name)); //sort while fetching from firebase
@@ -64,10 +65,14 @@ class ContactsProvider with ChangeNotifier {
 
   bool get createGroupActive => _createGroupActive;
 
+  bool get addMemberActive => _addMemberActive;
+
   void toggleCreateGroupMode(){
     _createGroupActive=!_createGroupActive;
     notifyListeners();
   }
+
+  void setAddMemberMode(bool flag) => _addMemberActive=flag;
 
   void unSelectContact(Contact contact) {
     _selectedContacts.remove(contact);
@@ -93,6 +98,13 @@ class ContactsProvider with ChangeNotifier {
 
   Conversation createNewGroupConversation(String groupName) {
     return _messageManager.createGroupConversation(selectedContacts,groupName.isNotEmpty ? groupName : "DEFAULT");
+  }
+
+  void addParticipant(Conversation convo){
+    // TODO:Add new members to firestore
+    convo.addParticipant(_selectedContacts);
+    setAddMemberMode(false);
+    clearSelected();
   }
 
   Contact getSenderContact(String number) {

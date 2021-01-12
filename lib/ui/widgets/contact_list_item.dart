@@ -22,12 +22,12 @@ class ContactListItem extends StatelessWidget {
         Provider.of<ContactsProvider>(context, listen: false);
     return InkWell(
       onLongPress: () {
-        if (contactsProvider.createGroupActive) {
+        if (contactsProvider.createGroupActive || contactsProvider.addMemberActive) {
           contactsProvider.toggleSelected(contact);
         }
       },
       onTap: () {
-        if (contactsProvider.createGroupActive) {
+        if (contactsProvider.createGroupActive || contactsProvider.addMemberActive) {
           contactsProvider.toggleSelected(contact);
         } else {
           Conversation convo = msgManager.getConversation(contact);

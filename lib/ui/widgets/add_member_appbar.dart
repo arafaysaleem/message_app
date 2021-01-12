@@ -3,19 +3,19 @@ import 'package:provider/provider.dart';
 
 import '../../providers/contacts_provider.dart';
 
-import '../screens/create_new_group_screen.dart';
+import '../../models/conversation.dart';
 
-class NewMessageAppBar extends StatefulWidget {
+class AddMemberAppBar extends StatefulWidget {
   final TextEditingController textEditingController;
 
-  const NewMessageAppBar({Key key, this.textEditingController})
+  const AddMemberAppBar({Key key, this.textEditingController})
       : super(key: key);
 
   @override
-  _NewMessageAppBarState createState() => _NewMessageAppBarState();
+  _AddMemberAppBarState createState() => _AddMemberAppBarState();
 }
 
-class _NewMessageAppBarState extends State<NewMessageAppBar> {
+class _AddMemberAppBarState extends State<AddMemberAppBar> {
   double _splashRadius;
   FocusNode _focusNode;
   bool isDialPad = false;
@@ -77,8 +77,8 @@ class _NewMessageAppBarState extends State<NewMessageAppBar> {
                 IconButton(
                   onPressed: () {
                     final contactProvider = context.read<ContactsProvider>();
-                    if (contactProvider.createGroupActive) {
-                      contactProvider.toggleCreateGroupMode();
+                    if (contactProvider.selectedContacts.isNotEmpty) {
+                      contactProvider.setAddMemberMode(false);
                       contactProvider.clearSelected();
                     } else {
                       Navigator.of(context).pop();
@@ -92,45 +92,33 @@ class _NewMessageAppBarState extends State<NewMessageAppBar> {
 
                 //AppBar title
                 Text(
-                  "New Conversation",
+                  "New Member",
                   style: TextStyle(fontSize: 17, fontFamily: "Poppins"),
                 ),
 
                 Spacer(),
 
-                //Proceed New Group Button
+                //Proceed Add Member Button
                 Consumer<ContactsProvider>(
-                  builder: (ctx, contactsProvider, child) =>
-                      (contactsProvider.selectedContacts.length > 1 &&
-                              contactsProvider.createGroupActive)
-                          ? InkWell(
-                              onTap: () => Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (ctx) => ChangeNotifierProvider.value(
-                                    value: contactsProvider,
-                                    child: NewGroupScreen(),
-                                  ),
-                                ),
-                              ),
-                              child: Text(
-                                "Next",
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontFamily: "Poppins",
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                              ),
-                            )
-                          : contactsProvider.createGroupActive
-                              ? Text(
-                                  "Next",
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    fontFamily: "Poppins",
-                                    color: Colors.grey,
-                                  ),
-                                )
-                              : SizedBox.shrink(),
+                  builder: (ctx, contactsProvider, child) => InkWell(
+                    onTap: () {
+                      if(contactsProvider.selectedContacts.isNotEmpty) {
+                        //fetch conversation from top, and add members in it
+                        contactsProvider.addParticipant(context.read<Conversation>());
+                        Navigator.of(context).pop();
+                      }
+                    },
+                    child: Text(
+                      "Add",
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontFamily: "Poppins",
+                        color: contactsProvider.selectedContacts.isNotEmpty
+                            ? Theme.of(context).primaryColor
+                            : Colors.grey,
+                      ),
+                    ),
+                  ),
                 ),
 
                 SizedBox(width: 13),
@@ -143,7 +131,7 @@ class _NewMessageAppBarState extends State<NewMessageAppBar> {
               child: Row(
                 children: [
                   Text(
-                    "To",
+                    "Name",
                     style: TextStyle(fontSize: 16, color: Colors.grey[700]),
                   ),
                   SizedBox(width: 33),

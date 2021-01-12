@@ -124,9 +124,14 @@ class Conversation with ChangeNotifier {
     return ConversationType.NORMAL;
   }
 
-  void addParticipant(List<Contact> _participants) {
+  void addParticipant(List<Contact> newParticipants) {
     if (!_isGroup) _isGroup = true;
-    this._participants = _participants;
+    _participants.addAll(newParticipants);
+    notifyListeners();
+  }
+
+  bool containsParticipant(Contact contact){
+    return (sender.number == contact.number) || _participants.contains(contact);
   }
 
   void addMessage(Message msg) {

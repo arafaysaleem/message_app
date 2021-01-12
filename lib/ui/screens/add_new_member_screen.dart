@@ -4,20 +4,21 @@ import 'package:provider/provider.dart';
 import '../../providers/contacts_provider.dart';
 
 import '../widgets/contacts_list.dart';
-import '../widgets/new_message_appbar.dart';
+import '../widgets/add_member_appbar.dart';
 
 // ignore: must_be_immutable
-class NewMessageScreen extends StatelessWidget {
+class AddNewMemberScreen extends StatelessWidget {
   TextEditingController _textEditingController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    final contactProvider = Provider.of<ContactsProvider>(context,listen: false);
+    contactProvider.setAddMemberMode(true);
     return Scaffold(
       body: WillPopScope(
         onWillPop: () {
-          final contactProvider = context.read<ContactsProvider>();
-          if (contactProvider.createGroupActive) {
-            contactProvider.toggleCreateGroupMode();
+          if (contactProvider.selectedContacts.isNotEmpty) {
+            contactProvider.setAddMemberMode(false);
             contactProvider.clearSelected();
             return Future.value(false);
           }
@@ -31,7 +32,7 @@ class NewMessageScreen extends StatelessWidget {
             },
             child: CustomScrollView(
               slivers: [
-                NewMessageAppBar(textEditingController: _textEditingController),
+                AddMemberAppBar(textEditingController: _textEditingController),
                 SliverToBoxAdapter(
                   child: SizedBox(
                     height: MediaQuery.of(context).size.height - 129,

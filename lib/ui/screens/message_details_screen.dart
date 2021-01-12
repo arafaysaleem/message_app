@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../providers/contacts_provider.dart';
 import '../../providers/messages_provider.dart';
 
 import '../../helper/utils.dart';
 
 import '../../models/conversation.dart';
+
+import 'add_new_member_screen.dart';
 
 class MessageDetailsScreen extends StatelessWidget {
   @override
@@ -46,6 +49,8 @@ class MessageDetailsScreen extends StatelessWidget {
                 color: Colors.grey[600],
               ),
             ),
+
+            //Option Tiles
             DetailOptionTile(
               width: width,
               text: "Notifications",
@@ -69,7 +74,10 @@ class MessageDetailsScreen extends StatelessWidget {
                 );
               },
             ),
+
             SizedBox(height: 22),
+
+            //Person Count
             Text(
               "${convo.participants.length + 1} PERSON",
               style: TextStyle(
@@ -78,11 +86,29 @@ class MessageDetailsScreen extends StatelessWidget {
                 color: Colors.grey[600],
               ),
             ),
+
             SizedBox(height: 16),
 
             //Add people
             InkWell(
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (ctx) => MultiProvider(
+                      providers: [
+                        ChangeNotifierProvider.value(value: convo),
+                        ChangeNotifierProvider(
+                          create: (_) => ContactsProvider(
+                            context.read<MessageManager>(),
+                          ),
+                        ),
+                      ],
+                      child: AddNewMemberScreen(),
+                    ),
+                  ),
+                );
+              },
               child: SizedBox(
                 width: width,
                 child: Row(
@@ -115,111 +141,96 @@ class MessageDetailsScreen extends StatelessWidget {
               ),
             ),
 
+            SizedBox(height: 5),
+
             //Sender tile
-            InkWell(
-              onTap: () {},
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                child: SizedBox(
-                  width: width,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      CircleAvatar(
-                        radius: 20,
-                        backgroundColor: convo.isSpam
-                            ? Colors.grey[200]
-                            : convo.sender.avClr,
-                        child: convo.sender.isAdded
-                            ? Text(
-                                convo.sender.name.substring(0, 1),
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 19,
-                                ),
-                              )
-                            : Icon(
-                                Icons.person,
-                                color: Colors.white,
-                                size: 20,
-                              ),
+            ParticipantListItem(
+              isSpam: convo.isSpam,
+              isAdded: convo.sender.isAdded,
+              name: convo.sender.name,
+              avClr: convo.sender.avClr,
+            ),
+
+            SizedBox(height: 15),
+
+            //List of group members
+            if (convo.isGroup)
+              Expanded(
+                child: NotificationListener<OverscrollIndicatorNotification>(
+                  onNotification: (overScroll) {
+                    overScroll.disallowGlow();
+                    return false;
+                  },
+                  child: Selector<Conversation, int>(
+                    selector: (_, convo) => convo.participants.length - 1,
+                    builder: (_, length, ___) => ListView.separated(
+                      separatorBuilder: (_, __) => SizedBox(height: 7),
+                      itemCount: length,
+                      itemBuilder: (_, i) => ParticipantListItem(
+                        isSpam: convo.participants[i + 1].isBlocked,
+                        isAdded: convo.participants[i + 1].isAdded,
+                        name: convo.participants[i + 1].name,
+                        avClr: convo.participants[i + 1].avClr,
                       ),
-                      SizedBox(width: 10),
-                      Text(
-                        convo.sender.name,
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
                 ),
               ),
-            ),
-
-            SizedBox(height: 5),
-
-            //List of group members
-            if(convo.isGroup) Expanded(
-              child: NotificationListener<OverscrollIndicatorNotification>(
-                onNotification: (overScroll) {
-                  overScroll.disallowGlow();
-                  return false;
-                },
-                child: ListView(
-                  children: convo.participants.sublist(1)
-                      .map(
-                        (member) => InkWell(
-                          onTap: () {
-                            // TODO: Add feature to add new group participant
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10),
-                            child: SizedBox(
-                              width: width,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  CircleAvatar(
-                                    radius: 20,
-                                    backgroundColor: convo.isSpam
-                                        ? Colors.grey[200]
-                                        : member.avClr,
-                                    child: convo.sender.isAdded
-                                        ? Text(
-                                            member.name.substring(0, 1),
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 19,
-                                            ),
-                                          )
-                                        : Icon(
-                                            Icons.person,
-                                            color: Colors.white,
-                                            size: 20,
-                                          ),
-                                  ),
-                                  SizedBox(width: 10),
-                                  Text(
-                                    member.name,
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      )
-                      .toList(),
-                ),
-              ),
-            ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class ParticipantListItem extends StatelessWidget {
+  final bool isSpam;
+  final bool isAdded;
+  final String name;
+  final Color avClr;
+
+  const ParticipantListItem({
+    Key key,
+    @required this.isSpam,
+    @required this.isAdded,
+    @required this.name,
+    @required this.avClr,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    return SizedBox(
+      width: width,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          CircleAvatar(
+            radius: 20,
+            backgroundColor: isSpam ? Colors.grey[200] : avClr,
+            child: isAdded
+                ? Text(
+                    name.substring(0, 1),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 19,
+                    ),
+                  )
+                : Icon(
+                    Icons.person,
+                    color: Colors.white,
+                    size: 20,
+                  ),
+          ),
+          SizedBox(width: 10),
+          Text(
+            name,
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+        ],
       ),
     );
   }
