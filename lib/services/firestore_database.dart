@@ -13,6 +13,10 @@ class FirestoreDatabase {
   final String uid;
   final _service = FirestoreService.instance;
 
+  // TODO: Add firebase auth, get uid from authUser
+  /// Singleton instance of a firestoreDatabase class.
+  static final instance = FirestoreDatabase(uid: "Rafay123");
+
   FirestoreDatabase({@required this.uid})
       : assert(uid != null, 'Cannot create FirestoreDatabase with null uid');
 
@@ -133,10 +137,11 @@ class FirestoreDatabase {
   }
 
   /// Updates an entire group document or adds it if it doesn't exist.
-  Future<void> addOrUpdateGroup(Conversation conversation) {
+  Future<void> addOrUpdateGroup(Conversation conversation, {bool merge}) {
     return _service.setData(
       path: FirestorePath.group(uid, conversation.groupID),
       data: conversation.toMap(),
+      merge: merge
     );
   }
 

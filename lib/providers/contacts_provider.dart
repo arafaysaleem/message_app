@@ -2,6 +2,8 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 
+import '../services/firestore_database.dart';
+
 import 'messages_provider.dart';
 
 import '../helper/utils.dart';
@@ -11,7 +13,14 @@ import '../models/contact.dart';
 
 class ContactsProvider with ChangeNotifier {
   // TODO: Add firestore support to store and sync contacts
+  final _firestoredb = FirestoreDatabase.instance;
+
   final MessageManager _messageManager;
+
+  ContactsProvider(this._messageManager) {
+    _contacts.sort((Contact a, Contact b) => a.name.compareTo(b.name)); //sort while fetching from firebase
+  }
+
   final List<Contact> _contacts = [
     Contact(name: "Bakh", number: "03328652868", avClr: Colors.blue),
     Contact(number: "03012668889", name: "Zain", avClr: Colors.amber),
@@ -42,10 +51,6 @@ class ContactsProvider with ChangeNotifier {
   bool _createGroupActive=false;
   bool _addMemberActive=false;
 
-  ContactsProvider(this._messageManager) {
-    _contacts.sort((Contact a, Contact b) => a.name.compareTo(b.name)); //sort while fetching from firebase
-  }
-
   UnmodifiableListView<Contact> get contacts => UnmodifiableListView(_contacts);
 
   UnmodifiableListView<Contact> get top8Contacts {
@@ -74,21 +79,21 @@ class ContactsProvider with ChangeNotifier {
 
   void setAddMemberMode(bool flag) => _addMemberActive=flag;
 
-  void unSelectContact(Contact contact) {
+  void _unSelectContact(Contact contact) {
     _selectedContacts.remove(contact);
     notifyListeners();
   }
 
-  void selectContact(Contact contact) {
+  void _selectContact(Contact contact) {
     _selectedContacts.add(contact);
     notifyListeners();
   }
 
   void toggleSelected(Contact contact) {
     if (isSelected(contact))
-      unSelectContact(contact);
+      _unSelectContact(contact);
     else
-      selectContact(contact);
+      _selectContact(contact);
   }
 
   void clearSelected(){
@@ -101,8 +106,8 @@ class ContactsProvider with ChangeNotifier {
   }
 
   void addParticipant(Conversation convo){
-    // TODO:Add new members to firestore
     convo.addParticipant(_selectedContacts);
+    _firestoredb.addOrUpdateGroup(convo,merge: true);
     setAddMemberMode(false);
     clearSelected();
   }

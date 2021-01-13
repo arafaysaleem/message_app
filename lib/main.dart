@@ -6,8 +6,6 @@ import 'package:provider/provider.dart';
 
 import 'providers/messages_provider.dart';
 
-import 'services/firestore_database.dart';
-
 import 'ui/screens/spam_blocked_msg_screen.dart';
 import 'ui/screens/archived_screen.dart';
 import 'ui/screens/home_screen.dart';
@@ -31,9 +29,8 @@ class MyApp extends StatelessWidget {
       ),
     );
     return ChangeNotifierProvider(
-      // TODO: Add firebase auth, get uid from authUser
       create: (ctx) =>
-          MessageManager(firestoredb: FirestoreDatabase(uid: "Rafay123")),
+          MessageManager(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Flutter Message Manager',

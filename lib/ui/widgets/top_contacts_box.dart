@@ -39,7 +39,7 @@ class _TopContactsBoxState extends State<TopContactsBox>
                         color: Theme.of(context).primaryColor,
                       ),
                       onDeleted: () {
-                        contactsProvider.unSelectContact(contact);
+                        contactsProvider.toggleSelected(contact);
                       },
                       elevation: 0,
                       avatar: CircleAvatar(
