@@ -362,6 +362,8 @@ class MessageManager with ChangeNotifier {
       }
       convo.toggleSpam();
       _firestoredb.spamSelectedConversation(convo);
+      //Block contact
+      _firestoredb.addOrUpdateContact(convo.sender,merge: true);
     }
     clearSelected();
   }

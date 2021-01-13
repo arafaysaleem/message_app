@@ -5,7 +5,7 @@ class Contact{
   final String _name,picturePath;
   final String number;
   final Color avClr;
-  final bool isBlocked;
+  bool isBlocked;
 
   factory Contact.fromMap(Map<String, dynamic> map) {
     return new Contact(

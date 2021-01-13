@@ -168,6 +168,7 @@ class Conversation with ChangeNotifier {
 
   void toggleSpam() {
     _isSpam = !_isSpam;
+    if(!_isGroup) sender.isBlocked = _isSpam;
     notifyListeners();
   }
 
