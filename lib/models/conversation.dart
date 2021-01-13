@@ -125,7 +125,6 @@ class Conversation with ChangeNotifier {
   }
 
   void addParticipant(List<Contact> newParticipants) {
-    if (!_isGroup) _isGroup = true;
     _participants.addAll(newParticipants);
     notifyListeners();
   }

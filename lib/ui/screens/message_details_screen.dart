@@ -90,58 +90,60 @@ class MessageDetailsScreen extends StatelessWidget {
             SizedBox(height: 16),
 
             //Add people
-            InkWell(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (ctx) => MultiProvider(
-                      providers: [
-                        ChangeNotifierProvider.value(value: convo),
-                        ChangeNotifierProvider(
-                          create: (_) => ContactsProvider(
-                            context.read<MessageManager>(),
+            if(convo.isGroup) ...[
+              InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (ctx) => MultiProvider(
+                        providers: [
+                          ChangeNotifierProvider.value(value: convo),
+                          ChangeNotifierProvider(
+                            create: (_) => ContactsProvider(
+                              context.read<MessageManager>(),
+                            ),
                           ),
-                        ),
-                      ],
-                      child: AddNewMemberScreen(),
-                    ),
-                  ),
-                );
-              },
-              child: SizedBox(
-                width: width,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    CircleAvatar(
-                      radius: 20,
-                      backgroundColor: Theme.of(context).primaryColor,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        padding: const EdgeInsets.all(8),
-                        child: Icon(
-                          Icons.add,
-                          color: Theme.of(context).primaryColor,
-                          size: 20,
-                        ),
+                        ],
+                        child: AddNewMemberScreen(),
                       ),
                     ),
-                    SizedBox(width: 10),
-                    Text(
-                      "Add people",
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                    ),
-                  ],
+                  );
+                },
+                child: SizedBox(
+                  width: width,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      CircleAvatar(
+                        radius: 20,
+                        backgroundColor: Theme.of(context).primaryColor,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          padding: const EdgeInsets.all(8),
+                          child: Icon(
+                            Icons.add,
+                            color: Theme.of(context).primaryColor,
+                            size: 20,
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 10),
+                      Text(
+                        "Add people",
+                        style:
+                            TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
 
-            SizedBox(height: 5),
+              SizedBox(height: 5),
+            ],
 
             //Sender tile
             ParticipantListItem(
