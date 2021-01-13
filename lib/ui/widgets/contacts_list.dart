@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:message_app/models/conversation.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/contacts_provider.dart';
 
+import '../../models/conversation.dart';
 import '../../models/contact.dart';
 
 import 'contact_list_item.dart';
@@ -61,8 +61,6 @@ class ContactsList extends StatelessWidget {
         ),
       );
 
-    final convo = Provider.of<Conversation>(context,listen: false);
-
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 0, 17, 0),
       child: ListView.builder(
@@ -81,6 +79,7 @@ class ContactsList extends StatelessWidget {
           }
 
           if(contactsProvider.addMemberActive){
+            final convo = Provider.of<Conversation>(context,listen: false);
             if(convo.containsParticipant(contact)) return SizedBox.shrink();
             return Column(
               children: getListItem(showLetter, letter, contact),

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../providers/contacts_provider.dart';
 import '../../providers/messages_provider.dart';
 
 import '../../helper/utils.dart';
@@ -90,21 +89,14 @@ class MessageDetailsScreen extends StatelessWidget {
             SizedBox(height: 16),
 
             //Add people
-            if(convo.isGroup) ...[
+            if (convo.isGroup) ...[
               InkWell(
                 onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (ctx) => MultiProvider(
-                        providers: [
-                          ChangeNotifierProvider.value(value: convo),
-                          ChangeNotifierProvider(
-                            create: (_) => ContactsProvider(
-                              context.read<MessageManager>(),
-                            ),
-                          ),
-                        ],
+                      builder: (ctx) => ChangeNotifierProvider.value(
+                        value: convo,
                         child: AddNewMemberScreen(),
                       ),
                     ),
@@ -134,14 +126,13 @@ class MessageDetailsScreen extends StatelessWidget {
                       SizedBox(width: 10),
                       Text(
                         "Add people",
-                        style:
-                            TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w600),
                       ),
                     ],
                   ),
                 ),
               ),
-
               SizedBox(height: 5),
             ],
 

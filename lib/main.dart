@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 
+import 'providers/contacts_provider.dart';
 import 'providers/messages_provider.dart';
 
 import 'ui/screens/spam_blocked_msg_screen.dart';
@@ -28,9 +29,17 @@ class MyApp extends StatelessWidget {
         statusBarBrightness: Brightness.dark,
       ),
     );
-    return ChangeNotifierProvider(
-      create: (ctx) =>
-          MessageManager(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (ctx) => MessageManager(),
+        ),
+        ChangeNotifierProxyProvider<MessageManager, ContactsProvider>(
+          create: (_) => ContactsProvider(),
+          update: (_, msgMgr, contactsProvider) =>
+              contactsProvider..update(msgMgr),
+        ),
+      ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Flutter Message Manager',

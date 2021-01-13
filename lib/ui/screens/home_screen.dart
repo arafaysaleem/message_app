@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 
 import 'package:animations/animations.dart';
 
-import '../../providers/contacts_provider.dart';
 import '../../providers/messages_provider.dart';
 
 import '../../helper/enums/filters_enum.dart';
@@ -106,10 +105,7 @@ class _HomeScreenState extends State<HomeScreen> {
             onTap: openFunction,
           ),
         ),
-        openBuilder: (ctx, _) => ChangeNotifierProvider(
-          create: (_) => ContactsProvider(context.read<MessageManager>()),
-          child: NewMessageScreen(),
-        ),
+        openBuilder: (ctx, _) => NewMessageScreen(),
       ),
     );
   }

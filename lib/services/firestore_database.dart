@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:message_app/models/contact.dart';
 import 'package:meta/meta.dart';
 
 import 'firestore_path.dart';
@@ -115,6 +116,17 @@ class FirestoreDatabase {
     );
   }
 
+  /// Sets the isBlocked field for the contact.
+  /// Updates only the specific isBlocked field instead of updating
+  /// the whole document.
+  Future<void> blockSelectedContact(Contact blockedContact) {
+    print("Block: $blockedContact");
+    return _service.documentAction(
+      path: FirestorePath.contact(uid, blockedContact.number),
+      changes: {'isBlocked': blockedContact.isBlocked},
+    );
+  }
+
   /// Performs a batchAction to perform the provided changes on all
   /// the documents in the collection "conversations".
   /// It only applies this operation on normal conversations by filtering
@@ -152,6 +164,15 @@ class FirestoreDatabase {
     );
   }
 
+  /// Updates an entire contact document or adds it if it doesn't exist.
+  Future<void> addOrUpdateContact(Contact contact, {bool merge = false}) {
+    return _service.setData(
+        path: FirestorePath.contact(uid, contact.number),
+        data: contact.toMap(),
+        merge: merge
+    );
+  }
+
   /// Returns a stream of a single conversation fetched from the conversation
   /// document at the provided number.
   Stream<Conversation> conversationStream({@required String number}) {
@@ -167,6 +188,15 @@ class FirestoreDatabase {
     return _service.documentStream(
       path: FirestorePath.group(uid, groupID),
       builder: (data, documentId) => Conversation.fromMap(data),
+    );
+  }
+
+  /// Returns a stream of a single contact fetched from the contact
+  /// document at the provided number.
+  Stream<Contact> contactStream({@required String number}) {
+    return _service.documentStream(
+      path: FirestorePath.contact(uid, number),
+      builder: (data, documentId) => Contact.fromMap(data),
     );
   }
 
@@ -252,6 +282,16 @@ class FirestoreDatabase {
           .where('isArchived', isEqualTo: true),
       builder: (data, _) => Conversation.fromMap(data),
       sort: (lhs, rhs) => rhs.groupName.compareTo(lhs.groupName),
+    );
+  }
+
+  /// Returns a stream of a list of all normal contacts,
+  /// sorted in ascending order.
+  Stream<List<Contact>> contactsStream() {
+    return _service.collectionStream<Contact>(
+      path: FirestorePath.contacts(uid),
+      builder: (data, _) => Contact.fromMap(data),
+      sort: (lhs, rhs) => lhs.name.compareTo(rhs.name),
     );
   }
 }
