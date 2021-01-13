@@ -2,45 +2,79 @@ import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_link_preview/flutter_link_preview.dart';
 
-class CustomLinkPreview extends StatelessWidget {
+import '../../helper/utils.dart';
+
+class CustomLinkPreview extends StatefulWidget {
   final String previewPath;
 
-  const CustomLinkPreview({Key key, @required this.previewPath}) : super(key: key);
+  const CustomLinkPreview({Key key, @required this.previewPath})
+      : super(key: key);
+
+  @override
+  _CustomLinkPreviewState createState() => _CustomLinkPreviewState();
+}
+
+class _CustomLinkPreviewState extends State<CustomLinkPreview> {
+  bool isFetched;
+
+  @override
+  void initState() {
+    isFetched = false;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return FlutterLinkPreview(
-      url: previewPath,
-      builder: (info) {
-        if (info is WebImageInfo) {
-          return CachedNetworkImage(
-            imageUrl: info.image,
-            fit: BoxFit.contain,
-          );
-        }
-        final WebInfo webInfo = info;
-        if (info == null || (!WebAnalyzer.isNotEmpty(webInfo.title))) return buildPreviewReload();
-        return Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            buildPreviewIcon(webInfo.icon),
-            SizedBox(width: 8),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  buildPreviewTitle(webInfo.title),
-                  const SizedBox(height: 2),
-                  if (WebAnalyzer.isNotEmpty(webInfo.description))
-                    buildPreviewDescription(webInfo.description),
-                  if (WebAnalyzer.isNotEmpty(webInfo.image)) ...buildPreviewImage(webInfo.image)
-                ],
-              ),
+    return isFetched
+        ? InkWell(
+          onTap: () {
+            Utils.launchURL(widget.previewPath);
+          },
+          splashColor: Colors.grey[100],
+          highlightColor: Colors.grey[100],
+          child: FlutterLinkPreview(
+              url: widget.previewPath,
+              builder: (info) {
+                if (info is WebImageInfo) {
+                  return CachedNetworkImage(
+                    imageUrl: info.image,
+                    fit: BoxFit.contain,
+                  );
+                }
+                final WebInfo webInfo = info;
+                if (info == null || (!WebAnalyzer.isNotEmpty(webInfo.title)))
+                  return buildPreviewReload();
+                return Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    buildPreviewIcon(webInfo.icon),
+                    SizedBox(width: 8),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          buildPreviewTitle(webInfo.title),
+                          const SizedBox(height: 2),
+                          if (WebAnalyzer.isNotEmpty(webInfo.description))
+                            buildPreviewDescription(webInfo.description),
+                          if (WebAnalyzer.isNotEmpty(webInfo.image))
+                            ...buildPreviewImage(webInfo.image)
+                        ],
+                      ),
+                    ),
+                  ],
+                );
+              },
             ),
-          ],
-        );
-      },
-    );
+        )
+        : InkWell(
+            child: buildPreviewReload(),
+            onTap: () {
+              setState(() {
+                isFetched = true;
+              });
+            },
+          );
   }
 
   List<Widget> buildPreviewImage(String image) {
@@ -61,7 +95,7 @@ class CustomLinkPreview extends StatelessWidget {
             description,
             maxLines: 3,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(fontSize: 12,letterSpacing: 0.2),
+            style: TextStyle(fontSize: 12, letterSpacing: 0.2),
           ),
         ),
       ],

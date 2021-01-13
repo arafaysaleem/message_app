@@ -367,26 +367,19 @@ class _MessageListItemState extends State<MessageListItem> with SingleTickerProv
           ),
 
           //Preview
-          InkWell(
-            onTap: () {
-              Utils.launchURL(widget.msg.previewPath);
-            },
-            splashColor: Colors.grey[100],
-            highlightColor: Colors.grey[100],
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(15),
-                  bottomRight: Radius.circular(15),
-                ),
-                border: Border.all(
-                  color: Utils.greyColor,
-                ),
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(15),
+                bottomRight: Radius.circular(15),
               ),
-              padding: const EdgeInsets.all(10),
-              child: Center(
-                child: CustomLinkPreview(previewPath: widget.msg.previewPath),
+              border: Border.all(
+                color: Utils.greyColor,
               ),
+            ),
+            padding: const EdgeInsets.all(10),
+            child: Center(
+              child: CustomLinkPreview(previewPath: widget.msg.previewPath),
             ),
           ),
         ],
