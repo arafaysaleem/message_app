@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../providers/contacts_provider.dart';
+import '../../../providers/contacts_provider.dart';
 
-import '../../models/conversation.dart';
-import '../../models/contact.dart';
+import '../../../models/conversation.dart';
+import '../../../models/contact.dart';
 
 import 'contact_list_item.dart';
-import 'top_contacts_box.dart';
+import '../top_contacts_box.dart';
 
 // ignore: must_be_immutable
 class ContactsList extends StatelessWidget {

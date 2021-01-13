@@ -24,10 +24,11 @@ class FirestoreDatabase {
   /// Updates an entire conversation document or adds it if it doesn't exist.
   /// Setting merge to true would only update the document with the new changes
   /// instead of re writing all field.
-  Future<void> addOrUpdateConversation(Conversation conversation) {
+  Future<void> addOrUpdateConversation(Conversation conversation,{bool merge = false}) {
     return _service.setData(
       path: FirestorePath.conversation(uid, conversation.sender.number),
       data: conversation.toMap(),
+      merge: merge
     );
   }
 

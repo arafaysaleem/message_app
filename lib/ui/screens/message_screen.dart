@@ -69,6 +69,11 @@ class MessageScreen extends StatelessWidget {
               Icons.more_vert,
             ),
             itemBuilder: (_) => [
+              if (!convo.sender.isAdded && !convo.isGroup)
+                PopupMenuItem(
+                  child: Text("Add contact"),
+                  value: ConversationActions.ADD_CONTACT,
+                ),
               PopupMenuItem(
                 child: Text("Details"),
                 value: ConversationActions.DETAILS,

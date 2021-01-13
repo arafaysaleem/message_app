@@ -8,9 +8,10 @@ import '../utils.dart';
 
 import '../../models/conversation.dart';
 
+import '../../ui/screens/add_contact_screen.dart';
 import '../../ui/screens/message_details_screen.dart';
 
-enum ConversationActions { DELETE, DETAILS, ARCHIVE, HELP }
+enum ConversationActions { DELETE, DETAILS, ARCHIVE, HELP, ADD_CONTACT }
 
 extension ConversationActionExtension on ConversationActions {
   String get name => describeEnum(this);
@@ -58,6 +59,19 @@ extension ConversationActionExtension on ConversationActions {
               builder: (ctx) => ChangeNotifierProvider.value(
                 value: convo,
                 child: MessageDetailsScreen(),
+              ),
+            ),
+          );
+          return;
+        }
+      case ConversationActions.ADD_CONTACT:
+        {
+          final convo = context.read<Conversation>();
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (ctx) => ChangeNotifierProvider.value(
+                value: convo,
+                child: AddContactScreen(),
               ),
             ),
           );

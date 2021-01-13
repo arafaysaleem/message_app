@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 
-import '../../providers/messages_provider.dart';
-import '../../providers/contacts_provider.dart';
+import '../../../providers/messages_provider.dart';
+import '../../../providers/contacts_provider.dart';
 
-import '../../models/contact.dart';
-import '../../models/conversation.dart';
+import '../../../models/contact.dart';
+import '../../../models/conversation.dart';
 
-import '../screens/message_screen.dart';
+import '../../screens/message_screen.dart';
 
 class ContactListItem extends StatelessWidget {
   final Contact contact;

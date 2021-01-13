@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 
 class Contact{
-  final String _name,picturePath;
+  String _name,picturePath;
   final String number;
   final Color avClr;
   bool isBlocked;
@@ -43,6 +43,8 @@ class Contact{
   String get name => _name?? "${number.substring(0, 4)} ${number.substring(4)}" ;
 
   bool get isAdded => _name!=null;
+
+  void setName(String name) => _name = name;
 
   @override
   String toString() {

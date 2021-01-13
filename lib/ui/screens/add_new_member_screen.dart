@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../providers/contacts_provider.dart';
 
-import '../widgets/contacts_list.dart';
+import '../widgets/shared/contacts_list.dart';
 import '../widgets/add_member_appbar.dart';
 
 // ignore: must_be_immutable

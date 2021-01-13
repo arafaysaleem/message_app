@@ -121,4 +121,12 @@ class ContactsProvider with ChangeNotifier {
     });
     return UnmodifiableListView(filteredContacts);
   }
+
+  void addContact(Conversation convo,String name){
+    convo.sender.setName(name);
+    _contacts.add(convo.sender);
+    _firestoredb.addOrUpdateContact(convo.sender);
+    _firestoredb.addOrUpdateConversation(convo, merge: true);
+    convo.notifyListeners();
+  }
 }

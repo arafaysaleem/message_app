@@ -120,7 +120,7 @@ class _BottomMessageBarState extends State<BottomMessageBar> {
                       child: _textEditingController.text.isEmpty
                           ? InkWell(
                               child: Icon(
-                                Icons.person_add,
+                                Icons.emoji_emotions,
                                 color: Theme.of(context).primaryColor,
                                 size: 28,
                               ),
