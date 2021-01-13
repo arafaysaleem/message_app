@@ -5,7 +5,7 @@ class CustomFAB extends StatefulWidget {
   final ScrollController _controller;
   final VoidCallback onTap;
 
-  const CustomFAB({Key key,@required controller, @required this.onTap})
+  const CustomFAB({Key key, @required controller, @required this.onTap})
       : _controller = controller,
         super(key: key);
 
@@ -13,7 +13,7 @@ class CustomFAB extends StatefulWidget {
   _CustomFABState createState() => _CustomFABState();
 }
 
-class _CustomFABState extends State<CustomFAB> with TickerProviderStateMixin{
+class _CustomFABState extends State<CustomFAB> with TickerProviderStateMixin {
   bool expandFAB = false;
 
   void _switchFAB(bool expand) {
@@ -22,7 +22,7 @@ class _CustomFABState extends State<CustomFAB> with TickerProviderStateMixin{
     });
   }
 
-  void scrollListener(){
+  void scrollListener() {
     if (widget._controller.position.userScrollDirection ==
         ScrollDirection.reverse) {
       _switchFAB(false);
@@ -35,8 +35,7 @@ class _CustomFABState extends State<CustomFAB> with TickerProviderStateMixin{
   @override
   void initState() {
     super.initState();
-    widget._controller
-      ..addListener(() => scrollListener());
+    widget._controller..addListener(() => scrollListener());
   }
 
   @override
@@ -48,34 +47,36 @@ class _CustomFABState extends State<CustomFAB> with TickerProviderStateMixin{
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 50,
+      height: 55,
       child: FloatingActionButton.extended(
         backgroundColor: Theme.of(context).primaryColor,
         isExtended: expandFAB,
         onPressed: widget.onTap,
         label: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Icon(
-                    Icons.message,
-                    color: Colors.white,
-                    size: 22,
-                  ),
-                  if (expandFAB) SizedBox(width: 8),
-                  AnimatedSize(
-                    vsync: this,
-                    duration: Duration(milliseconds: 100),
-                    child: Text(
-                    expandFAB ? "Start chat" : "",
-                      style: TextStyle(fontSize: 17, color: Colors.white,
-                        fontWeight: FontWeight.w400,
-                        letterSpacing: 0.3,
-                        height: 1
-                      ),
-                    ),
-                  ),
-                ],
-              )
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Icon(
+              Icons.message,
+              color: Colors.white,
+              size: 22,
+            ),
+            if (expandFAB) SizedBox(width: 8),
+            AnimatedSize(
+              vsync: this,
+              duration: Duration(milliseconds: 100),
+              child: Text(
+                expandFAB ? "Start chat" : "",
+                style: TextStyle(
+                  fontSize: 16.5,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w400,
+                  letterSpacing: 0.3,
+                  height: 1,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
