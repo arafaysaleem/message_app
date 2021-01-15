@@ -17,6 +17,8 @@ import '../widgets/shared/conversations_list.dart';
 
 // ignore: must_be_immutable
 class HomeScreen extends StatefulWidget {
+  static const routeName = 'HomeScreen';
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
