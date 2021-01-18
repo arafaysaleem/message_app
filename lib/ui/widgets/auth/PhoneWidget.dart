@@ -57,6 +57,7 @@ class _PhoneWidgetState extends State<PhoneWidget> {
               Expanded(
                 child: TextField(
                   controller: _phoneNoController,
+                  style: TextStyle(fontFamily: fontFamily),
                   cursorColor: Colors.black,
                   keyboardType: TextInputType.phone,
                   textInputAction: TextInputAction.done,

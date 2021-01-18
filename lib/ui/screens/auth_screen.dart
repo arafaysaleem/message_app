@@ -36,11 +36,27 @@ class AuthScreen extends StatelessWidget {
             builder: (_, status, __) {
               if (status == AuthStatus.LOGGED_IN) {
                 return Text("LOGGED IN UID: ${context.read<AuthProvider>().userNumber}");
-                // Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
+                //TODO: Insert providers(msg and contact) before navigating to home
+                // Navigator.of(context).pushNamed(HomeScreen.routeName);
               } else if (status == AuthStatus.AUTHENTICATING) {
                 return CircularProgressIndicator();
               } else if (status == AuthStatus.UNAUTHENTICATED) {
-                return Text("Failed");
+                return Column(
+                  children: [
+                    Text(
+                        "Phone Verification Failed",
+                        style: TextStyle(
+                            fontSize: 18,
+                            fontFamily: "Poppins",
+                            color: Colors.red,
+                        ),
+                    ),
+
+                    SizedBox(height: 10),
+
+                    PhoneWidget(),
+                  ],
+                );
               } else if (status == AuthStatus.OTP_SENT) {
                 return OTPWidget();
               }

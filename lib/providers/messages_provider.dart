@@ -10,9 +10,10 @@ import '../models/conversation.dart';
 import '../models/message.dart';
 
 class MessageManager with ChangeNotifier {
-  final FirestoreDatabase _firestoredb = FirestoreDatabase.instance;
+  FirestoreDatabase _firestoredb;
 
-  MessageManager() {
+  MessageManager(String number) {
+    _firestoredb = FirestoreDatabase(uid: number);
     _initializeData();
   }
 

@@ -12,11 +12,12 @@ import '../models/conversation.dart';
 import '../models/contact.dart';
 
 class ContactsProvider with ChangeNotifier {
-  final _firestoredb = FirestoreDatabase.instance;
+  FirestoreDatabase _firestoredb;
 
   MessageManager _messageManager;
 
-  ContactsProvider() {
+  ContactsProvider(String number) {
+    _firestoredb = FirestoreDatabase(uid: number);
     _initializeData();
   }
 

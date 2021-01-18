@@ -11,15 +11,19 @@ import '../models/conversation.dart';
 String documentIdFromCurrentDate() => DateTime.now().toIso8601String();
 
 class FirestoreDatabase {
-  final String uid;
+  String uid;
   final _service = FirestoreService.instance;
 
   // TODO: Add firebase auth, get uid from authUser
   /// Singleton instance of a firestoreDatabase class.
-  static final instance = FirestoreDatabase(uid: "Rafay123");
+  static final _instance = FirestoreDatabase._();
 
-  FirestoreDatabase({@required this.uid})
-      : assert(uid != null, 'Cannot create FirestoreDatabase with null uid');
+  FirestoreDatabase._();
+
+  factory FirestoreDatabase({@required uid}){
+    _instance.uid = uid;
+    return _instance;
+  }
 
   /// Updates an entire conversation document or adds it if it doesn't exist.
   /// Setting merge to true would only update the document with the new changes
