@@ -13,8 +13,8 @@ class AuthProvider extends ChangeNotifier {
 
   String _verificationId;
 
-  //Default status
-  AuthStatus _status = AuthStatus.UNINITIALIZED;
+  //Default status - Load from shared prefs
+  AuthStatus _status = AuthStatus.LOGGED_OUT;
 
   AuthStatus get status => _status;
 
@@ -22,12 +22,7 @@ class AuthProvider extends ChangeNotifier {
 
   String get uid => _currentUser.number;
 
-  AuthProvider() {
-    //listener for authentication changes such as user sign in and sign out
-    _auth.authStateChanges().listen(authStateChanges);
-  }
-
-  Future<void> verifyPhoneForOTP(phoneNo) async {
+  Future<void> verifyPhoneForOTP(String phoneNo) async {
     _status = AuthStatus.AUTHENTICATING;
     notifyListeners();
 
@@ -70,7 +65,7 @@ class AuthProvider extends ChangeNotifier {
     try {
       final UserCredential userCredential =
           await _auth.signInWithCredential(credential);
-      _status = AuthStatus.AUTHENTICATED;
+      _status = AuthStatus.LOGGED_IN;
       _currentUser = _userAccountFromFirebase(userCredential.user);
     } catch (e) {
       print(e.toString());
@@ -87,21 +82,10 @@ class AuthProvider extends ChangeNotifier {
     return UserAccount(user.phoneNumber);
   }
 
-  //Method to detect live auth changes such as user sign in and sign out
-  Future<void> authStateChanges(User firebaseUser) async {
-    if (firebaseUser == null) {
-      _status = AuthStatus.UNAUTHENTICATED;
-    } else {
-      _status = AuthStatus.AUTHENTICATED;
-    }
-    print("auth state changed: listener");
-    notifyListeners();
-  }
-
   //Method to handle user signing out
   Future signOut() async {
     _auth.signOut();
-    _status = AuthStatus.UNAUTHENTICATED;
+    _status = AuthStatus.LOGGED_OUT;
     notifyListeners();
     return Future.delayed(Duration.zero);
   }

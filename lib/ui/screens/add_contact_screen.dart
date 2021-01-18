@@ -16,9 +16,8 @@ class _AddContactScreenState extends State<AddContactScreen> {
   final _lastNameFocusNode = FocusNode();
   final _textEditingController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  String firstName = "",lastName = "";
-  bool _formChecked = false,
-      _formChanged = false;
+  String firstName = "", lastName = "";
+  bool _formChecked = false, _formChanged = false;
 
   void _submitForm(Conversation convo) async {
     bool isValid = _formKey.currentState.validate();
@@ -55,7 +54,8 @@ class _AddContactScreenState extends State<AddContactScreen> {
           ),
         ),
         actions: <Widget>[
-          IconButton(icon: Icon(Icons.save), onPressed: () => _submitForm(convo)),
+          IconButton(
+              icon: Icon(Icons.save), onPressed: () => _submitForm(convo)),
         ],
       ),
       body: SingleChildScrollView(
@@ -92,14 +92,16 @@ class _AddContactScreenState extends State<AddContactScreen> {
                       context: context,
                       builder: (ctx) => AlertDialog(
                         content: Text(
-                            "Do you want to go back without saving your form data?"),
+                          "Do you want to go back without saving your form data?",
+                        ),
                         title: Text("Are you sure?"),
                         actions: <Widget>[
                           FlatButton(
                             child: Text(
                               "Yes",
                               style: TextStyle(
-                                  color: Theme.of(context).primaryColor),
+                                color: Theme.of(context).primaryColor,
+                              ),
                             ),
                             onPressed: () {
                               Navigator.of(context).pop(true);
@@ -125,14 +127,15 @@ class _AddContactScreenState extends State<AddContactScreen> {
                 child: Column(
                   children: [
                     TextFormField(
-                      autovalidateMode: _formChecked ? AutovalidateMode.always : AutovalidateMode.disabled,
+                      autovalidateMode: _formChecked
+                          ? AutovalidateMode.always
+                          : AutovalidateMode.disabled,
                       decoration: InputDecoration(
                         labelText: "First Name",
                       ),
                       textInputAction: TextInputAction.next,
                       onFieldSubmitted: (String title) {
-                        FocusScope.of(context)
-                            .requestFocus(_lastNameFocusNode);
+                        FocusScope.of(context).requestFocus(_lastNameFocusNode);
                       },
                       onSaved: (fName) {
                         firstName = fName.trim();
@@ -141,9 +144,8 @@ class _AddContactScreenState extends State<AddContactScreen> {
                         fName = fName.trim();
                         if (fName.isEmpty) {
                           return "Please enter a first name";
-                        }
-                        else{
-                          if(!Utils.nameRegExp.hasMatch(fName)) {
+                        } else {
+                          if (!Utils.nameRegex.hasMatch(fName)) {
                             return "Invalid characters found";
                           }
                           return null;
@@ -155,7 +157,9 @@ class _AddContactScreenState extends State<AddContactScreen> {
 
                     //Last Name
                     TextFormField(
-                      autovalidateMode: _formChecked ? AutovalidateMode.always : AutovalidateMode.disabled,
+                      autovalidateMode: _formChecked
+                          ? AutovalidateMode.always
+                          : AutovalidateMode.disabled,
                       decoration: InputDecoration(
                         labelText: "Last Name",
                       ),
@@ -166,11 +170,12 @@ class _AddContactScreenState extends State<AddContactScreen> {
                       },
                       onSaved: (lName) {
                         lastName = lName.trim();
-                        if(lastName.isNotEmpty) lastName = " $lastName";
+                        if (lastName.isNotEmpty) lastName = " $lastName";
                       },
                       validator: (lName) {
                         lName = lName.trim();
-                        if(lName.isNotEmpty && !Utils.nameRegExp.hasMatch(lName)) {
+                        if (lName.isNotEmpty &&
+                            !Utils.nameRegex.hasMatch(lName)) {
                           return "Invalid characters found";
                         }
                         return null;
@@ -186,5 +191,3 @@ class _AddContactScreenState extends State<AddContactScreen> {
     );
   }
 }
-
-

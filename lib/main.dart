@@ -4,12 +4,12 @@ import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 
-// import 'providers/auth_provider.dart';
+import 'providers/auth_provider.dart';
 import 'providers/contacts_provider.dart';
 import 'providers/messages_provider.dart';
 
 import 'ui/screens/spam_blocked_msg_screen.dart';
-// import 'ui/screens/auth_screen.dart';
+import 'ui/screens/auth_screen.dart';
 import 'ui/screens/archived_screen.dart';
 import 'ui/screens/home_screen.dart';
 import 'ui/screens/settings_screen.dart';
@@ -36,12 +36,16 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (ctx) => MessageManager(),
         ),
+
         ChangeNotifierProxyProvider<MessageManager, ContactsProvider>(
           create: (_) => ContactsProvider(),
           update: (_, msgMgr, contactsProvider) =>
               contactsProvider..update(msgMgr),
         ),
-      ],
+        ChangeNotifierProvider(
+          create: (_) => AuthProvider(),
+        )
+    ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Flutter Message Manager',
@@ -58,6 +62,7 @@ class MyApp extends StatelessWidget {
         ),
         routes: {
           "/": (_) => HomeScreen(),
+          "/auth":(_) => AuthScreen(),
           ArchivedMessagesScreen.routeName: (_) => ArchivedMessagesScreen(),
           SpamBlockedMessagesScreen.routeName: (_) =>
               SpamBlockedMessagesScreen(),

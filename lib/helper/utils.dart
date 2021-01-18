@@ -10,8 +10,9 @@ class Utils {
   static final myMessageColor = const Color(0xffE0ECFF);
   static final myMessageTextColor = Colors.blue[800];
   static final _randomGenerator = Random();
-  static final RegExp nameRegExp = RegExp('[a-z A-Z0-9]');
-  //static final RegExp numberRegExp = RegExp(r'\d');
+  static final RegExp nameRegex = RegExp('[a-z A-Z0-9]');
+  static final RegExp phoneNoRegex = RegExp('[+]{1}[0-9]');
+  static final RegExp otpRegex = RegExp('[0-9]{1}');
   static final List<Color> _avatarColors = [
     Colors.red,
     Colors.amber,
