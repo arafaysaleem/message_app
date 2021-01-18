@@ -35,7 +35,7 @@ class AuthScreen extends StatelessWidget {
             selector: (_, authProvider) => authProvider.status,
             builder: (_, status, __) {
               if (status == AuthStatus.LOGGED_IN) {
-                return Text("LOGGED IN UID: ${context.read<AuthProvider>().uid}");
+                return Text("LOGGED IN UID: ${context.read<AuthProvider>().userNumber}");
                 // Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
               } else if (status == AuthStatus.AUTHENTICATING) {
                 return CircularProgressIndicator();
