@@ -10,21 +10,24 @@ class OTPDigitInput extends StatelessWidget {
     @required this.onSaved,
   }) : super(key: key);
 
-  OutlineInputBorder getBorder(Color color){
+  OutlineInputBorder getBorder(Color color, {double width = 1.4}){
     return OutlineInputBorder(
       borderRadius: BorderRadius.circular(10),
       borderSide: BorderSide(
         color: color,
-        width: 1.4,
+        width: width,
         style: BorderStyle.solid,
       ),
     );
   }
 
-  //TODO: Fix font style
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      style: TextStyle(
+        fontSize: 25,
+      ),
+      textAlign: TextAlign.center,
       cursorColor: Colors.black,
       maxLength: 1,
       autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -47,9 +50,9 @@ class OTPDigitInput extends StatelessWidget {
         errorStyle: TextStyle(height: 0, color: Colors.transparent),
         contentPadding: const EdgeInsets.all(3),
         enabledBorder: getBorder(Colors.black),
-        focusedErrorBorder: getBorder(Theme.of(context).primaryColor),
+        focusedErrorBorder: getBorder(Colors.red,width: 3.5),
         errorBorder: getBorder(Colors.red),
-        focusedBorder: getBorder(Theme.of(context).primaryColor),
+        focusedBorder: getBorder(Colors.black,width: 3.5),
       ),
     );
   }
