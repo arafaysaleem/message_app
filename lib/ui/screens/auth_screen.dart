@@ -40,12 +40,11 @@ class AuthScreen extends StatelessWidget {
                 return CircularProgressIndicator();
               }
               else if (status == AuthStatus.UNAUTHENTICATED) {
-                //TODO: Test fail case
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     PhoneWidget(),
-                    SizedBox(height: 10),
+                    SizedBox(height: 30),
                     Text(
                       "Phone Verification Failed",
                       style: TextStyle(

@@ -77,7 +77,7 @@ class _PhoneWidgetState extends State<PhoneWidget> {
                 ),
               ),
 
-              SizedBox(width: 15),
+              SizedBox(width: 10),
 
               //Autofill button
               CustomRaisedButton(
@@ -87,7 +87,7 @@ class _PhoneWidgetState extends State<PhoneWidget> {
                   _phoneNoController.text = await _autoFill.hint;
                 },
                 height: 47,
-                width: 85,
+                width: 90,
               ),
             ],
           ),
