@@ -6,8 +6,8 @@ import '../../../providers/auth_provider.dart';
 
 import '../../../helper/utils.dart';
 
-import 'CustomRaisedButton.dart';
-import 'ErrorDialog.dart';
+import 'custom_raised_button.dart';
+import 'error_dialog.dart';
 
 class PhoneWidget extends StatefulWidget {
   @override

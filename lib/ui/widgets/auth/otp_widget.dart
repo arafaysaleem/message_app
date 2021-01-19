@@ -3,8 +3,8 @@ import 'package:provider/provider.dart';
 
 import '../../../providers/auth_provider.dart';
 
-import 'CustomRaisedButton.dart';
-import 'OTPDigitInput.dart';
+import 'custom_raised_button.dart';
+import 'otp_digit_input.dart';
 
 class OTPWidget extends StatefulWidget {
   @override

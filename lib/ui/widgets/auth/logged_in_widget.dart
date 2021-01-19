@@ -6,7 +6,7 @@ import '../../../providers/messages_provider.dart';
 
 import '../../screens/home_screen.dart';
 
-import 'CustomRaisedButton.dart';
+import 'custom_raised_button.dart';
 
 class LoggedInWidget extends StatelessWidget {
   @override

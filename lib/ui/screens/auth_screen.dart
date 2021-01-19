@@ -6,8 +6,8 @@ import '../../providers/auth_provider.dart';
 import '../../helper/enums/auth_status_enum.dart';
 
 import '../widgets/auth/logged_in_widget.dart';
-import '../widgets/auth/OTPWidget.dart';
-import '../widgets/auth/PhoneWidget.dart';
+import '../widgets/auth/otp_widget.dart';
+import '../widgets/auth/phone_widget.dart';
 
 class AuthScreen extends StatelessWidget {
   @override
