@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:message_app/services/prefs.dart';
 import 'package:provider/provider.dart';
 
 import 'package:animations/animations.dart';
@@ -26,26 +27,15 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   ScrollController _controller = ScrollController();
 
-  // bool runOnce=false;
-
   dispose() {
     _controller.dispose();
     super.dispose();
   }
 
-  //TODO: Delete these comments after app done
-  // @override
-  // void didChangeDependencies() {
-  //   super.didChangeDependencies();
-  //   if(!runOnce) {
-  //     context.read<MessageManager>().addAllToFirebase();
-  //     context.read<MessageManager>().addGroupsToFirebase();
-  //     runOnce=true;
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
+    //TODO: Remove this
+    Prefs.instance.resetAuth();
     return Scaffold(
       body: SafeArea(
         child: Stack(

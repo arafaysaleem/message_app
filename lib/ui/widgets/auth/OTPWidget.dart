@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../../providers/auth_provider.dart';
 
+import 'CustomRaisedButton.dart';
 import 'OTPDigitInput.dart';
 
 class OTPWidget extends StatefulWidget {
@@ -11,7 +12,7 @@ class OTPWidget extends StatefulWidget {
 }
 
 class _OTPWidgetState extends State<OTPWidget> {
-  List<String> otpDigits = ["0","0","0","0","0","0"];
+  List<String> otpDigits = ["0", "0", "0", "0", "0", "0"];
   final formKey = GlobalKey<FormState>();
 
   @override
@@ -53,32 +54,20 @@ class _OTPWidgetState extends State<OTPWidget> {
         SizedBox(height: 30),
 
         //Verify OTP button
-        SizedBox(
+        CustomRaisedButton(
+          text: "Verify OTP",
+          buttonColor: Colors.black,
+          onPressed: () {
+            if (formKey.currentState.validate()) {
+              formKey.currentState.save();
+              String otpCode =
+              otpDigits.fold("", (otp, digit) => "$otp$digit");
+              authProvider.verifyOTP(otpCode);
+            }
+          },
           height: 40,
           width: 115,
-          child: RaisedButton(
-            onPressed: () {
-              if (formKey.currentState.validate()) {
-                formKey.currentState.save();
-                String otpCode =
-                otpDigits.fold("", (otp, digit) => "$otp$digit");
-                authProvider.verifyOTP(otpCode);
-              }
-            },
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30),
-            ),
-            color: Colors.black,
-            child: Text(
-              "Verify OTP",
-              style: TextStyle(
-                fontFamily: "Poppins",
-                fontSize: 15,
-                color: Colors.white,
-              ),
-            ),
-          ),
-        )
+        ),
       ],
     );
   }

@@ -6,6 +6,7 @@ import '../../../providers/auth_provider.dart';
 
 import '../../../helper/utils.dart';
 
+import 'CustomRaisedButton.dart';
 import 'ErrorDialog.dart';
 
 class PhoneWidget extends StatefulWidget {
@@ -64,7 +65,8 @@ class _PhoneWidgetState extends State<PhoneWidget> {
                   decoration: InputDecoration(
                     contentPadding: const EdgeInsets.fromLTRB(10, 10, 2, 10),
                     hintText: "Phone# (+xx xxxxxxxxx)",
-                    hintStyle: TextStyle(color: Colors.grey, fontFamily: fontFamily),
+                    hintStyle:
+                        TextStyle(color: Colors.grey, fontFamily: fontFamily),
                     enabledBorder: buildUnfocusedBorder(40),
                     focusedBorder: buildFocusedBorder(40),
                     prefixIcon: Icon(
@@ -78,27 +80,15 @@ class _PhoneWidgetState extends State<PhoneWidget> {
               SizedBox(width: 15),
 
               //Autofill button
-              SizedBox(
+              CustomRaisedButton(
+                text: "Autofill",
+                buttonColor: Theme.of(context).primaryColor,
+                onPressed: () async {
+                  _phoneNoController.text = await _autoFill.hint;
+                },
                 height: 47,
                 width: 85,
-                child: RaisedButton(
-                  onPressed: () async => {
-                    _phoneNoController.text = await _autoFill.hint
-                  },
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  color: Theme.of(context).primaryColor,
-                  child: Text(
-                    "Autofill",
-                    style: TextStyle(
-                      fontFamily: fontFamily,
-                      fontSize: 15,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              )
+              ),
             ],
           ),
         ),
@@ -106,34 +96,23 @@ class _PhoneWidgetState extends State<PhoneWidget> {
         SizedBox(height: 30),
 
         //Send OTP button
-        SizedBox(
+        CustomRaisedButton(
+          text: "Send OTP",
+          buttonColor: Colors.black,
+          onPressed: () {
+            final phoneNumber = _phoneNoController.text.trim();
+            if (phoneNumber.isNotEmpty &&
+                Utils.phoneNoRegex.hasMatch(phoneNumber)) {
+              authProvider.verifyPhoneForOTP(phoneNumber);
+            } else {
+              showDialog(
+                context: context,
+                builder: (_) => ErrorDialog(),
+              );
+            }
+          },
           height: 45,
           width: 105,
-          child: RaisedButton(
-            onPressed: () {
-              final phoneNumber = _phoneNoController.text.trim();
-              if (phoneNumber.isNotEmpty && Utils.phoneNoRegex.hasMatch(phoneNumber)) {
-                authProvider.verifyPhoneForOTP(phoneNumber);
-              } else {
-                showDialog(
-                  context: context,
-                  builder: (_) => ErrorDialog(),
-                );
-              }
-            },
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30),
-            ),
-            color: Colors.black,
-            child: Text(
-              "Send OTP",
-              style: TextStyle(
-                fontFamily: fontFamily,
-                fontSize: 15,
-                color: Colors.white,
-              ),
-            ),
-          ),
         ),
       ],
     );

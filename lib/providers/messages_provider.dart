@@ -10,22 +10,85 @@ import '../models/conversation.dart';
 import '../models/message.dart';
 
 class MessageManager with ChangeNotifier {
-  FirestoreDatabase _firestoredb;
+  FirestoreDatabase _firestoredb = FirestoreDatabase.instance;
 
-  MessageManager(String number) {
-    _firestoredb = FirestoreDatabase(uid: number);
+  init(){
+    _initializeDefaults();
     _initializeData();
   }
 
   //initialise with firestore
-  final Map<String, Conversation> _conversations = Map();
-  final Map<String, Conversation> _groups = Map();
-  List<Conversation> _spammedConversations = [];
-  List<Conversation> _archivedConversations = [];
-  List<Conversation> _spammedGroups = [];
-  List<Conversation> _archivedGroups = [];
+  Map<String, Conversation> _conversations;
+  Map<String, Conversation> _groups;
+  List<Conversation> _spammedConversations;
+  List<Conversation> _archivedConversations;
+  List<Conversation> _spammedGroups;
+  List<Conversation> _archivedGroups;
+  List<Conversation> _selectedConversations;
+  List<Message> _favMessages;
+  bool _displayGroupConversations;
 
   /*final Map<String, Conversation> _conversations = {
+    "03009756562": Conversation(
+      sender: Contact(number: "03009756562", name: "Meeran",avClr: Colors.blue),
+      messages: [
+        Message(
+          number: "03009756562",
+          body: "Where are u ??",
+          datetime: DateTime.now(),
+        ),
+        Message(
+          number: "03009756562",
+          body: "What time you'll come home?",
+          datetime: DateTime.now(),
+        ),
+      ],
+    ),
+    "03339657568": Conversation(
+      sender: Contact(number: "03339657568",avClr: Colors.red),
+      messages: [
+        Message(
+          number: "03339657568",
+          body: "First Message",
+          datetime: DateTime.now(),
+        ),
+        Message(
+          number: "03339657568",
+          body: "Second Message",
+          datetime: DateTime.now(),
+        ),
+      ],
+    ),
+    "03309677784": Conversation(
+      sender: Contact(name: "Faryal",number: "03309677784",avClr: Colors.blue),
+      messages: [
+        Message(
+          number: "03309677784",
+          body: "First Message",
+          datetime: DateTime.now(),
+        ),
+        Message(
+          number: "03309677784",
+          body: "Check the timetable and update when free",
+          datetime: DateTime.now(),
+        ),
+      ],
+    ),
+    "03012668889": Conversation(
+      sender: Contact(number: "03012668889", name: "Zain",avClr: Colors.amber),
+      messages: [
+        Message(
+          number: "03012668889",
+          body: "Where are u ??",
+          datetime: DateTime.now(),
+        ),
+        Message(
+          number: "03012668889",
+          body: "What time you'll come home?",
+          datetime: DateTime.now(),
+        ),
+      ],
+    ),
     "03028220488": Conversation(
       sender: Contact(name: "Farhan",number: "03028220488",avClr: Colors.red),
       messages: [
@@ -68,10 +131,17 @@ class MessageManager with ChangeNotifier {
     )
   };*/
 
-  //reset on app start
-  final List<Conversation> _selectedConversations = [];
-  final List<Message> _favMessages = [];
-  bool _displayGroupConversations = false;
+  void _initializeDefaults(){
+    _conversations = Map();
+    _groups = Map();
+    _selectedConversations = [];
+    _archivedConversations = [];
+    _spammedGroups = [];
+    _archivedGroups = [];
+    _selectedConversations = [];
+    _favMessages = [];
+    _displayGroupConversations = false;
+  }
 
   bool get displayGroupConversations => _displayGroupConversations;
 

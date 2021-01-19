@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:message_app/services/firestore_database.dart';
 
 import '../services/prefs.dart';
 
@@ -65,7 +66,7 @@ class AuthProvider extends ChangeNotifier {
     );
   }
 
-  Future<void> verifyOTP(String otp) async {
+  void verifyOTP(String otp) {
     final AuthCredential credential = PhoneAuthProvider.credential(
       verificationId: _verificationId,
       smsCode: otp,
@@ -73,12 +74,18 @@ class AuthProvider extends ChangeNotifier {
     _signInUser(credential);
   }
 
-  Future<void> _signInUser(AuthCredential credential) async {
+  void _signInUser(AuthCredential credential) async {
     try {
+      //Sign in, change status and get user
       final UserCredential userCredential =
           await _auth.signInWithCredential(credential);
       _status = AuthStatus.LOGGED_IN;
       _currentUser = _userAccountFromFirebase(userCredential.user);
+
+      //Initialize database for this user
+      FirestoreDatabase.init(uid: userNumber);
+
+      //Save preferences
       await _prefs.setAuthUserKey(userNumber);
       await _prefs.setAuthStatusKey(_status);
     } catch (e) {

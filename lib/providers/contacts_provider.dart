@@ -12,17 +12,27 @@ import '../models/conversation.dart';
 import '../models/contact.dart';
 
 class ContactsProvider with ChangeNotifier {
-  FirestoreDatabase _firestoredb;
+  FirestoreDatabase _firestoredb = FirestoreDatabase.instance;
 
   MessageManager _messageManager;
 
-  ContactsProvider(String number) {
-    _firestoredb = FirestoreDatabase(uid: number);
+  init(){
+    _initializeDefaults();
     _initializeData();
   }
 
   //initialise with firestore
-  List<Contact> _contacts = [];
+  List<Contact> _contacts;
+  List<Contact> _selectedContacts;
+  bool _createGroupActive;
+  bool _addMemberActive;
+
+  void _initializeDefaults(){
+    _contacts = [];
+    _selectedContacts = [];
+    _createGroupActive = false;
+    _addMemberActive = false;
+  }
 
   void _initializeData() {
     _firestoredb.contactsStream().listen((contacts) {
@@ -34,11 +44,6 @@ class ContactsProvider with ChangeNotifier {
   void update(MessageManager messageManager) {
     _messageManager = messageManager;
   }
-
-  //reset on app restart
-  final List<Contact> _selectedContacts = [];
-  bool _createGroupActive = false;
-  bool _addMemberActive = false;
 
   UnmodifiableListView<Contact> get contacts => UnmodifiableListView(_contacts);
 

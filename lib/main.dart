@@ -5,6 +5,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 
 import 'providers/auth_provider.dart';
+import 'providers/contacts_provider.dart';
+import 'providers/messages_provider.dart';
 
 import 'ui/screens/spam_blocked_msg_screen.dart';
 import 'ui/screens/auth_screen.dart';
@@ -31,15 +33,14 @@ class MyApp extends StatelessWidget {
     );
     return MultiProvider(
       providers: [
-        //TODO: Put these after AuthScreen but before HomeScreen
-        // ChangeNotifierProvider(
-        //   create: (ctx) => MessageManager(),
-        // ),
-        // ChangeNotifierProxyProvider<MessageManager, ContactsProvider>(
-        //   create: (_) => ContactsProvider(),
-        //   update: (_, msgMgr, contactsProvider) =>
-        //       contactsProvider..update(msgMgr),
-        // ),
+        ChangeNotifierProvider(
+          create: (ctx) => MessageManager(),
+        ),
+        ChangeNotifierProxyProvider<MessageManager, ContactsProvider>(
+          create: (_) => ContactsProvider(),
+          update: (_, msgMgr, contactsProvider) =>
+              contactsProvider..update(msgMgr),
+        ),
         ChangeNotifierProvider(
           create: (_) => AuthProvider(),
         )

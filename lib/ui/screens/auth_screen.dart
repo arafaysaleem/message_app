@@ -5,8 +5,7 @@ import '../../providers/auth_provider.dart';
 
 import '../../helper/enums/auth_status_enum.dart';
 
-import 'home_screen.dart';
-
+import '../widgets/auth/logged_in_widget.dart';
 import '../widgets/auth/OTPWidget.dart';
 import '../widgets/auth/PhoneWidget.dart';
 
@@ -35,29 +34,30 @@ class AuthScreen extends StatelessWidget {
             selector: (_, authProvider) => authProvider.status,
             builder: (_, status, __) {
               if (status == AuthStatus.LOGGED_IN) {
-                return Text("LOGGED IN UID: ${context.read<AuthProvider>().userNumber}");
-                //TODO: Insert providers(msg and contact) before navigating to home
-                // Navigator.of(context).pushNamed(HomeScreen.routeName);
-              } else if (status == AuthStatus.AUTHENTICATING) {
+                return LoggedInWidget();
+              }
+              else if (status == AuthStatus.AUTHENTICATING) {
                 return CircularProgressIndicator();
-              } else if (status == AuthStatus.UNAUTHENTICATED) {
+              }
+              else if (status == AuthStatus.UNAUTHENTICATED) {
+                //TODO: Test fail case
                 return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                        "Phone Verification Failed",
-                        style: TextStyle(
-                            fontSize: 18,
-                            fontFamily: "Poppins",
-                            color: Colors.red,
-                        ),
-                    ),
-
-                    SizedBox(height: 10),
-
                     PhoneWidget(),
+                    SizedBox(height: 10),
+                    Text(
+                      "Phone Verification Failed",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontFamily: "Poppins",
+                        color: Colors.red,
+                      ),
+                    ),
                   ],
                 );
-              } else if (status == AuthStatus.OTP_SENT) {
+              }
+              else if (status == AuthStatus.OTP_SENT) {
                 return OTPWidget();
               }
               return PhoneWidget();
@@ -68,5 +68,3 @@ class AuthScreen extends StatelessWidget {
     );
   }
 }
-
-

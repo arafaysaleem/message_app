@@ -21,6 +21,7 @@ class OTPDigitInput extends StatelessWidget {
     );
   }
 
+  //TODO: Fix font style
   @override
   Widget build(BuildContext context) {
     return TextFormField(
@@ -31,6 +32,9 @@ class OTPDigitInput extends StatelessWidget {
       keyboardType: TextInputType.phone,
       textInputAction: TextInputAction.next,
       onSaved: onSaved,
+      onChanged: (msg){
+        if(msg.length == 1) FocusScope.of(context).nextFocus();
+      },
       validator: (digit) {
         digit = digit.trim();
         if (digit.isNotEmpty && Utils.otpRegex.hasMatch(digit)) {
