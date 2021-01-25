@@ -9,8 +9,12 @@ import 'contact.dart';
 import 'message.dart';
 
 class Conversation with ChangeNotifier {
-  static Contact myContact = Contact(
-      number: "03001234567", name: "Abdur Rafay Saleem", avClr: Colors.red);
+  static Contact myContact;
+
+  static setMyContact(String number){
+    myContact = Contact(number: number,avClr: Colors.red);
+  }
+
   final Contact sender;
   final List<Message> _messages;
   List<Contact> _participants;

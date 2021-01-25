@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:message_app/services/firestore_database.dart';
 
 import '../services/prefs.dart';
+import '../services/firestore_database.dart';
 
 import '../helper/enums/auth_status_enum.dart';
 
+import '../models/conversation.dart';
 import '../models/user_account.dart';
 
 class AuthProvider extends ChangeNotifier {
@@ -84,6 +85,9 @@ class AuthProvider extends ChangeNotifier {
 
       //Initialize database for this user
       FirestoreDatabase.init(uid: userNumber);
+
+      //Set myContact
+      Conversation.setMyContact(userNumber);
 
       //Save preferences
       await _prefs.setAuthUserKey(userNumber);

@@ -14,6 +14,7 @@ class Utils {
   static final authStatusKey = "status";
   static final RegExp nameRegex = RegExp('[a-z A-Z0-9]');
   static final RegExp phoneNoRegex = RegExp('[+]{1}[0-9]');
+  static final RegExp numberRegex = RegExp('[0-9]');
   static final RegExp otpRegex = RegExp('[0-9]{1}');
   static final List<Color> _avatarColors = [
     Colors.red,

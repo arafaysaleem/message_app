@@ -267,7 +267,7 @@ class MessageManager with ChangeNotifier {
     _firestoredb.markAllConversationsRead();
   }
 
-  Conversation getConversation(Contact contact) {
+  Conversation getConversation(Contact contact){
     return _conversations[contact.number] ?? _createConversation(contact);
   }
 
