@@ -17,7 +17,7 @@ class FirestoreDatabase {
   /// Singleton instance of a firestoreDatabase class.
   static final _instance = FirestoreDatabase._();
 
-  static get instance => _instance;
+  static FirestoreDatabase get instance => _instance;
 
   FirestoreDatabase._();
 
@@ -67,25 +67,35 @@ class FirestoreDatabase {
   /// the whole document.
   Future<void> addMessages(Conversation conversation) {
     return _service.setData(
-      path: FirestorePath.conversation(uid, conversation.sender.number),
-      data: conversation.toMap(),
-      merge: true
-    );
+        path: FirestorePath.conversation(uid, conversation.sender.number),
+        data: conversation.toMap(),
+        merge: true);
   }
 
   /// Checks if the recipient exists as a user.
-  /// Updates the messages list for user's conversation to add the new
-  /// messages.
-  Future<void> addMessagesToSender(Conversation conversation, String number) async {
-    final bool userExists = await _service.checkDocument(
+  Future<bool> checkUser(String number) async {
+    return await _service.checkDocument(
       path: FirestorePath.user(number),
     );
-    if(userExists){
+  }
+
+  Future<void> createUser(String number, Map<String,dynamic> data) async {
+    return await _service.setData(
+      path: FirestorePath.user(number),
+      data: data,
+    );
+  }
+
+  /// Updates the messages list for user's conversation to add the new
+  /// messages.
+  Future<void> addMessagesToSender(
+      Conversation conversation, String number) async {
+    final bool userFound = await checkUser(number);
+    if (userFound) {
       return _service.setData(
-        path: FirestorePath.conversation(number, uid),
-        data: conversation.toMap(),
-        merge: true
-      );
+          path: FirestorePath.conversation(number, uid),
+          data: conversation.toMap(),
+          merge: true);
     }
   }
 

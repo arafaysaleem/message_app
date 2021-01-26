@@ -255,7 +255,7 @@ class MessageManager with ChangeNotifier {
     final number = convo.sender.number;
     if (Utils.isPhoneNumber(number)) {
       _firestoredb.addMessagesToSender(
-        convo.copyWith(sender: Conversation.myContact),
+        convo.copyWith(sender: Conversation.myContact,isRead: false),
         Utils.parsePhoneNo(number),
       );
     }

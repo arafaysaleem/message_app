@@ -78,10 +78,17 @@ class AuthProvider extends ChangeNotifier {
   void _signInUser(AuthCredential credential) async {
     try {
       //Sign in, change status and get user
-      final UserCredential userCredential =
-          await _auth.signInWithCredential(credential);
+      final userCredential = await _auth.signInWithCredential(credential);
       _status = AuthStatus.LOGGED_IN;
       _currentUser = _userAccountFromFirebase(userCredential.user);
+
+      //create user firestore document
+      if (userCredential.additionalUserInfo.isNewUser) {
+        FirestoreDatabase.instance.createUser(userNumber, {
+          'exists': true,
+          'uid': userCredential.user.uid,
+        });
+      }
 
       //Initialize database for this user
       FirestoreDatabase.init(uid: userNumber);
@@ -109,10 +116,9 @@ class AuthProvider extends ChangeNotifier {
 
   //Method to handle user signing out
   void signOut() async {
-    await _auth.signOut();
+    if (_auth.currentUser != null) await _auth.signOut();
     _status = AuthStatus.LOGGED_OUT;
     await _prefs.resetAuth();
     notifyListeners();
-    return;
   }
 }
