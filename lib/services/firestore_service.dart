@@ -19,6 +19,15 @@ class FirestoreService {
     await reference.set(data, SetOptions(merge: merge));
   }
 
+  /// Checks if the document/collection exists
+  /// at the provided path.
+  Future<bool> checkDocument({@required String path}) async {
+    final reference = FirebaseFirestore.instance.doc(path);
+    final snapshot = await reference.get();
+    print('$path exists: ${snapshot.exists}');
+    return snapshot.exists;
+  }
+
   /// Deletes the document/collection existing at the
   /// provided path.
   Future<void> deleteData({@required String path}) async {
@@ -34,11 +43,11 @@ class FirestoreService {
     @required String path,
     @required Map<String, dynamic> changes,
   }) async {
-      print('$path');
+    print('$path');
 
-      final docRef = FirebaseFirestore.instance.doc(path);
+    final docRef = FirebaseFirestore.instance.doc(path);
 
-      docRef.update(changes);
+    docRef.update(changes);
   }
 
   /// Updates data in a list of documents of a single collection

@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 
 import '../services/firestore_database.dart';
 
+import '../helper/utils.dart';
+
 import '../models/contact.dart';
 import '../models/conversation.dart';
 import '../models/message.dart';
@@ -243,10 +245,20 @@ class MessageManager with ChangeNotifier {
 
   bool isSelected(Conversation convo) => _selectedConversations.contains(convo);
 
-  void sendConversationMessages(
-      {@required Conversation convo, @required String text, @required String previewPath}) {
-    convo.sendMessage(text: text,previewAsset: previewPath);
+  void sendConversationMessages({
+    @required Conversation convo,
+    @required String text,
+    @required String previewPath,
+  }) {
+    convo.sendMessage(text: text, previewAsset: previewPath);
     _firestoredb.addMessages(convo);
+    final number = convo.sender.number;
+    if (Utils.isPhoneNumber(number)) {
+      _firestoredb.addMessagesToSender(
+        convo.copyWith(sender: Conversation.myContact),
+        Utils.parsePhoneNo(number),
+      );
+    }
   }
 
   void readConversation(Conversation convo) {

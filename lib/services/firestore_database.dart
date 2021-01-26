@@ -21,19 +21,19 @@ class FirestoreDatabase {
 
   FirestoreDatabase._();
 
-  static void init({@required uid}){
+  static void init({@required uid}) {
     _instance.uid = uid;
   }
 
   /// Updates an entire conversation document or adds it if it doesn't exist.
   /// Setting merge to true would only update the document with the new changes
   /// instead of re writing all field.
-  Future<void> addOrUpdateConversation(Conversation conversation,{bool merge = false}) {
+  Future<void> addOrUpdateConversation(Conversation conversation,
+      {bool merge = false}) {
     return _service.setData(
-      path: FirestorePath.conversation(uid, conversation.sender.number),
-      data: conversation.toMap(),
-      merge: merge
-    );
+        path: FirestorePath.conversation(uid, conversation.sender.number),
+        data: conversation.toMap(),
+        merge: merge);
   }
 
   /*
@@ -65,12 +65,28 @@ class FirestoreDatabase {
   /// Updates the messages list for a conversation to add the new
   /// messages. Updates only the specific messages field instead of updating
   /// the whole document.
-  /// Calls the serialiseMessages() method to convert messages to a map.
   Future<void> addMessages(Conversation conversation) {
-    return _service.documentAction(
+    return _service.setData(
       path: FirestorePath.conversation(uid, conversation.sender.number),
-      changes: {'messages': conversation.serializeMessages()},
+      data: conversation.toMap(),
+      merge: true
     );
+  }
+
+  /// Checks if the recipient exists as a user.
+  /// Updates the messages list for user's conversation to add the new
+  /// messages.
+  Future<void> addMessagesToSender(Conversation conversation, String number) async {
+    final bool userExists = await _service.checkDocument(
+      path: FirestorePath.user(number),
+    );
+    if(userExists){
+      return _service.setData(
+        path: FirestorePath.conversation(number, uid),
+        data: conversation.toMap(),
+        merge: true
+      );
+    }
   }
 
   /// Iterates over the conversations list to toggle the isArchived field.
@@ -154,12 +170,12 @@ class FirestoreDatabase {
   }
 
   /// Updates an entire group document or adds it if it doesn't exist.
-  Future<void> addOrUpdateGroup(Conversation conversation, {bool merge = false}) {
+  Future<void> addOrUpdateGroup(Conversation conversation,
+      {bool merge = false}) {
     return _service.setData(
-      path: FirestorePath.group(uid, conversation.groupID),
-      data: conversation.toMap(),
-      merge: merge
-    );
+        path: FirestorePath.group(uid, conversation.groupID),
+        data: conversation.toMap(),
+        merge: merge);
   }
 
   /// Deletes the provided group document.
@@ -174,8 +190,7 @@ class FirestoreDatabase {
     return _service.setData(
         path: FirestorePath.contact(uid, contact.number),
         data: contact.toMap(),
-        merge: merge
-    );
+        merge: merge);
   }
 
   /// Returns a stream of a single conversation fetched from the conversation
@@ -244,13 +259,11 @@ class FirestoreDatabase {
   Stream<List<Conversation>> archivedStream({Conversation conversation}) {
     return _service.collectionStream<Conversation>(
       path: FirestorePath.conversations(uid),
-      queryBuilder: (query) => query
-          .where('isArchived', isEqualTo: true),
+      queryBuilder: (query) => query.where('isArchived', isEqualTo: true),
       builder: (data, _) => Conversation.fromMap(data),
       sort: (lhs, rhs) => rhs.sender.name.compareTo(lhs.sender.name),
     );
   }
-
 
   /// Returns a stream of a list of all normal groups
   /// that are neither spammed nor archived, sorted in ascending
@@ -283,8 +296,7 @@ class FirestoreDatabase {
   Stream<List<Conversation>> archivedGroupsStream({Conversation conversation}) {
     return _service.collectionStream<Conversation>(
       path: FirestorePath.groups(uid),
-      queryBuilder: (query) => query
-          .where('isArchived', isEqualTo: true),
+      queryBuilder: (query) => query.where('isArchived', isEqualTo: true),
       builder: (data, _) => Conversation.fromMap(data),
       sort: (lhs, rhs) => rhs.groupName.compareTo(lhs.groupName),
     );

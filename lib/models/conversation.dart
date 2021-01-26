@@ -47,6 +47,30 @@ class Conversation with ChangeNotifier {
         _isArchived = isArchived,
         _groupName = groupName;
 
+  Conversation copyWith({
+    Contact sender,
+    List<Message> messages,
+    List<Contact> participants,
+    bool isRead,
+    bool isSpam,
+    bool isGroup,
+    String groupID,
+    String groupName,
+    bool isArchived,
+  }) {
+    return new Conversation(
+      sender: sender ?? this.sender,
+      messages: messages ?? this._messages,
+      participants: participants ?? this._participants,
+      isRead: isRead ?? this._isRead,
+      isSpam: isSpam ?? this._isSpam,
+      isGroup: isGroup ?? this._isGroup,
+      groupID: groupID ?? this._groupID,
+      groupName: groupName ?? this._groupName,
+      isArchived: isArchived ?? this._isArchived,
+    );
+  }
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||

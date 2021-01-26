@@ -10,8 +10,6 @@ import '../widgets/new_message_appbar.dart';
 class NewMessageScreen extends StatelessWidget {
   TextEditingController _textEditingController = TextEditingController();
 
-  //TODO: Add support for sending message to other firebase user
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

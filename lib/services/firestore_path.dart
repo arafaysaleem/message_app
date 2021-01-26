@@ -26,4 +26,7 @@ class FirestorePath{
 
   /// Path to a single contact of a user, represented by a number.
   static String contact(String uid,String number) => 'users/$uid/contacts/$number';
+
+  /// Path to a single user, represented by a number.
+  static String user(String uid) => 'users/$uid';
 }

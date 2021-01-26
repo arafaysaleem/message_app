@@ -30,6 +30,16 @@ class Utils {
     return avClr;
   }
 
+  static bool isPhoneNumber(String number){
+    if(phoneNoRegex.hasMatch(number) && number.length == 13) return true;
+    return number.length == 11; //&& number.startsWith("03");
+  }
+
+  static String parsePhoneNo(String number){
+    if(phoneNoRegex.hasMatch(number)) return number;
+    return "+92${number.substring(1)}";
+  }
+
   static void showFlushBar(context, String message, IconData icon) {
     Flushbar(
       messageText: Text(
