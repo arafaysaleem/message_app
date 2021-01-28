@@ -34,9 +34,9 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (ctx) => MessageManager(),
+          create: (ctx) => MessagesProvider(),
         ),
-        ChangeNotifierProxyProvider<MessageManager, ContactsProvider>(
+        ChangeNotifierProxyProvider<MessagesProvider, ContactsProvider>(
           create: (_) => ContactsProvider(),
           update: (_, msgMgr, contactsProvider) =>
               contactsProvider..update(msgMgr),

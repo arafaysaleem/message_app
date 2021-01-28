@@ -29,7 +29,7 @@ class LoggedInWidget extends StatelessWidget {
         CustomRaisedButton(
           buttonColor: Theme.of(context).primaryColor,
           onPressed: () {
-            context.read<MessageManager>().init();
+            context.read<MessagesProvider>().init();
             context.read<ContactsProvider>().init();
             Navigator.of(context).pushNamed(HomeScreen.routeName);
           },

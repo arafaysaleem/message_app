@@ -16,7 +16,7 @@ class ActionsAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final messageManager = Provider.of<MessageManager>(context, listen: false);
+    final messageManager = Provider.of<MessagesProvider>(context, listen: false);
     return Row(
       children: <Widget>[
         IconButton(

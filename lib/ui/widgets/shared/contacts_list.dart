@@ -131,7 +131,7 @@ class _SendUnknownListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Conversation convo = context.read<MessageManager>().getConversation(
+        Conversation convo = context.read<MessagesProvider>().getConversation(
               Contact(avClr: Utils.getAvatarColor(), number: contactInput),
             );
         Navigator.of(context).push(

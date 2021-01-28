@@ -15,7 +15,7 @@ class FirestoreService {
     bool merge = false,
   }) async {
     final reference = FirebaseFirestore.instance.doc(path);
-    print('$path: $data');
+    print('$path');
     await reference.set(data, SetOptions(merge: merge));
   }
 

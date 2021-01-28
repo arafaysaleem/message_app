@@ -132,7 +132,7 @@ class TopContactItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final conversationsMap =
-        Provider.of<MessageManager>(context, listen: false).conversationsMap;
+        Provider.of<MessagesProvider>(context, listen: false).conversationsMap;
     return SizedBox(
       width: 70,
       child: InkWell(

@@ -21,7 +21,7 @@ class ConversationsList extends StatelessWidget {
       : super(key: key);
 
   getConvos(BuildContext context) {
-    final msgManager = Provider.of<MessageManager>(context, listen: false);
+    final msgManager = Provider.of<MessagesProvider>(context, listen: false);
     switch (currentFilter) {
       case Filters.EnableDarkMode:
       case Filters.HelpAndFeedback:
@@ -47,7 +47,7 @@ class ConversationsList extends StatelessWidget {
   Widget build(BuildContext context) {
     return SliverPadding(
       padding: const EdgeInsets.fromLTRB(16, 0, 17, 0),
-      sliver: Selector<MessageManager,
+      sliver: Selector<MessagesProvider,
           Tuple2<UnmodifiableMapView<String, Conversation>, int>>(
         selector: (ctx, msgManager) {
           int length;

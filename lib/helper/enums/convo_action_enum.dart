@@ -20,7 +20,7 @@ extension ConversationActionExtension on ConversationActions {
     switch (this) {
       case ConversationActions.DELETE:
         {
-          final msgManger = context.read<MessageManager>();
+          final msgManger = context.read<MessagesProvider>();
           msgManger.deleteConversation(convo);
           Navigator.of(context).pop();
           Future.delayed(Duration(milliseconds: 300)).then(
@@ -34,7 +34,7 @@ extension ConversationActionExtension on ConversationActions {
         }
       case ConversationActions.ARCHIVE:
         {
-          final msgManger = context.read<MessageManager>();
+          final msgManger = context.read<MessagesProvider>();
           msgManger.toggleArchiveConvo(convo);
           Navigator.of(context).pop();
           Future.delayed(Duration(milliseconds: 300)).then(

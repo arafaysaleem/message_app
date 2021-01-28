@@ -11,10 +11,10 @@ import '../../screens/message_screen.dart';
 // ignore: must_be_immutable
 class ConversationListItem extends StatelessWidget {
   Conversation convo;
-  MessageManager msgManager;
+  MessagesProvider msgManager;
 
   Widget getProfilePicture() {
-    return Selector<MessageManager, int>(
+    return Selector<MessagesProvider, int>(
       selector: (ctx, msgManager) => msgManager.selectedConversations.length,
       builder: (BuildContext context, _, child) {
         if (msgManager.isSelected(convo))
@@ -64,6 +64,7 @@ class ConversationListItem extends StatelessWidget {
 
   Widget getMessageBody() {
     String message = convo.latestMessage.body;
+    bool myMessage = convo.latestMessage.isMyMessage;
     return Padding(
       padding: const EdgeInsets.fromLTRB(15, 1, 10, 0),
       child: Column(
@@ -86,27 +87,22 @@ class ConversationListItem extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
           ),
           SizedBox(height: 4),
-          convo.isRead
-              ? Text(
-                  message,
-                  style: TextStyle(
+          Text(
+            myMessage? "You: $message" : message,
+            style: convo.isRead
+                ? TextStyle(
                     fontWeight: FontWeight.normal,
                     color: Colors.grey[700],
                     fontSize: 14,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                )
-              : Text(
-                  message,
-                  style: TextStyle(
+                  )
+                : TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
                     fontSize: 14,
                   ),
-                  maxLines: 3,
-                  overflow: TextOverflow.ellipsis,
-                ),
+            maxLines: convo.isRead ? 1 : 3,
+            overflow: TextOverflow.ellipsis,
+          )
         ],
       ),
     );
@@ -121,7 +117,7 @@ class ConversationListItem extends StatelessWidget {
           : msgDaysAgo > 0 && msgDaysAgo <= 6
               ? DateFormat(DateFormat.ABBR_WEEKDAY).format(msg.datetime)
               : msgDaysAgo > 6 && msgDaysAgo <= 365
-                  ? DateFormat("MM dd").format(msg.datetime)
+                  ? DateFormat("MMM dd").format(msg.datetime)
                   : DateFormat("dd/MM/yy").format(msg.datetime),
       style: TextStyle(
         color: Colors.grey[700],
@@ -132,7 +128,7 @@ class ConversationListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    msgManager = Provider.of<MessageManager>(context, listen: false);
+    msgManager = Provider.of<MessagesProvider>(context, listen: false);
     convo = Provider.of<Conversation>(context);
     return InkWell(
       splashColor: Colors.grey[300],

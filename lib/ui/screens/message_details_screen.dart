@@ -392,7 +392,7 @@ class _CustomAlertDialogState extends State<CustomAlertDialog> {
             style: TextStyle(color: Theme.of(context).primaryColor),
           ),
           onPressed: () {
-            context.read<MessageManager>().toggleSpamConvo(widget.convo);
+            context.read<MessagesProvider>().toggleSpamConvo(widget.convo);
             Navigator.popUntil(context, (route) => route.settings.name == '/');
             Future.delayed(Duration(milliseconds: 300)).then(
               (value) => Utils.showFlushBar(

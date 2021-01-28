@@ -53,7 +53,7 @@ extension SelectedFilterExtension on Filters{
         return;
       }
       case Filters.MarkAllAsRead: {
-        final msgManger = context.read<MessageManager>();
+        final msgManger = context.read<MessagesProvider>();
         msgManger.readAllConversations();
         return;
       }
@@ -67,7 +67,7 @@ extension SelectedFilterExtension on Filters{
       }
       case Filters.Conversation: return;
       case Filters.Groups: {
-        final msgManager= context.read<MessageManager>();
+        final msgManager= context.read<MessagesProvider>();
         msgManager.toggleDisplayGroupConvos();
         return;
       }

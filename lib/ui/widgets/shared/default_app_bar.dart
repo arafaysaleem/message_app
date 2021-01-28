@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../../../providers/auth_provider.dart';
+import '../../../providers/messages_provider.dart';
 
 import '../../../helper/enums/filters_enum.dart';
 
@@ -31,6 +35,18 @@ class DefaultAppBar extends StatelessWidget {
               hintText: "Search images and video",
             ),
           ),
+        ),
+        IconButton(
+          constraints: BoxConstraints(maxWidth: 28),
+          splashColor: Colors.grey,
+          icon: Icon(
+            Icons.logout,
+            color: Colors.redAccent,
+          ),
+          onPressed: () {
+            context.read<AuthProvider>().signOut();
+            Navigator.of(context).pop();
+          },
         ),
         PopupMenuButton(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),

@@ -61,7 +61,7 @@ class AuthProvider extends ChangeNotifier {
       phoneNumber: phoneNo,
       codeAutoRetrievalTimeout: autoRetrieve,
       codeSent: smsCodeSent,
-      timeout: const Duration(seconds: 5),
+      timeout: const Duration(seconds: 30),
       verificationCompleted: _signInUser,
       verificationFailed: verifyFailed,
     );

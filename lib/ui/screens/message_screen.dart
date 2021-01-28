@@ -34,9 +34,9 @@ class MessageScreen extends StatelessWidget {
           onPressed: () {
             if (convo.messages.isEmpty) {
               if (convo.isGroup) {
-                context.read<MessageManager>().deleteGroup(convo);
+                context.read<MessagesProvider>().deleteGroup(convo);
               } else
-                context.read<MessageManager>().deleteConversation(convo);
+                context.read<MessagesProvider>().deleteConversation(convo);
             }
             Navigator.of(context).pop();
           },

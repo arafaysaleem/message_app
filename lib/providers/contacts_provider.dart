@@ -14,7 +14,7 @@ import '../models/contact.dart';
 class ContactsProvider with ChangeNotifier {
   FirestoreDatabase _firestoredb = FirestoreDatabase.instance;
 
-  MessageManager _messageManager;
+  MessagesProvider _messageManager;
 
   init(){
     _initializeDefaults();
@@ -41,7 +41,7 @@ class ContactsProvider with ChangeNotifier {
     });
   }
 
-  void update(MessageManager messageManager) {
+  void update(MessagesProvider messageManager) {
     _messageManager = messageManager;
   }
 

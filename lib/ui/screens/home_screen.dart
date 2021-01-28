@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:message_app/services/prefs.dart';
 import 'package:provider/provider.dart';
 
 import 'package:animations/animations.dart';
@@ -34,8 +33,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    //TODO: Remove this
-    Prefs.instance.resetAuth();
     return Scaffold(
       body: SafeArea(
         child: Stack(
@@ -48,7 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: CustomScrollView(
                 controller: _controller,
                 slivers: [
-                  Selector<MessageManager, int>(
+                  Selector<MessagesProvider, int>(
                     selector: (ctx, msgMgr) =>
                         msgMgr.selectedConversations.length,
                     builder: (ctx, int length, child) => CustomAppBar(
@@ -57,14 +54,14 @@ class _HomeScreenState extends State<HomeScreen> {
                       duration: Duration(milliseconds: 300),
                     ),
                     child: DefaultAppBar(
-                      currentFilter: context.select<MessageManager, bool>(
+                      currentFilter: context.select<MessagesProvider, bool>(
                         (msgManager) => msgManager.displayGroupConversations,
                       )
                           ? Filters.Groups
                           : Filters.Conversation,
                     ),
                   ),
-                  Selector<MessageManager, bool>(
+                  Selector<MessagesProvider, bool>(
                     selector: (ctx, msgManger) =>
                         msgManger.displayGroupConversations,
                     builder: (ctx, displayGroups, child) => displayGroups

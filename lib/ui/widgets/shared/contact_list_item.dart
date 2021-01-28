@@ -17,7 +17,7 @@ class ContactListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final msgManager = Provider.of<MessageManager>(context, listen: false);
+    final msgManager = Provider.of<MessagesProvider>(context, listen: false);
     final contactsProvider =
         Provider.of<ContactsProvider>(context, listen: false);
     return InkWell(
@@ -39,7 +39,6 @@ class ContactListItem extends StatelessWidget {
               ),
             ),
           );
-          msgManager.readConversation(convo);
         }
       },
       child: Padding(

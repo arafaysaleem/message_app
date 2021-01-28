@@ -11,10 +11,10 @@ import '../screens/message_screen.dart';
 // ignore: must_be_immutable
 class GroupConversationTile extends StatelessWidget {
   Conversation convo;
-  MessageManager msgManager;
+  MessagesProvider msgManager;
 
   Widget getProfilePicture() {
-    return Selector<MessageManager, int>(
+    return Selector<MessagesProvider, int>(
       selector: (ctx, msgManager) => msgManager.selectedConversations.length,
       builder: (BuildContext context, _, child) {
         if (msgManager.isSelected(convo))
@@ -186,7 +186,7 @@ class GroupConversationTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    msgManager = Provider.of<MessageManager>(context, listen: false);
+    msgManager = Provider.of<MessagesProvider>(context, listen: false);
     convo = Provider.of<Conversation>(context);
     return InkWell(
       splashColor: Colors.grey[300],

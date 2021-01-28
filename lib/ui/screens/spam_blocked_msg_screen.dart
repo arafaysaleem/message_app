@@ -20,7 +20,7 @@ class SpamBlockedMessagesScreen extends StatelessWidget {
           children: [
             CustomScrollView(
               slivers: [
-                Selector<MessageManager, int>(
+                Selector<MessagesProvider, int>(
                   selector: (ctx, msgMgr) =>
                       msgMgr.selectedConversations.length,
                   builder: (ctx, int length, child) => SliverAppBar(

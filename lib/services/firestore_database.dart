@@ -1,11 +1,11 @@
 import 'dart:async';
 
-import 'package:message_app/models/contact.dart';
 import 'package:meta/meta.dart';
 
 import 'firestore_path.dart';
 import 'firestore_service.dart';
 
+import '../models/contact.dart';
 import '../models/conversation.dart';
 
 String documentIdFromCurrentDate() => DateTime.now().toIso8601String();
@@ -31,9 +31,10 @@ class FirestoreDatabase {
   Future<void> addOrUpdateConversation(Conversation conversation,
       {bool merge = false}) {
     return _service.setData(
-        path: FirestorePath.conversation(uid, conversation.sender.number),
-        data: conversation.toMap(),
-        merge: merge);
+      path: FirestorePath.conversation(uid, conversation.sender.number),
+      data: conversation.toMap(),
+      merge: merge,
+    );
   }
 
   /*
@@ -67,9 +68,10 @@ class FirestoreDatabase {
   /// the whole document.
   Future<void> addMessages(Conversation conversation) {
     return _service.setData(
-        path: FirestorePath.conversation(uid, conversation.sender.number),
-        data: conversation.toMap(),
-        merge: true);
+      path: FirestorePath.conversation(uid, conversation.sender.number),
+      data: conversation.toMap(),
+      merge: true,
+    );
   }
 
   /// Checks if the recipient exists as a user.
@@ -79,7 +81,7 @@ class FirestoreDatabase {
     );
   }
 
-  Future<void> createUser(String number, Map<String,dynamic> data) async {
+  Future<void> createUser(String number, Map<String, dynamic> data) async {
     return await _service.setData(
       path: FirestorePath.user(number),
       data: data,
@@ -89,13 +91,16 @@ class FirestoreDatabase {
   /// Updates the messages list for user's conversation to add the new
   /// messages.
   Future<void> addMessagesToSender(
-      Conversation conversation, String number) async {
+    Conversation conversation,
+    String number,
+  ) async {
     final bool userFound = await checkUser(number);
     if (userFound) {
-      return _service.setData(
-          path: FirestorePath.conversation(number, uid),
-          data: conversation.toMap(),
-          merge: true);
+      // return _service.setData(
+      //   path: FirestorePath.conversation(number, uid),
+      //   data: conversation.toMap(),
+      //   merge: true,
+      // );
     }
   }
 
@@ -198,9 +203,10 @@ class FirestoreDatabase {
   /// Updates an entire contact document or adds it if it doesn't exist.
   Future<void> addOrUpdateContact(Contact contact, {bool merge = false}) {
     return _service.setData(
-        path: FirestorePath.contact(uid, contact.number),
-        data: contact.toMap(),
-        merge: merge);
+      path: FirestorePath.contact(uid, contact.number),
+      data: contact.toMap(),
+      merge: merge,
+    );
   }
 
   /// Returns a stream of a single conversation fetched from the conversation
@@ -249,7 +255,8 @@ class FirestoreDatabase {
           .where('isSpam', isEqualTo: false)
           .where('isArchived', isEqualTo: false),
       builder: (data, _) => Conversation.fromMap(data),
-      sort: (lhs, rhs) => rhs.sender.name.compareTo(lhs.sender.name),
+      sort: (lhs, rhs) =>
+          lhs.latestMessage.datetime.compareTo(rhs.latestMessage.datetime),
     );
   }
 
@@ -260,7 +267,7 @@ class FirestoreDatabase {
       path: FirestorePath.conversations(uid),
       queryBuilder: (query) => query.where('isSpam', isEqualTo: true),
       builder: (data, _) => Conversation.fromMap(data),
-      sort: (lhs, rhs) => rhs.sender.name.compareTo(lhs.sender.name),
+      sort: (lhs, rhs) => lhs.latestMessage.datetime.compareTo(rhs.latestMessage.datetime),
     );
   }
 
@@ -271,7 +278,7 @@ class FirestoreDatabase {
       path: FirestorePath.conversations(uid),
       queryBuilder: (query) => query.where('isArchived', isEqualTo: true),
       builder: (data, _) => Conversation.fromMap(data),
-      sort: (lhs, rhs) => rhs.sender.name.compareTo(lhs.sender.name),
+      sort: (lhs, rhs) => lhs.latestMessage.datetime.compareTo(rhs.latestMessage.datetime),
     );
   }
 
