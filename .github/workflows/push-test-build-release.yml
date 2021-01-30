@@ -32,7 +32,7 @@ jobs:
     - uses: mkrakowitzer/actions-googledrive@master
       with:
         upload-from: ./build/app/outputs/apk/release/
-        upload-to: APKS/covid_tracker/
+        upload-to: APKS/message_app/
         skicka-tokencache-json: ${{ secrets.SKICKA_TOKENCACHE_JSON }}
         google-client-id: ${{ secrets.DRIVE_CLIENT_ID }}
         google-client-secret: ${{ secrets.DRIVE_CLIENT_SECRET }}
