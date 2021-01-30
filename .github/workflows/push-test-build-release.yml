@@ -9,6 +9,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+    - name: Provide Firebase Android
+      env:
+        FIREBASE_CONFIG: ${{ secrets.FIREBASE_CONFIG }}
+      run: echo $FIREBASE_CONFIG > ./android/app/google-services.json
     - uses: actions/setup-java@v1
       with:
         java-version: '12.x'
