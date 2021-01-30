@@ -11,16 +11,22 @@ import '../models/conversation.dart';
 String documentIdFromCurrentDate() => DateTime.now().toIso8601String();
 
 class FirestoreDatabase {
+
+  ///Logged in user id
   String uid;
+
+  ///Instance of firestore service
   final _service = FirestoreService.instance;
 
-  /// Singleton instance of a firestoreDatabase class.
+  /// Creates a singleton instance of a firestoreDatabase class.
   static final _instance = FirestoreDatabase._();
-
-  static FirestoreDatabase get instance => _instance;
 
   FirestoreDatabase._();
 
+  ///Returns a singleton instance of firebase database
+  static FirestoreDatabase get instance => _instance;
+
+  ///Initializes firebase with the logged in uid
   static void init({@required uid}) {
     _instance.uid = uid;
   }
@@ -38,9 +44,10 @@ class FirestoreDatabase {
   }
 
   /*
-  * Most of the below specified methods for document action can be removed
-  * and all the work can be done by addOrUpdate method by specifying merge true. However, you won't have
-  * control over what's being updated and to what value it is being updated.final
+  * Most of the below specified methods for document action can be removed and
+  * all the work can be done by addOrUpdate method by specifying merge true.
+  *  However, you won't have control over what's being updated and to what
+  *  value it is being updated.
   */
 
   /// Sets the conversation isRead to true.
@@ -81,6 +88,7 @@ class FirestoreDatabase {
     );
   }
 
+  /// Creates a new user document
   Future<void> createUser(String number, Map<String, dynamic> data) async {
     return await _service.setData(
       path: FirestorePath.user(number),
@@ -90,6 +98,8 @@ class FirestoreDatabase {
 
   /// Updates the messages list for user's conversation to add the new
   /// messages.
+  /// Commented out part causes errors. It was used to send messages to other
+  /// firebase users
   Future<void> addMessagesToSender(
     Conversation conversation,
     String number,
@@ -190,7 +200,8 @@ class FirestoreDatabase {
     return _service.setData(
         path: FirestorePath.group(uid, conversation.groupID),
         data: conversation.toMap(),
-        merge: merge);
+        merge: merge,
+    );
   }
 
   /// Deletes the provided group document.
