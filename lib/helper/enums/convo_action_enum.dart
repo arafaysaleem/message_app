@@ -11,13 +11,29 @@ import '../../models/conversation.dart';
 import '../../ui/screens/add_contact_screen.dart';
 import '../../ui/screens/message_details_screen.dart';
 
-enum ConversationActions { DELETE, DETAILS, ARCHIVE, HELP, ADD_CONTACT }
+enum ConversationActions {
+  ///For performing delete action
+  DELETE,
+
+  ///For showing details
+  DETAILS,
+
+  ///For performing archive action
+  ARCHIVE,
+
+  ///For showing help/FAQ
+  HELP,
+
+  ///For performing add contact action
+  ADD_CONTACT,
+}
 
 extension ConversationActionExtension on ConversationActions {
   String get name => describeEnum(this);
 
   void actionOnConversation(BuildContext context, convo) {
     switch (this) {
+      ///Deletes this conversation, pops route and shows toast
       case ConversationActions.DELETE:
         {
           final msgManger = context.read<MessagesProvider>();
@@ -32,6 +48,8 @@ extension ConversationActionExtension on ConversationActions {
           );
           return;
         }
+
+      ///Archives this conversation, pops route and shows toast
       case ConversationActions.ARCHIVE:
         {
           final msgManger = context.read<MessagesProvider>();
@@ -46,11 +64,15 @@ extension ConversationActionExtension on ConversationActions {
           );
           return;
         }
+
+      ///Redirects to help page. UNIMPLEMENTED
       case ConversationActions.HELP:
         {
           //go to help page
           return;
         }
+
+      ///Redirects to message details screen
       case ConversationActions.DETAILS:
         {
           final convo = context.read<Conversation>();
@@ -64,6 +86,8 @@ extension ConversationActionExtension on ConversationActions {
           );
           return;
         }
+
+      ///Redirects to add contact screen
       case ConversationActions.ADD_CONTACT:
         {
           final convo = context.read<Conversation>();
