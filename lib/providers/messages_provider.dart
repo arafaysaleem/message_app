@@ -12,8 +12,11 @@ import '../models/conversation.dart';
 import '../models/message.dart';
 
 class MessagesProvider with ChangeNotifier {
+
+  /// Instance of firestore database
   FirestoreDatabase _firestoredb = FirestoreDatabase.instance;
 
+  /// Initializes and loads the data for the logged in user
   init() {
     _initializeDefaults();
     _initializeData();
@@ -133,6 +136,7 @@ class MessagesProvider with ChangeNotifier {
     )
   };*/
 
+  /// Internal method to initialize all variables for the logged in user
   void _initializeDefaults() {
     _conversations = Map();
     _groups = Map();
@@ -145,38 +149,54 @@ class MessagesProvider with ChangeNotifier {
     _displayGroupConversations = false;
   }
 
+  /// Returns true if you want to view groups
   bool get displayGroupConversations => _displayGroupConversations;
 
+  /// Returns an unmodifiable map of all conversation with sender number
+  /// as keys
   UnmodifiableMapView<String, Conversation> get conversationsMap =>
       UnmodifiableMapView(_conversations);
 
+  /// Returns an unmodifiable list of all normal conversations
   UnmodifiableListView<Conversation> get conversations =>
       UnmodifiableListView(_conversations.values);
 
+  /// Returns an unmodifiable list of all selected conversation or groups
   UnmodifiableListView<Conversation> get selectedConversations =>
       UnmodifiableListView(_selectedConversations);
 
+  /// Returns an unmodifiable list of all favourite messages of a user
   UnmodifiableListView<Message> get favMsgs =>
       UnmodifiableListView(_favMessages);
 
+  /// Returns an unmodifiable list of all spammed conversations
   UnmodifiableListView<Conversation> get spammedConversations =>
       UnmodifiableListView(_spammedConversations);
 
+  /// Returns an unmodifiable list of all archived individual conversation
   UnmodifiableListView<Conversation> get archivedConversations =>
       UnmodifiableListView(_archivedConversations);
 
+  /// Returns an unmodifiable list of all spammed groups
   UnmodifiableListView<Conversation> get spammedGroups =>
       UnmodifiableListView(_spammedGroups);
 
+  /// Returns an unmodifiable list of all archived groups
   UnmodifiableListView<Conversation> get archivedGroups =>
       UnmodifiableListView(_archivedGroups);
 
+  /// Returns an unmodifiable map of groups with groupIDs as keys
   UnmodifiableMapView<String, Conversation> get groupsMap =>
       UnmodifiableMapView(_groups);
 
+  /// Returns an unmodifiable list of all normal groups
   UnmodifiableListView<Conversation> get groupsConversations =>
       UnmodifiableListView(_groups.values);
 
+  /// Returns true if a conversation is selected
+  bool isSelected(Conversation convo) => _selectedConversations.contains(convo);
+
+  /// Internal method to load all data for logged in user
   void _initializeData() {
     _initializeConversationsMap();
     _initializeSpammedConversations();
@@ -186,7 +206,8 @@ class MessagesProvider with ChangeNotifier {
     _initializeGroupsMap();
   }
 
-  /// Stream based methods
+  /// Fetches a stream of normal group conversations from database
+  /// and adds them the groups map with groupID as key.
   void _initializeGroupsMap() {
     _firestoredb.normalGroupsStream().listen((tempGroups) {
       tempGroups.forEach((group) => _groups[group.groupID] = group);
@@ -194,6 +215,8 @@ class MessagesProvider with ChangeNotifier {
     });
   }
 
+  /// Fetches a stream of normal individual conversations from database
+  /// and adds them the conversations map with sender number as key.
   void _initializeConversationsMap() {
     _firestoredb.normalStream().listen((tempConversations) {
       tempConversations.forEach((convo) {
@@ -203,6 +226,8 @@ class MessagesProvider with ChangeNotifier {
     });
   }
 
+  /// Fetches a stream of spammed individual conversations from database
+  /// and sets them to the spammed convos list.
   void _initializeSpammedConversations() {
     _firestoredb.spammedStream().listen((spammedConvos) {
       _spammedConversations = spammedConvos;
@@ -210,6 +235,8 @@ class MessagesProvider with ChangeNotifier {
     });
   }
 
+  /// Fetches a stream of archived individual conversations from database
+  /// and sets them to the archived convos list.
   void _initializeArchivedConversations() {
     _firestoredb.archivedStream().listen((archivedConvos) {
       _archivedConversations = archivedConvos;
@@ -217,6 +244,8 @@ class MessagesProvider with ChangeNotifier {
     });
   }
 
+  /// Fetches a stream of spammed groups from database
+  /// and sets them to the spammed groups list.
   void _initializeSpammedGroups() {
     _firestoredb.spammedGroupsStream().listen((spammedGroups) {
       _spammedGroups = spammedGroups;
@@ -224,6 +253,8 @@ class MessagesProvider with ChangeNotifier {
     });
   }
 
+  /// Fetches a stream of archived groups from database
+  /// and sets them to the archived groups list.
   void _initializeArchivedGroups() {
     _firestoredb.archivedGroupsStream().listen((archivedGroups) {
       _archivedGroups = archivedGroups;
@@ -231,11 +262,13 @@ class MessagesProvider with ChangeNotifier {
     });
   }
 
+  /// Switch view mode to group conversations
   void toggleDisplayGroupConvos() {
     _displayGroupConversations = !displayGroupConversations;
     notifyListeners();
   }
 
+  /// Updates the conversations to move recent ones to the top
   void _updateConversionList(Conversation convo) {
     if (convo.isGroup) {
       _groups.remove(convo.groupID); //remove
@@ -252,8 +285,8 @@ class MessagesProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  bool isSelected(Conversation convo) => _selectedConversations.contains(convo);
-
+  /// Adds a messaage to the specified conversation and updates the
+  /// database. Also updates the conversation for the reciever
   void sendConversationMessages({
     @required Conversation convo,
     @required String text,
@@ -271,28 +304,34 @@ class MessagesProvider with ChangeNotifier {
     }
   }
 
+  /// Marks a conversation as read and updates the database
   void readConversation(Conversation convo) {
     if (convo.isRead) return;
     convo.readConversation();
     _firestoredb.readConversation(convo);
   }
 
+  /// Marks a group as read and updates the database
   void readGroup(Conversation convo) {
     if (convo.isRead) return;
     convo.readConversation();
     _firestoredb.readGroup(convo);
   }
 
+  /// Marks all conversations as read and updates the database
   void readAllConversations() {
     _conversations.values
         .forEach((Conversation convo) => convo.readConversation());
     _firestoredb.markAllConversationsRead();
   }
 
+  /// Returns the conversation for the given contact,
+  /// else creates a new one if it isn't found
   Conversation getConversation(Contact contact) {
     return _conversations[contact.number] ?? _createConversation(contact);
   }
 
+  /// Creates and returns a new group and updates the database
   Conversation createGroupConversation(groupMembers, groupName) {
     Random random = Random();
     String groupID = random.nextInt(100000).toString();
@@ -309,6 +348,7 @@ class MessagesProvider with ChangeNotifier {
     return _groups[groupID];
   }
 
+  /// Creates and returns a new conversation and updates the database
   Conversation _createConversation(Contact contact) {
     _conversations[contact.number] =
         Conversation(sender: contact, messages: <Message>[], isRead: true);
@@ -317,6 +357,7 @@ class MessagesProvider with ChangeNotifier {
     return _conversations[contact.number];
   }
 
+  /// Deletes a conversation and updates the database
   void deleteConversation(Conversation convo) {
     if (_conversations.containsKey(convo.sender.number))
       _conversations.remove(convo.sender.number);
@@ -328,6 +369,7 @@ class MessagesProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  /// Deletes a group and updates the database
   void deleteGroup(Conversation group) {
     if (_groups.containsKey(group.groupID))
       _groups.remove(group.groupID);
@@ -338,17 +380,21 @@ class MessagesProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  /// Deletes the selected conversations one by one
   void deleteSelected() {
     _selectedConversations
         .forEach((Conversation convo) => deleteConversation(convo));
     clearSelected();
   }
 
+  /// Empties the selected conversations list
   void clearSelected() {
     _selectedConversations.clear();
     notifyListeners();
   }
 
+  /// Archives/Unarchives the selected conversations or groups
+  /// and updates the database.
   void archiveSelected() {
     // If first item is a group conversation, it means all selected are groups
     if (_selectedConversations[0].isGroup) {
@@ -382,27 +428,21 @@ class MessagesProvider with ChangeNotifier {
     clearSelected();
   }
 
+  /// Spams/Unspams the selected conversations or groups
+  /// and updates the database.
   void spamSelected() {
     toggleSpamConvo(_selectedConversations[0]); //bcz only one can be spammed
   }
 
-  void unSelectConversation(Conversation convo) {
-    _selectedConversations.remove(convo);
-    notifyListeners();
-  }
-
-  void selectConversation(Conversation convo) {
-    _selectedConversations.add(convo);
-    notifyListeners();
-  }
-
+  /// Marks/Unmarks a conversation or group as selected
   void toggleSelected(Conversation convo) {
-    if (isSelected(convo))
-      unSelectConversation(convo);
-    else
-      selectConversation(convo);
+    if (isSelected(convo)) _selectedConversations.remove(convo);
+    else _selectedConversations.add(convo);
+    notifyListeners();
   }
 
+  /// Archives/Unarchives a single conversation or group
+  /// and updates the database.
   void toggleArchiveConvo(Conversation convo) {
     if (convo.isGroup) {
       if (convo.isArchived) {
@@ -429,6 +469,8 @@ class MessagesProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  /// Spams/Unspams a single conversation or group
+  /// and updates the database.
   void toggleSpamConvo(Conversation convo) {
     if (convo.isGroup) {
       if (convo.isSpam) {
@@ -457,6 +499,8 @@ class MessagesProvider with ChangeNotifier {
     clearSelected();
   }
 
+  /// Marks/Unmarks a single message as favourite
+  /// and updates the database.
   void toggleFavMessage(Message msg) {
     if (msg.isFav)
       _favMessages.remove(msg);
