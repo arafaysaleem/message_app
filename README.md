@@ -1,12 +1,12 @@
-# Messager app - A native android messaging app
+# Messager app - A flutter messaging app
 
 [![made-with-python](https://img.shields.io/badge/Made%20With-Flutter-blue)](https://flutter.dev/)
 
-Messager is an app made with **Flutter** framework to provide messaging functionality. **The release apk is available under the release tags. It's also available on this drive link - [Messager APK](https://drive.google.com/drive/folders/1xazOX_VaaAPzuccusj-hk0zsPZaomDLc?usp=sharing)**
+Messager is an app made with **Flutter** framework to provide messaging functionality. **The release apk is available under the release tags. It's also available on this drive link - [Messager APK](https://drive.google.com/drive/folders/1MfHkegrGcXWkxJ_-XtXV8pOej1_W_ARP?usp=sharing)**
 
-The UI is inspired by Native Android messaging app.
+:art: The UI is inspired by native android messaging app.
 
-## App Features
+## :iphone: App Features
 
   - Real time messaging with users.
   - Groups with multiple users.
@@ -15,7 +15,7 @@ The UI is inspired by Native Android messaging app.
   - Adding and viewing contacts.
   - Spamming and archiving messages.
 
-## Technical Features
+## :wrench: Technical Features
 
   - Firebase Phone Authentication.
   - Provider State Management.
