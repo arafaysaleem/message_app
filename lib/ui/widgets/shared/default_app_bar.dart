@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../providers/auth_provider.dart';
-import '../../../providers/messages_provider.dart';
 
 import '../../../helper/enums/filters_enum.dart';
 
