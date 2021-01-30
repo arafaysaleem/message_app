@@ -47,7 +47,7 @@ class MyApp extends StatelessWidget {
     ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Flutter Message Manager',
+        title: 'Flutter Messager',
         theme: ThemeData(
           primaryColor: Colors.lightBlueAccent[700],
           scaffoldBackgroundColor: Color(0xFFfefefe),
