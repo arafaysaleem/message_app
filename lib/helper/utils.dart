@@ -6,16 +6,37 @@ import 'package:linkify/linkify.dart';
 import 'package:url_launcher/url_launcher.dart' as url_launcher;
 
 class Utils {
+  ///Grey color used in the app theme
   static final greyColor = const Color(0xFFEEEEEE);
+
+  ///Color used to represent my messages' background
   static final myMessageColor = const Color(0xffE0ECFF);
+
+  ///Color used to represent my messages' text
   static final myMessageTextColor = Colors.blue[800];
+
+  ///Instance of random number generator
   static final _randomGenerator = Random();
+
+  ///Getter for auth user key name
   static final authUserKey = "uid";
+
+  ///Getter for auth status key name
   static final authStatusKey = "status";
+
+  ///Regex for name
   static final RegExp nameRegex = RegExp('[a-z A-Z0-9]');
+
+  ///Regex for phone no
   static final RegExp phoneNoRegex = RegExp('[+]{1}[0-9]');
+
+  ///Regex for number
   static final RegExp numberRegex = RegExp('[0-9]');
+
+  ///Rege for OTP
   static final RegExp otpRegex = RegExp('[0-9]{1}');
+
+  ///Internal list of avatar colors
   static final List<Color> _avatarColors = [
     Colors.red,
     Colors.amber,
@@ -25,21 +46,25 @@ class Utils {
     Colors.green[800]
   ];
 
+  ///Returns a random avatar color
   static Color getAvatarColor() {
     Color avClr = _avatarColors[_randomGenerator.nextInt(_avatarColors.length)];
     return avClr;
   }
 
+  ///Checks if a phone number is valid
   static bool isPhoneNumber(String number){
     if(phoneNoRegex.hasMatch(number) && number.length == 13) return true;
     return number.length == 11; //&& number.startsWith("03");
   }
 
+  ///Parses a phone number to add country code in beginning
   static String parsePhoneNo(String number){
     if(phoneNoRegex.hasMatch(number)) return number;
     return "+92${number.substring(1)}";
   }
 
+  ///Helper method to show toast message
   static void showFlushBar(context, String message, IconData icon) {
     Flushbar(
       messageText: Text(
@@ -66,6 +91,7 @@ class Utils {
     )..show(context);
   }
 
+  ///Helper method to launch URL
   static launchURL(String url) async {
     if (await url_launcher.canLaunch(url)) {
       await url_launcher.launch(url);
@@ -74,6 +100,8 @@ class Utils {
     }
   }
 
+  ///Returns a list of split message components,
+  ///Used to parse a message containing a URl to split URL from other parts
   static List<String> splitMessageComponents(String message) {
     List<String> list = [];
     var elements = linkify(
@@ -93,6 +121,7 @@ class Utils {
     return list;
   }
 
+  ///Fetches the URl from a message if it contains any
   static String extractUrl(String input) {
     var elements = linkify(
       input,
