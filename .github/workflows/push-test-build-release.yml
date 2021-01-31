@@ -19,8 +19,7 @@ jobs:
         DECRYPTED_KEYSTORE: ${{ secrets.DECRYPTED_KEYSTORE }}
         KEY_PROPERTIES: ${{ secrets.KEY_PROPERTIES }}
       run: |
-        mkdir keys
-        echo "$ENCRYPTED_KEYSTORE" | base64 -d > ./keys/$DECRYPTED_KEYSTORE
+        echo "$ENCRYPTED_KEYSTORE" | base64 -d > ./android/app/$DECRYPTED_KEYSTORE
         echo "$KEY_PROPERTIES" > ./android/key.properties
     - uses: actions/setup-java@v1
       with:
