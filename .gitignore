@@ -233,9 +233,11 @@ fabric.properties
 
 !/gradle/wrapper/gradle-wrapper.jar
 
-keystore keys.txt
-
 # Firebase config
 google-services.json
+
+#keys
+keys
+keys/*
 
 # End of https://www.toptal.com/developers/gitignore/api/flutter,dart,androidstudio,windows
