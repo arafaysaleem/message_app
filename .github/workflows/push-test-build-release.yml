@@ -21,7 +21,7 @@ jobs:
         DECRYPTED_KEYSTORE_PATH: ${{ secrets.DECRYPTED_KEYSTORE_PATH }}
       run: |
         mkdir keys
-        echo $RELEASE_KEYSTORE > ./keys/release_key.jks.asc
+        echo ${{ secrets.RELEASE_KEYSTORE }} > ./keys/release_key.jks.asc
         gpg -d --passphrase ${{ secrets.RELEASE_KEYSTORE_PASSPHRASE }} --batch ./keys/release_key.jks.asc > ./keys/release_key.jks
     - uses: actions/setup-java@v1
       with:
