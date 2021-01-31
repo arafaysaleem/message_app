@@ -9,10 +9,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Provide Firebase Android
+    - name: Load Firebase Config
       env:
         FIREBASE_CONFIG: ${{ secrets.FIREBASE_CONFIG }}
       run: echo $FIREBASE_CONFIG > ./android/app/google-services.json
+    - name: Load and decrypt keystore file
+      env:
+        RELEASE_KEYSTORE: ${{ secrets.RELEASE_KEYSTORE }}
+        RELEASE_KEYSTORE_PASSPHRASE: ${{ secrets.RELEASE_KEYSTORE_PASSPHRASE }}
+        ENCRYPTED_KEYSTORE_PATH: ${{ secrets.ENCRYPTED_KEYSTORE_PATH }}
+        DECRYPTED_KEYSTORE_PATH: ${{ secrets.DECRYPTED_KEYSTORE_PATH }}
+      run: |
+        echo $RELEASE_KEYSTORE > $ENCRYPTED_KEYSTORE_PATH
+        gpg -d --passphrase $RELEASE_KEYSTORE_PASSPHRASE --batch $ENCRYPTED_KEYSTORE_PATH > $DECRYPTED_KEYSTORE_PATH
     - uses: actions/setup-java@v1
       with:
         java-version: '12.x'
