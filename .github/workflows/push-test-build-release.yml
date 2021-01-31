@@ -13,16 +13,12 @@ jobs:
       env:
         FIREBASE_CONFIG: ${{ secrets.FIREBASE_CONFIG }}
       run: echo $FIREBASE_CONFIG > ./android/app/google-services.json
-    - name: Load and decrypt keystore file
+    - name: Load and decrypt keystore
       env:
-        RELEASE_KEYSTORE: ${{ secrets.RELEASE_KEYSTORE }}
-        RELEASE_KEYSTORE_PASSPHRASE: ${{ secrets.RELEASE_KEYSTORE_PASSPHRASE }}
-        ENCRYPTED_KEYSTORE_PATH: ${{ secrets.ENCRYPTED_KEYSTORE_PATH }}
-        DECRYPTED_KEYSTORE_PATH: ${{ secrets.DECRYPTED_KEYSTORE_PATH }}
-      run: |
-        mkdir keys
-        echo ${{ secrets.RELEASE_KEYSTORE }} > ./keys/release_key.jks.asc
-        gpg -d --passphrase ${{ secrets.RELEASE_KEYSTORE_PASSPHRASE }} --batch ./keys/release_key.jks.asc > ./keys/release_key.jks
+        ENCRYPTED_KEYSTORE: ${{ secrets.ENCRYPTED_KEYSTORE }}
+        run: |
+          mkdir keys
+          echo "$ENCRYPTED_KEYSTORE" | base64 -d > ./keys/${{ secrets.DECRYPTED_KEYSTORE }}
     - uses: actions/setup-java@v1
       with:
         java-version: '12.x'
