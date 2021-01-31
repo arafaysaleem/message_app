@@ -16,9 +16,9 @@ jobs:
     - name: Load and decrypt keystore
       env:
         ENCRYPTED_KEYSTORE: ${{ secrets.ENCRYPTED_KEYSTORE }}
-        run: |
-          mkdir keys
-          echo "$ENCRYPTED_KEYSTORE" | base64 -d > ./keys/${{ secrets.DECRYPTED_KEYSTORE }}
+      run: |
+        mkdir keys
+        echo "$ENCRYPTED_KEYSTORE" | base64 -d > ./keys/${{ secrets.DECRYPTED_KEYSTORE }}
     - uses: actions/setup-java@v1
       with:
         java-version: '12.x'
