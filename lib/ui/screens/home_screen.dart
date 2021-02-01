@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import 'package:animations/animations.dart';
@@ -34,49 +35,56 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Stack(
-          children: <Widget>[
-            NotificationListener<OverscrollIndicatorNotification>(
-              onNotification: (overScroll) {
-                overScroll.disallowGlow();
-                return false;
-              },
-              child: CustomScrollView(
-                controller: _controller,
-                slivers: [
-                  Selector<MessagesProvider, int>(
-                    selector: (ctx, msgMgr) =>
-                        msgMgr.selectedConversations.length,
-                    builder: (ctx, int length, child) => CustomAppBar(
-                      length: length,
-                      child: child,
-                      duration: Duration(milliseconds: 300),
+      body: AnnotatedRegion<SystemUiOverlayStyle>(
+        value: SystemUiOverlayStyle.dark.copyWith(
+          statusBarColor: Colors.white,
+          statusBarIconBrightness: Brightness.dark,
+          statusBarBrightness: Brightness.dark,
+        ),
+        child: SafeArea(
+          child: Stack(
+            children: <Widget>[
+              NotificationListener<OverscrollIndicatorNotification>(
+                onNotification: (overScroll) {
+                  overScroll.disallowGlow();
+                  return false;
+                },
+                child: CustomScrollView(
+                  controller: _controller,
+                  slivers: [
+                    Selector<MessagesProvider, int>(
+                      selector: (ctx, msgMgr) =>
+                          msgMgr.selectedConversations.length,
+                      builder: (ctx, int length, child) => CustomAppBar(
+                        length: length,
+                        child: child,
+                        duration: Duration(milliseconds: 300),
+                      ),
+                      child: DefaultAppBar(
+                        currentFilter: context.select<MessagesProvider, bool>(
+                          (msgManager) => msgManager.displayGroupConversations,
+                        )
+                            ? Filters.Groups
+                            : Filters.Conversation,
+                      ),
                     ),
-                    child: DefaultAppBar(
-                      currentFilter: context.select<MessagesProvider, bool>(
-                        (msgManager) => msgManager.displayGroupConversations,
-                      )
-                          ? Filters.Groups
-                          : Filters.Conversation,
+                    Selector<MessagesProvider, bool>(
+                      selector: (ctx, msgManger) =>
+                          msgManger.displayGroupConversations,
+                      builder: (ctx, displayGroups, child) => displayGroups
+                          ? ConversationsList(
+                              currentFilter: Filters.Groups,
+                            )
+                          : child,
+                      child: ConversationsList(
+                        currentFilter: Filters.Conversation,
+                      ),
                     ),
-                  ),
-                  Selector<MessagesProvider, bool>(
-                    selector: (ctx, msgManger) =>
-                        msgManger.displayGroupConversations,
-                    builder: (ctx, displayGroups, child) => displayGroups
-                        ? ConversationsList(
-                            currentFilter: Filters.Groups,
-                          )
-                        : child,
-                    child: ConversationsList(
-                      currentFilter: Filters.Conversation,
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
       floatingActionButton: OpenContainer(

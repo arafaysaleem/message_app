@@ -23,6 +23,9 @@ class AuthProvider extends ChangeNotifier {
   ///Verification id of logged in user
   String _verificationId;
 
+  ///Resend token
+  int resendToken;
+
   ///Status of authentication process
   AuthStatus _status;
 
@@ -44,6 +47,13 @@ class AuthProvider extends ChangeNotifier {
   void _loadDefaults() async {
     _currentUser = await _prefs.getAuthUserKey();
     _status = await _prefs.getAuthStatusKey();
+    if(_currentUser!=null) {
+      //Initialize database for the loaded user
+      FirestoreDatabase.init(uid: userNumber);
+
+      //Set myContact
+      Conversation.setMyContact(userNumber);
+    }
   }
 
   ///Verifies a phone number and if successful,
@@ -60,6 +70,8 @@ class AuthProvider extends ChangeNotifier {
 
     final PhoneCodeSent smsCodeSent = (String verId, [int forceCodeResend]) {
       _verificationId = verId;
+      resendToken = forceCodeResend;
+      _currentUser = UserAccount(phoneNo);
       _status = AuthStatus.OTP_SENT;
       notifyListeners();
     };
@@ -78,6 +90,7 @@ class AuthProvider extends ChangeNotifier {
       timeout: const Duration(seconds: 30),
       verificationCompleted: _signInUser,
       verificationFailed: verifyFailed,
+      forceResendingToken: resendToken
     );
   }
 
@@ -125,6 +138,11 @@ class AuthProvider extends ChangeNotifier {
       print(e.toString());
       _status = AuthStatus.UNAUTHENTICATED;
     }
+    notifyListeners();
+  }
+
+  void changeAuthStatus(AuthStatus status) {
+    _status = status;
     notifyListeners();
   }
 
