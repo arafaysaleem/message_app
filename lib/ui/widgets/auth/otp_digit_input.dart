@@ -12,7 +12,7 @@ class OTPDigitInput extends StatelessWidget {
 
   OutlineInputBorder getBorder(Color color, {double width = 1.4}){
     return OutlineInputBorder(
-      borderRadius: BorderRadius.circular(10),
+      borderRadius: BorderRadius.circular(8),
       borderSide: BorderSide(
         color: color,
         width: width,
@@ -37,6 +37,7 @@ class OTPDigitInput extends StatelessWidget {
       onSaved: onSaved,
       onChanged: (msg){
         if(msg.length == 1) FocusScope.of(context).nextFocus();
+        if(msg.length == 0) FocusScope.of(context).previousFocus();
       },
       validator: (digit) {
         digit = digit.trim();

@@ -18,11 +18,35 @@ class Utils {
   ///Instance of random number generator
   static final _randomGenerator = Random();
 
+  ///Getter for phone asset
+  static final phoneAsset = "assets/phone.png";
+
+  ///Getter for otp asset
+  static final otpAsset = "assets/otp.png";
+
+  ///Getter for failed asset
+  static final failAsset = "assets/fail.png";
+
+  ///Getter for success asset
+  static final successAsset = "assets/success.png";
+
   ///Getter for auth user key name
   static final authUserKey = "uid";
 
   ///Getter for auth status key name
   static final authStatusKey = "status";
+
+  static LinearGradient get linearGradient => const LinearGradient(
+    colors: [
+      const Color(0xFF0091EA),
+      const Color(0xFF00AFF5),
+    ],
+    begin: const FractionalOffset(0.0, 0.0),
+    end: const FractionalOffset(0.0, 1.0),
+    stops: [0.0, 1.0],
+    tileMode: TileMode.clamp,
+  );
+
 
   ///Regex for name
   static final RegExp nameRegex = RegExp('[a-z A-Z0-9]');

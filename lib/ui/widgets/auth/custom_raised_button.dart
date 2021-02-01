@@ -26,14 +26,14 @@ class CustomRaisedButton extends StatelessWidget {
       child: RaisedButton(
         onPressed: onPressed,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30),
+          borderRadius: BorderRadius.circular(8),
         ),
         color: buttonColor,
         child: child ?? Text(
           text,
           style: TextStyle(
             fontFamily: "Poppins",
-            fontSize: 15,
+            fontSize: 16,
             color: Colors.white,
           ),
         ),
